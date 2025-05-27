@@ -1,7 +1,7 @@
 
 'use client'
 import { useState } from "react"
-import { Log, Logbook } from "../../../resources/types"
+import { Log, LogBook, Logbook } from "../../../resources/types"
 
 
 import { useCSVReader } from "react-papaparse"
@@ -14,14 +14,17 @@ import { GradeConverter } from "../../../resources/utils"
 
 export default function Stats() {
 
-    const [logbook, setLogbook] = useState<Logbook>({ boulder: [], sport: [], trad: [], winter: [] })
+    const [logbook, setLogbook] = useState<Log[]>()
+
     const { CSVReader } = useCSVReader()
+    const [firstYear, setFirstYear] = useState<number>(2025);
+
 
     const gradeConverter = new GradeConverter()
 
 
-    function getStyle(style: string){
-        switch(style) {
+    function getStyle(style: string) {
+        switch (style) {
             case "Sent x": return "Sent"
             case "Sent β": return "Flash"
             case "Sent O/S": return "Onsight"
@@ -37,8 +40,12 @@ export default function Stats() {
         }
     }
 
-    function normaliseGrade(grade: string){
+    function normaliseGrade(grade: string) {
         return gradeConverter.getBoulderGrade(grade)
+    }
+
+    function createDate(date: string) {
+        return new Date(date.replace("???", "01/Jan").replace("??", "01"))
     }
 
     return (
@@ -51,20 +58,21 @@ export default function Stats() {
                     const trads = [] as Log[]
                     const winters = [] as Log[]
 
+                    const climbs = [] as Log[]
+
                     results.data.forEach((climb: any, index: number) => {
-                        
-                        if (climb[0] == "") { return ; }
-                        if (index > 200) { return ; }
-                        if (index == 0) { return ; }
-                        console.log(climb)
+
+                        if (climb[0] == "") { return; }
+                        //if (index > 200) { return ; }
+                        if (index == 0) { return; }
                         const newLog = {
                             id: index,
                             name: climb[0],
-                            grade:  normaliseGrade(climb[1]),
+                            grade: climb[11] == "Bouldering" ? normaliseGrade(climb[1]) : climb[1],
                             style: getStyle(climb[2]),
                             partner: climb[3],
                             notes: climb[4],
-                            date: climb[5],
+                            date: createDate(climb[5]),
                             crag: climb[6],
                             county: climb[7],
                             region: climb[8],
@@ -72,13 +80,16 @@ export default function Stats() {
                             pitches: climb[10],
                             type: climb[11]
                         } as Log
-                        if (newLog.type == "Bouldering") boulders.push(newLog)
-                        else if (newLog.type == "Sport") sports.push(newLog)
-                        else if (newLog.type == "Trad") trads.push(newLog)
-                        else if (newLog.type == "Winter") winters.push(newLog)
+                        // if (newLog.type == "Bouldering") boulders.push(newLog)
+                        // else if (newLog.type == "Sport") sports.push(newLog)
+                        // else if (newLog.type == "Trad") trads.push(newLog)
+                        // else if (newLog.type == "Winter") winters.push(newLog)
+                        if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
+                        climbs.push(newLog)
                     })
-                    
-                    setLogbook({boulder: boulders, sport: sports, trad: trads, winter: winters})
+
+                    setLogbook(climbs.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)))
+                    //({ boulder: boulders.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)), sport: sports.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)), trad: trads, winter: winters })
 
                 }}
 
@@ -104,23 +115,29 @@ export default function Stats() {
                 )}
             </CSVReader >
 
-            <SummaryStats logbook={logbook} />
+            {/* <SummaryStats logbook={logbook.getClimbs()} /> */}
+            {/* {logbook?.getClimbs().length > 0
+                ?
+                <>
+                    <StyleSummary title={"Bouldering"} logs={logbook?.getClimbs("grade", "all", "boulder") ?? []} />
+                    <StyleSummary title={"Sport"} logs={logbook?.getClimbs("grade", "all", "sport") ?? []} />
+                    <StyleSummary title={"Trad"} logs={logbook?.getClimbs("grade", "all", "trad") ?? []} />
+                </>
+                :
+                <></>} */}
 
-            <StyleSummary title={"Bouldering"} logs={logbook.boulder}/>
-            <StyleSummary title={"Sport"} logs={logbook.sport}/>
 
-            <ul>
-                {logbook.boulder?.map((log) => {
+            <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
+            <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear}  />
+            <StyleSummary title={"Trad"} logs={logbook?.filter((log) => log.type == "Trad") ?? []} firstYear={firstYear}  />
+
+            {/* <ul>
+                {logbook.getClimbs().map((log) => {
                     return (
-                        <div key={log.id}>{log.name} - {log.date} - {log.grade} - {log.style} - {log.country}</div>
+                        <div key={log.id}>{log.name} - {log.date.toDateString()} - {log.grade} - {log.style} - {log.country}</div>
                     )
                 })}
-                {logbook.sport?.map((log) => {
-                    return (
-                        <div key={log.id}>{log.name} - {log.date} - {log.grade} - {log.style} - {log.country}</div>
-                    )
-                })}
-            </ul>
+            </ul> */}
 
         </>
     );

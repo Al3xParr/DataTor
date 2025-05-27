@@ -12,81 +12,29 @@ export function getTotalClimbs(logbook: Logbook) {
 
 export class GradeConverter {
 
-    map: Record<string, string> = {
-        "VB": "f3",
-        "V0-": "f3+",
-        "V0": "f4",
-        "V0+": "f4+",
-        "V1": "f5",
-        "V2": "f5+",
-        "V3": "f6A",
-        "V3+": "f6A+",
-        "V4": "f6B",
-        "V4+": "f6B+",
-        "V5": "f6C",
-        "V5+": "f6C+",
-        "V6": "f7A",
-        "V7": "f7A+",
-        "V8": "f7B",
-        "V8+": "f7B+",
-        "V9": "f7C",
-        "V10": "f7C+",
-        "V11": "f8A",
-        "V12": "f8A+",
-        "V13": "f8B",
-        "V14": "f8B+",
-        "V15": "f8C",
-        "V16": "f8C+",
-        "V17": "f9A"
+    font =  ["f3", "f3+", "f4", "f4+", "f5", "f5+", "f6A", "f6A+", "f6B", "f6B+", "f6C", "f6C+", "f7A", "f7A+", "f7B", "f7B+", "f7C", "f7C+", "f8A", "f8A+", "f8B", "f8B+", "f8C", "f8C+", "f9A"]
+    v =     ["VB", "V0-", "V0", "V0+", "V1", "V2", "V3", "V3+", "V4", "V4+", "V5", "V5+", "V6", "V7", "V8", "V8+", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17"]
+
+    french = ["1", "2", "2+", "3a", "3b", "3c", "4a", "4b", "4c", "5a", "5b", "5c", "6a", "6a+", "6b", "6b+", "6c", "6c+", "7a", "7a+", "7b", "7b+", "7c", "7c+", "8a", "8a+", "8b", "8b+", "8c", "8c+", "9a", "9a+", "9b", "9b+", "9c" ]
+
+    britTrad = ["M", "D", "VD", "HVD", "S", "HS", "VS", "HVS", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12"]
+    
+
+    // For sorting lists of climbs based on grade in DESCENDING order
+    compareGrade(a: string, b: string) {
+
+        var aIndex = this.font.indexOf(a) + this.v.indexOf(a) + 1
+        var bIndex = this.font.indexOf(b) + this.v.indexOf(b) + 1
+        if (aIndex == -1) aIndex = this.french.indexOf(a)
+        if (aIndex == -1) aIndex = this.britTrad.indexOf(a.split(" ")[0])
+        if (bIndex == -1) bIndex = this.french.indexOf(b)
+        if (bIndex == -1) bIndex = this.britTrad.indexOf(b.split(" ")[0])
+    
+        return bIndex - aIndex
     }
 
-    reverseMap: Record<string, string> = {}
-
-    constructor() {
-        for (const key in this.map) {
-            const value = this.map[key]
-            this.reverseMap[value] = key
-        }
-
-    }
-
-    compareBoulderGrade(a: string, b: string) {
-        const aNorm = this.getBoulderGrade(a, "v")?.substring(1)
-        const bNorm = this.getBoulderGrade(b, "v")?.substring(1)
-
-
-        const trueA = parseInt(aNorm!)
-        const trueB = parseInt(bNorm!)
-
-        if (trueA.toString() == aNorm && trueB.toString() == bNorm) {
-
-
-
-            if (trueA < trueB) { //a < b
-                return -1;
-            } else if (trueA > trueB) { // a > b
-                return 1
-            }
-            return 0
-        }
-
-        if (trueA < trueB) { //a < b
-            return -1;
-        } else if (trueA > trueB) { // a > b
-            return 1
-        } else if (aNorm?.endsWith("+")) {
-            return 1
-        } else if (bNorm?.endsWith("+")) {
-            return -1
-        }
-
-        return 0
-
-
-    }
-
-    private getFontGrade(vGrade: any) { return this.map[vGrade] ?? vGrade }
-    private getVGrade(fontGrade: any) { return this.reverseMap[fontGrade] ?? fontGrade }
+    private getFontGrade(vGrade: any) { return this.font[this.v.indexOf(vGrade)] }
+    private getVGrade(fontGrade: any) { return this.v[this.font.indexOf(fontGrade)] }
 
 
     getBoulderGrade(grade: string, gradeScale: "font" | "v" = "font") {
