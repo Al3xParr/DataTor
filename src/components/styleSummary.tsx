@@ -1,20 +1,13 @@
 import { BarChart, BarChartProps } from '@mui/x-charts/BarChart';
 import { LineChart, LineChartProps } from '@mui/x-charts/LineChart';
-import { BarLabelProps, BarPlot } from '@mui/x-charts/BarChart';
-import { interpolateObject } from '@mui/x-charts-vendor/d3-interpolate';
-import { useAnimate } from '@mui/x-charts/hooks';
-import { styled } from '@mui/material/styles';
+import { legendClasses } from '@mui/x-charts/ChartsLegend';
+import { Select } from '@radix-ui/themes';
+import { useState } from 'react';
+import { Medal } from 'lucide-react';
 
 import { Log } from "../../resources/types";
 import { GradeConverter } from "../../resources/utils";
-
-
-
-import { legendClasses } from '@mui/x-charts/ChartsLegend';
-import { YearSummary } from './yearSummary';
-import { Button, Select } from '@radix-ui/themes';
-import { useEffect, useState } from 'react';
-
+import { Badge } from './badge';
 
 
 interface StyleSummaryProps {
@@ -27,8 +20,8 @@ interface StyleSummaryProps {
 function getDateData(climbs: Log[], presentGrades: string[]) {
     const climbDate: { [key: string]: Date | number }[] = []
 
-    function newDate(date: Date = new Date()): { [key: string]: Date | number } {
-        const a: { [key: string]: Date | number } = { "date": date }
+    function newDate(date: number = new Date().getTime()): { [key: string]: number | number } {
+        const a: { [key: string]: number | number } = { "date": date }
         for (const grade of presentGrades.values()) a[grade] = 0
         return a
     }
@@ -37,11 +30,11 @@ function getDateData(climbs: Log[], presentGrades: string[]) {
     var currentDate = newDate()
     structuredClone(climbs).sort((a, b) => a.date.valueOf() - b.date.valueOf()).forEach((climb) => {
 
-        if (currentDate["date"].toString() != climb.date.toString()) {
+        if (currentDate["date"] != climb.date.getTime()) {
 
             climbDate.push({ ...currentDate })
 
-            currentDate["date"] = climb.date
+            currentDate["date"] = climb.date.getTime()
         }
         const temp = currentDate[climb.grade] ?? 0
         if (typeof (temp) == "number") currentDate[climb.grade] = temp + 1
@@ -51,23 +44,35 @@ function getDateData(climbs: Log[], presentGrades: string[]) {
     return climbDate
 }
 
+interface TopClimbProps {
+    style: string,
+    name: string,
+    grade: string,
+    colour: string
+}
+
+function TopClimb({ style, name, grade, colour }: TopClimbProps) {
+    return (
+        <div className="font-normal flex text-center items-center my-1">
+            {style}
+            <p className=' font-bold text-xl mx-2'>{name}</p>
+            <Badge text={grade} colour={colour}></Badge>
+        </div>
+    )
+}
+
 export default function StyleSummary({ title, logs, firstYear }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
-    const [yearList, setYearList] = useState<number[]>([])
 
-    useEffect(() => {
-        setYearList(Array.from({ length: new Date().getFullYear() - firstYear + 1 }, (_, index) => firstYear + index))
-
-    }, [firstYear])
+    const yearList = Array.from({ length: new Date().getFullYear() - firstYear + 1 }, (_, index) => firstYear + index)
 
     const gradeConverter = new GradeConverter()
-    const datedLogs = logs.filter((l) => selectedYear == 0 || l.date.getFullYear() == selectedYear).sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade))
+    const allClimbs = logs.filter((l) => selectedYear == 0 || l.date.getFullYear() == selectedYear).sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade))
 
-
-    const total = datedLogs.length
-    const flash = datedLogs.filter((l) => l.style == "Flash")
-    const onsight = datedLogs.filter((l) => l.style == "Onsight")
+    const total = allClimbs.length
+    const flash = allClimbs.filter((l) => l.style == "Flash")
+    const onsight = allClimbs.filter((l) => l.style == "Onsight")
 
     const presentGrades: string[] = []
 
@@ -80,7 +85,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
             default: return 0
         }
     }
-    structuredClone(datedLogs).reverse().forEach((climb) => {
+    structuredClone(allClimbs).reverse().forEach((climb) => {
         if (!presentGrades.includes(climb.grade)) presentGrades.push(climb.grade)
         let temp = climbFreq[climb.grade] ?? [0, 0, 0] // send, flash, onsight
         temp[getStyleIndex(climb.style)] = temp[getStyleIndex(climb.style)] + 1
@@ -92,8 +97,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
     }
 
 
-    const climbByDateDataset = getDateData(datedLogs, presentGrades)
-
+    const climbByDateDataset = getDateData(allClimbs, presentGrades)
 
     const config: Partial<BarChartProps> = {
         height: 350,
@@ -109,92 +113,62 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
 
     const fontStyling = { fontSize: 18, fontWeight: "bold" }
 
-    const Text = styled('text')(({ theme }) => ({
-        ...theme?.typography?.body2,
-        stroke: 'none',
-        fill: (theme.vars || theme)?.palette?.text?.primary,
-        transition: 'opacity 0.2s ease-in, fill 0.2s ease-in',
-        textAnchor: 'middle',
-        dominantBaseline: 'central',
-        pointerEvents: 'none',
-    }));
-
-    function BarLabel(props: BarLabelProps) {
-        const {
-            seriesId,
-            dataIndex,
-            color,
-            isFaded,
-            isHighlighted,
-            classes,
-            xOrigin,
-            yOrigin,
-            x,
-            y,
-            width,
-            height,
-            layout,
-            skipAnimation,
-            ...otherProps
-        } = props;
-
-        const animatedProps = useAnimate(
-            { x: x + width / 2, y: y - 8 },
-            {
-                initialProps: { x: x + width / 2, y: yOrigin },
-                createInterpolator: interpolateObject,
-                transformProps: (p) => p,
-                applyProps: (element: SVGTextElement, p) => {
-                    element.setAttribute('x', p.x.toString());
-                    element.setAttribute('y', p.y.toString());
-                },
-                skip: skipAnimation,
-            },
-        );
-
-        return (
-            <Text {...otherProps} fill={color} textAnchor="middle" {...animatedProps} />
-        );
-    }
 
     return (
-        <div className="rounded border m-4">
-            <div className="font-bold">{title}</div>
-            <div className="font-bold">{total} climbs sent</div>
-            <div className="font-bold">{flash.length} climbs flashed</div>
-            {/* <div>{flash.map((climb) => {return <div key={climb.id}>{climb.name} - {climb.grade}</div>})}</div> */}
-            <div className="font-bold">{onsight?.length} climbs onsighted</div>
-            {/* <div>{onsight.map((climb) => {return <div key={climb.id}>{climb.name} - {climb.grade}</div>})}</div> */}
-            <div className="font-bold">Hardest Send - {datedLogs[0]?.name ?? "N/A"} - {datedLogs[0]?.grade ?? "N/A"}</div>
-            <div className="font-bold">Hardest Flash - {flash[0]?.name ?? "N/A"} - {flash[0]?.grade ?? "N/A"}</div>
-            <div className="font-bold">Hardest Onsight - {onsight[0]?.name ?? "N/A"} - {onsight[0]?.grade ?? "N/A"}</div>
+        <div className="flex flex-col p-4 rounded-lg shadow-md border border-gray-300 dark:bg-gray-800">
+            <div className="font-bold text-xl w-full  flex justify-between">{title}
+
+                <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
+                    <Select.Trigger className='SelectTrigger' >
+                    </Select.Trigger>
+                    <Select.Content>
+                        <Select.Group>
+                            <Select.Label>Years</Select.Label>
+                            <Select.Item value={"0"}>All Years</Select.Item>
+                            {yearList.map((y) => {
+                                return (<Select.Item key={y} value={y.toString()}>{y.toString()}</Select.Item>)
+                            })}
+                        </Select.Group>
+                    </Select.Content>
+                </Select.Root>
+
+            </div>
+            <div className='grid grid-cols-2 items-center p-4'>
+                <div className='grid grid-cols-3 divide-x divide-gray-400 border-gray-400 p-2 border rounded-xl shadow-md'>
+                    <div className="flex flex-col items-center">
+                        <div>Sent</div>
+                        <div className='font-bold text-3xl'>{total}</div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <div>Flash</div>
+                        <div className='font-bold text-3xl'>{flash?.length}</div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <div>Onsight</div>
+                        <div className='font-bold text-3xl'>{onsight?.length}</div>
+                    </div>
+
+                </div>
+
+                <div className='gap-2 font-bold justify-items-center'>
+                    <Medal size={50} className='flex'></Medal>
+                    <TopClimb style="Style" name={allClimbs[0]?.name ?? "N/A"} grade={allClimbs[0]?.grade ?? "N/A"} colour="blue" />
+                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour="blue" />
+                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour="blue" />
+
+                </div>
+            </div>
 
 
-            <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
-                <Select.Trigger className='SelectTrigger' >
-                </Select.Trigger>
-                <Select.Content>
-                    <Select.Group>
-                        <Select.Label>Years</Select.Label>
-                        <Select.Item value={"0"}>All Years</Select.Item>
-                        {yearList.map((y) => {
-                            return (<Select.Item key={y} value={y.toString()}>{y.toString()}</Select.Item>)
-                        })}
-                    </Select.Group>
-                </Select.Content>
-            </Select.Root>
-
-
-
-            {datedLogs.length > 0 ?
+            {allClimbs.length > 0 ?
                 <>
                     <BarChart
                         dataset={climbDataSet}
-                        
+
                         series={[
-                            { dataKey: "onsight", stack: "total", label: "Onsight" },
-                            { dataKey: "flash", stack: "total", label: "Flash" },
-                            { dataKey: 'send', stack: "total", label: "Send" }
+                            { dataKey: "onsight", stack: "total", label: "Onsight", color: "#e15759" },
+                            { dataKey: "flash", stack: "total", label: "Flash", color: "#edc949" },
+                            { dataKey: 'send', stack: "total", label: "Send", color: "#59a14f" }
                         ]}
                         xAxis={[{ dataKey: "grade" }]}
                         yAxis={[{ dataKey: "freq" }]}
@@ -203,10 +177,10 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                         {...config}
                     />
                 </>
-                : <></>}
+                : <div className='w-full h-full text-center'>No Logged Climbs</div>}
 
 
-            {datedLogs.length > 0 ?
+            {allClimbs.length > 0 ?
 
                 <LineChart
                     height={600}
@@ -242,23 +216,19 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
 
                     }]}
                     xAxis={[{
+                        id: "date",
                         dataKey: "date",
                         scaleType: "time",
                         //label: "Date",
-                        labelStyle: { ...fontStyling },
-                        //valueFormatter: (date: number) => new Date(date).toLocaleDateString(),
-                        //min: climbDate[0]["date"],
-                        //max: Date.now(),
+                        //labelStyle: { ...fontStyling },
+                        valueFormatter: (date: number) => new Date(date).toLocaleDateString(),
+
                     }]}
 
                     {...lineConfig}
                 />
-
-
                 :
-
-                <></>}
-
+                <div className='w-full h-full text-center'>No Logged Climbs</div>}
 
         </div>
     )

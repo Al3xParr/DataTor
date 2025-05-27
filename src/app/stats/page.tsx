@@ -1,27 +1,34 @@
 
 'use client'
 import { useState } from "react"
-import { Log, LogBook, Logbook } from "../../../resources/types"
-
-
-import { useCSVReader } from "react-papaparse"
-import SummaryStats from "@/components/summaryStats"
+import { Log } from "../../../resources/types"
+import { useCSVReader, lightenDarkenColor, formatFileSize } from "react-papaparse"
 import StyleSummary from "@/components/styleSummary"
 import { GradeConverter } from "../../../resources/utils"
 
 
-
-
 export default function Stats() {
+
+    const GREY = '#CCC';
+    const GREY_LIGHT = 'rgba(255, 255, 255, 0.4)';
+    const DEFAULT_REMOVE_HOVER_COLOR = '#A01919';
+    const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
+        DEFAULT_REMOVE_HOVER_COLOR,
+        40
+    );
+    const GREY_DIM = '#686868';
+
+    const [zoneHover, setZoneHover] = useState(false);
+    const [removeHoverColor, setRemoveHoverColor] = useState(
+        DEFAULT_REMOVE_HOVER_COLOR
+    );
 
     const [logbook, setLogbook] = useState<Log[]>()
 
     const { CSVReader } = useCSVReader()
     const [firstYear, setFirstYear] = useState<number>(2025);
 
-
     const gradeConverter = new GradeConverter()
-
 
     function getStyle(style: string) {
         switch (style) {
@@ -51,19 +58,15 @@ export default function Stats() {
     return (
         <>
             <CSVReader
-                onUploadAccepted={(results: any) => {
 
-                    const boulders = [] as Log[]
-                    const sports = [] as Log[]
-                    const trads = [] as Log[]
-                    const winters = [] as Log[]
+
+                onUploadAccepted={(results: any) => {
 
                     const climbs = [] as Log[]
 
                     results.data.forEach((climb: any, index: number) => {
 
                         if (climb[0] == "") { return; }
-                        //if (index > 200) { return ; }
                         if (index == 0) { return; }
                         const newLog = {
                             id: index,
@@ -80,64 +83,62 @@ export default function Stats() {
                             pitches: climb[10],
                             type: climb[11]
                         } as Log
-                        // if (newLog.type == "Bouldering") boulders.push(newLog)
-                        // else if (newLog.type == "Sport") sports.push(newLog)
-                        // else if (newLog.type == "Trad") trads.push(newLog)
-                        // else if (newLog.type == "Winter") winters.push(newLog)
+
                         if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
                         climbs.push(newLog)
                     })
 
                     setLogbook(climbs.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)))
-                    //({ boulder: boulders.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)), sport: sports.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)), trad: trads, winter: winters })
 
+                }}
+
+                onDragOver={(event: DragEvent) => {
+                    event.preventDefault()
+                    setZoneHover(true)
+                }}
+                onDragLeave={(event: DragEvent) => {
+                    event.preventDefault()
+                    setZoneHover(false)
                 }}
 
             >
                 {({
                     getRootProps,
                     acceptedFile,
+                    ProgressBar,
                     getRemoveFileProps,
+                    Remove
                 }: any) => (
-                    <>
-                        <div>
-                            <button type='button' {...getRootProps()}>
-                                Browse file
-                            </button>
-                            <div >
-                                {acceptedFile && acceptedFile.name}
+                    <div className="flex w-full h-full p-5">
+
+                        {acceptedFile ?
+                            <div className="w-full h-full flex flex-col gap-5 ">
+
+                                <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
+                                <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear} />
+                                <StyleSummary title={"Trad"} logs={logbook?.filter((log) => log.type == "Trad") ?? []} firstYear={firstYear} />
+
                             </div>
-                            <button {...getRemoveFileProps()}>
-                                Remove
-                            </button>
-                        </div>
-                    </>
+
+                            :
+                            <div className="w-full h-full border border-dashed rounded"
+                                {...getRootProps()}>
+                                This is where you upload our file
+
+                            </div>
+                        }
+
+
+                    </div>
                 )}
             </CSVReader >
 
-            {/* <SummaryStats logbook={logbook.getClimbs()} /> */}
-            {/* {logbook?.getClimbs().length > 0
-                ?
-                <>
-                    <StyleSummary title={"Bouldering"} logs={logbook?.getClimbs("grade", "all", "boulder") ?? []} />
-                    <StyleSummary title={"Sport"} logs={logbook?.getClimbs("grade", "all", "sport") ?? []} />
-                    <StyleSummary title={"Trad"} logs={logbook?.getClimbs("grade", "all", "trad") ?? []} />
-                </>
-                :
-                <></>} */}
 
 
-            <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
-            <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear}  />
-            <StyleSummary title={"Trad"} logs={logbook?.filter((log) => log.type == "Trad") ?? []} firstYear={firstYear}  />
 
-            {/* <ul>
-                {logbook.getClimbs().map((log) => {
-                    return (
-                        <div key={log.id}>{log.name} - {log.date.toDateString()} - {log.grade} - {log.style} - {log.country}</div>
-                    )
-                })}
-            </ul> */}
+
+
+
 
         </>
     );
