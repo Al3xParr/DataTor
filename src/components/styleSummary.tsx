@@ -1,6 +1,4 @@
-import { BarChart, BarChartProps } from '@mui/x-charts/BarChart';
-import { LineChart, LineChartProps } from '@mui/x-charts/LineChart';
-import { legendClasses } from '@mui/x-charts/ChartsLegend';
+
 import { Select } from '@radix-ui/themes';
 import { useState } from 'react';
 import { Medal } from 'lucide-react';
@@ -8,6 +6,8 @@ import { Medal } from 'lucide-react';
 import { Log } from "../../resources/types";
 import { GradeConverter } from "../../resources/utils";
 import { Badge } from './badge';
+import GradeGraph from './gradeGraph';
+import TimelineGraph from './timelineGraph';
 
 
 interface StyleSummaryProps {
@@ -28,8 +28,8 @@ function getDateData(climbs: Log[], presentGrades: string[]) {
 
 
     var currentDate = newDate()
-    structuredClone(climbs).sort((a, b) => a.date.valueOf() - b.date.valueOf()).forEach((climb) => {
-
+    structuredClone(climbs).sort((a, b) => a.date.valueOf() - b.date.valueOf()).forEach((climb, index) => {
+        if (index == 0) currentDate["date"] = climb.date.getTime()
         if (currentDate["date"] != climb.date.getTime()) {
 
             climbDate.push({ ...currentDate })
@@ -53,9 +53,9 @@ interface TopClimbProps {
 
 function TopClimb({ style, name, grade, colour }: TopClimbProps) {
     return (
-        <div className="font-normal flex text-center items-center my-1">
+        <div className="font-normal flex text-center items-center my-1 ">
             {style}
-            <p className=' font-bold text-xl mx-2'>{name}</p>
+            <p className=' font-bold text-xl mx-2 text-ellipsis'>{name}</p>
             <Badge text={grade} colour={colour}></Badge>
         </div>
     )
@@ -68,7 +68,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
     const yearList = Array.from({ length: new Date().getFullYear() - firstYear + 1 }, (_, index) => firstYear + index)
 
     const gradeConverter = new GradeConverter()
-    const allClimbs = logs.filter((l) => selectedYear == 0 || l.date.getFullYear() == selectedYear).sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade))
+    const allClimbs = logs.filter((l) => selectedYear == 0 || l.date.getFullYear() == selectedYear).sort((a, b) => gradeConverter.compareGrade(a, b))
 
     const total = allClimbs.length
     const flash = allClimbs.filter((l) => l.style == "Flash")
@@ -97,22 +97,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
     }
 
 
-    const climbByDateDataset = getDateData(allClimbs, presentGrades)
-
-    const config: Partial<BarChartProps> = {
-        height: 350,
-        margin: { left: 40 },
-        hideLegend: true,
-        grid: { horizontal: true }
-    };
-
-    const lineConfig: Partial<LineChartProps> = {
-        margin: { left: 40 },
-        grid: { horizontal: true }
-    };
-
-    const fontStyling = { fontSize: 18, fontWeight: "bold" }
-
+    const timelineData = getDateData(allClimbs, presentGrades)
 
     return (
         <div className="flex flex-col p-4 rounded-lg shadow-md border border-gray-300 dark:bg-gray-800">
@@ -124,7 +109,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                     <Select.Content>
                         <Select.Group>
                             <Select.Label>Years</Select.Label>
-                            <Select.Item value={"0"}>All Years</Select.Item>
+                            <Select.Item value={"0"}>All Time</Select.Item>
                             {yearList.map((y) => {
                                 return (<Select.Item key={y} value={y.toString()}>{y.toString()}</Select.Item>)
                             })}
@@ -133,102 +118,47 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                 </Select.Root>
 
             </div>
-            <div className='grid grid-cols-2 items-center p-4'>
-                <div className='grid grid-cols-3 divide-x divide-gray-400 border-gray-400 p-2 border rounded-xl shadow-md'>
-                    <div className="flex flex-col items-center">
-                        <div>Sent</div>
+            <div className='flex flex-col md:flex-row gap-3 items-center p-4 justify-items-center '>
+                <div className='flex divide-x divide-gray-400 border-gray-400 p-2 border rounded-xl shadow-md w-max'>
+
+                    <div className="flex flex-col items-center px-5">
+                        <div>Total Sent</div>
                         <div className='font-bold text-3xl'>{total}</div>
                     </div>
-                    <div className="flex flex-col items-center">
+
+                    <div className="flex flex-col items-center px-5">
                         <div>Flash</div>
                         <div className='font-bold text-3xl'>{flash?.length}</div>
                     </div>
-                    <div className="flex flex-col items-center">
+
+                    <div className="flex flex-col items-center px-5">
                         <div>Onsight</div>
                         <div className='font-bold text-3xl'>{onsight?.length}</div>
                     </div>
 
                 </div>
 
-                <div className='gap-2 font-bold justify-items-center'>
+                <div className='gap-2 font-bold justify-items-center border bg-dark rounded-xl border-gray-400 shadow-md p-4 w-max max-w-fit'>
                     <Medal size={50} className='flex'></Medal>
-                    <TopClimb style="Style" name={allClimbs[0]?.name ?? "N/A"} grade={allClimbs[0]?.grade ?? "N/A"} colour="blue" />
-                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour="blue" />
-                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour="blue" />
+                    <TopClimb style="Style" name={allClimbs[0]?.name ?? "N/A"} grade={allClimbs[0]?.grade ?? "N/A"} colour={allClimbs[0]?.grade != null ? "blue" : "grey"} />
+                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "blue" : "grey"} />
+                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "blue" : "grey"} />
 
                 </div>
             </div>
 
 
             {allClimbs.length > 0 ?
-                <>
-                    <BarChart
-                        dataset={climbDataSet}
-
-                        series={[
-                            { dataKey: "onsight", stack: "total", label: "Onsight", color: "#e15759" },
-                            { dataKey: "flash", stack: "total", label: "Flash", color: "#edc949" },
-                            { dataKey: 'send', stack: "total", label: "Send", color: "#59a14f" }
-                        ]}
-                        xAxis={[{ dataKey: "grade" }]}
-                        yAxis={[{ dataKey: "freq" }]}
-                        barLabel={"value"}
-                        borderRadius={7}
-                        {...config}
-                    />
-                </>
-                : <div className='w-full h-full text-center'>No Logged Climbs</div>}
-
-
+                <GradeGraph data={climbDataSet} />
+                : 
+                <div className='w-full h-full text-center'>No Logged Climbs</div>
+                }
             {allClimbs.length > 0 ?
+                <TimelineGraph data={timelineData} presentGrades={presentGrades}/>
 
-                <LineChart
-                    height={600}
-
-                    dataset={climbByDateDataset}
-                    series={presentGrades.map((grade) => ({
-                        dataKey: grade,
-                        label: grade,
-                        type: "line",
-                        showMark: false,
-
-                        curve: "stepAfter",
-                        labelMarkType: "circle"
-                    }))}
-
-                    slotProps={{
-                        tooltip: { trigger: "axis", },
-                        legend: {
-                            direction: "vertical",
-                            sx: {
-                                [`.${legendClasses.mark}`]: {
-                                    height: 15,
-                                    width: 15,
-                                },
-                                ...fontStyling
-                            }
-                        }
-                    }}
-                    yAxis={[{
-                        width: 50,
-                        label: "Number of Climbs",
-                        labelStyle: { ...fontStyling }
-
-                    }]}
-                    xAxis={[{
-                        id: "date",
-                        dataKey: "date",
-                        scaleType: "time",
-                        //label: "Date",
-                        //labelStyle: { ...fontStyling },
-                        valueFormatter: (date: number) => new Date(date).toLocaleDateString(),
-
-                    }]}
-
-                    {...lineConfig}
-                />
                 :
-                <div className='w-full h-full text-center'>No Logged Climbs</div>}
+                <div className='w-full h-full text-center'>No Logged Climbs</div>
+                }
 
         </div>
     )

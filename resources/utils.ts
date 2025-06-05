@@ -1,4 +1,4 @@
-import { Logbook } from "./types";
+import { Log, Logbook } from "./types";
 
 
 
@@ -21,15 +21,20 @@ export class GradeConverter {
     
 
     // For sorting lists of climbs based on grade in DESCENDING order
-    compareGrade(a: string, b: string) {
+    compareGrade(a: Log, b: Log) {
 
-        var aIndex = this.font.indexOf(a) + this.v.indexOf(a) + 1
-        var bIndex = this.font.indexOf(b) + this.v.indexOf(b) + 1
-        if (aIndex == -1) aIndex = this.french.indexOf(a)
-        if (aIndex == -1) aIndex = this.britTrad.indexOf(a.split(" ")[0])
-        if (bIndex == -1) bIndex = this.french.indexOf(b)
-        if (bIndex == -1) bIndex = this.britTrad.indexOf(b.split(" ")[0])
-    
+        const aGrade = a.grade
+        const bGrade = b.grade
+
+        var aIndex = this.font.indexOf(aGrade) + this.v.indexOf(aGrade) + 1
+        var bIndex = this.font.indexOf(bGrade) + this.v.indexOf(bGrade) + 1
+        if (aIndex == -1) aIndex = this.french.indexOf(aGrade)
+        if (aIndex == -1) aIndex = this.britTrad.indexOf(aGrade.split(" ")[0])
+        if (bIndex == -1) bIndex = this.french.indexOf(bGrade)
+        if (bIndex == -1) bIndex = this.britTrad.indexOf(bGrade.split(" ")[0])
+        
+        if (aIndex == bIndex) return a.date.getTime() - b.date.getTime()
+        
         return bIndex - aIndex
     }
 

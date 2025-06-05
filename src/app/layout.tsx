@@ -28,9 +28,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-around font-general`}
       >
         <Theme>
+          <span className="w-screen h-[100px] bg-dark inline-block align-middle text-3xl font-bold">Stat Masher</span>
           {children}
         </Theme>
       </body>

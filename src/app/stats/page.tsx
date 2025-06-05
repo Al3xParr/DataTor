@@ -5,6 +5,7 @@ import { Log } from "../../../resources/types"
 import { useCSVReader, lightenDarkenColor, formatFileSize } from "react-papaparse"
 import StyleSummary from "@/components/styleSummary"
 import { GradeConverter } from "../../../resources/utils"
+import { Upload } from "lucide-react"
 
 
 export default function Stats() {
@@ -88,7 +89,7 @@ export default function Stats() {
                         climbs.push(newLog)
                     })
 
-                    setLogbook(climbs.sort((a, b) => gradeConverter.compareGrade(a.grade, b.grade)))
+                    setLogbook(climbs.sort((a, b) => gradeConverter.compareGrade(a, b)))
 
                 }}
 
@@ -104,12 +105,9 @@ export default function Stats() {
             >
                 {({
                     getRootProps,
-                    acceptedFile,
-                    ProgressBar,
-                    getRemoveFileProps,
-                    Remove
+                    acceptedFile
                 }: any) => (
-                    <div className="flex w-full h-full p-5">
+                    <div className="flex w-screen h-full p-5 max-w-[1500px] justify-around items-center">
 
                         {acceptedFile ?
                             <div className="w-full h-full flex flex-col gap-5 ">
@@ -121,9 +119,20 @@ export default function Stats() {
                             </div>
 
                             :
-                            <div className="w-full h-full border border-dashed rounded"
+                            <div className="cursor-pointer w-2/3 h-2/3 border-3 text-gray-800 border-gray-800 border-dashed rounded-3xl bg-gray-200 font-general flex flex-col justify-center items-center "
                                 {...getRootProps()}>
-                                This is where you upload our file
+                                <Upload  size={80} className=""/>
+                                <div className="text-2xl my-10">Drag & drop to upload climbing DLOG (.csv format)</div>
+                                <div className="text-2xl">OR</div>
+                                <div className="text-2xl mt-10 p-3 border bg-gray-800 text-white rounded ">Browse Files</div>
+                                {/* <div className="flex gap-3 justify-between text-lg">
+
+                                    <div>Go To <a href="www.ukclimbing.co.uk/logbook">www.ukclimbing.co.uk/logbook</a></div>
+                                    <div>Click Download</div>
+                                    <div>Click here to upload</div>
+                                </div> */}
+
+
 
                             </div>
                         }
@@ -132,13 +141,6 @@ export default function Stats() {
                     </div>
                 )}
             </CSVReader >
-
-
-
-
-
-
-
 
         </>
     );
