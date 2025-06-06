@@ -2,7 +2,7 @@
 'use client'
 import { useState } from "react"
 import { Log } from "../../../resources/types"
-import { useCSVReader, lightenDarkenColor, formatFileSize } from "react-papaparse"
+import { useCSVReader, lightenDarkenColor } from "react-papaparse"
 import StyleSummary from "@/components/styleSummary"
 import { GradeConverter } from "../../../resources/utils"
 import { Upload } from "lucide-react"
@@ -107,10 +107,10 @@ export default function Stats() {
                     getRootProps,
                     acceptedFile
                 }: any) => (
-                    <div className="flex w-screen h-full p-5 max-w-[1500px] justify-around items-center">
+                    <div className="flex w-screen h-screen m-5 max-w-[1500px] justify-around items-center">
 
                         {acceptedFile ?
-                            <div className="w-full h-full flex flex-col gap-5 ">
+                            <div className="w-full h-full flex flex-col space-y-5 ">
 
                                 <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
                                 <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear} />
@@ -119,18 +119,13 @@ export default function Stats() {
                             </div>
 
                             :
-                            <div className="cursor-pointer w-2/3 h-2/3 border-3 text-gray-800 border-gray-800 border-dashed rounded-3xl bg-gray-200 font-general flex flex-col justify-center items-center "
+                            <div className="cursor-pointer w-2/3 h-2/3 border-3 space-y-10 border-dark border-dashed rounded-3xl bg-white font-general flex flex-col justify-center items-center "
                                 {...getRootProps()}>
-                                <Upload  size={80} className=""/>
-                                <div className="text-2xl my-10">Drag & drop to upload climbing DLOG (.csv format)</div>
+                                <Upload  size={80} className="" color="#2a1f2d "/>
+                                <div className="text-2xl">Drag & drop to upload climbing DLOG (.csv format)</div>
                                 <div className="text-2xl">OR</div>
-                                <div className="text-2xl mt-10 p-3 border bg-gray-800 text-white rounded ">Browse Files</div>
-                                {/* <div className="flex gap-3 justify-between text-lg">
+                                <div className="text-2xl p-3 border bg-dark text-white rounded ">Browse Files</div>
 
-                                    <div>Go To <a href="www.ukclimbing.co.uk/logbook">www.ukclimbing.co.uk/logbook</a></div>
-                                    <div>Click Download</div>
-                                    <div>Click here to upload</div>
-                                </div> */}
 
 
 

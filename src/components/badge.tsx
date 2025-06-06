@@ -9,14 +9,12 @@ interface BadgeProps {
 export function Badge({ text, colour }: BadgeProps) {
 
     const colourVariants : Record<string, string> = {
-        "red": "bg-red-500",
-        "blue": "bg-blue-500",
-        "green": "bg-green-500",
-        "grey": "bg-gray-500",
+        "primary": "bg-primary text-darksecondary",
+        "disabled": "bg-darksecondary text-gray-200",
     }
 
     return (
-        <div className={`${colourVariants[colour]} rounded-full w-min px-3 flex justify-center `}>
+        <div className={`${colourVariants[colour]} rounded-full w-min px-3 flex justify-center font-bold `}>
             {text}
         </div>
     )

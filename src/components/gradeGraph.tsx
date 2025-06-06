@@ -1,12 +1,10 @@
-import { BarChart, BarChartProps } from '@mui/x-charts/BarChart';
-import { BarLabelProps, BarSeriesType, ChartsGrid, ChartsLegend, ChartsTooltip } from '@mui/x-charts'
+import { BarLabelProps, ChartsGrid, ChartsTooltip } from '@mui/x-charts'
 import { ChartContainer } from '@mui/x-charts/ChartContainer';
-import { BarPlot, BarPlotProps } from '@mui/x-charts/BarChart';
+import { BarPlot } from '@mui/x-charts/BarChart';
 import { styled } from '@mui/material/styles';
 import { interpolateObject } from '@mui/x-charts-vendor/d3-interpolate';
-import { useAnimate, useAnimateBarLabel } from '@mui/x-charts/hooks';
+import { useAnimate } from '@mui/x-charts/hooks';
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
-import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis';
 
 interface GradeGraphProps {
     data: {

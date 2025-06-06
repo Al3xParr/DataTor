@@ -1,8 +1,6 @@
 
-import { Select } from '@radix-ui/themes';
+import { Select, Theme } from '@radix-ui/themes';
 import { useState } from 'react';
-import { Medal } from 'lucide-react';
-
 import { Log } from "../../resources/types";
 import { GradeConverter } from "../../resources/utils";
 import { Badge } from './badge';
@@ -100,49 +98,54 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
     const timelineData = getDateData(allClimbs, presentGrades)
 
     return (
-        <div className="flex flex-col p-4 rounded-lg shadow-md border border-gray-300 dark:bg-gray-800">
-            <div className="font-bold text-xl w-full  flex justify-between">{title}
+        <div className="flex flex-col p-6 rounded-xl shadow-md  bg-white">
+            <div className="font-extrabold text-3xl w-full  flex justify-between">{title}
+              <Theme style={{height: "min-content", minHeight: "min-content"}}>
 
-                <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
-                    <Select.Trigger className='SelectTrigger' >
-                    </Select.Trigger>
-                    <Select.Content>
-                        <Select.Group>
-                            <Select.Label>Years</Select.Label>
-                            <Select.Item value={"0"}>All Time</Select.Item>
-                            {yearList.map((y) => {
-                                return (<Select.Item key={y} value={y.toString()}>{y.toString()}</Select.Item>)
-                            })}
-                        </Select.Group>
-                    </Select.Content>
-                </Select.Root>
+           
+                    <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
+                        <Select.Trigger className='SelectTrigger min-h-min' >
+                        </Select.Trigger>
+                        <Select.Content>
+                            <Select.Group>
+                                <Select.Label>Years</Select.Label>
+                                <Select.Item value={"0"}>All Time</Select.Item>
+                                {yearList.map((y) => {
+                                    return (<Select.Item key={y} value={y.toString()}>{y.toString()}</Select.Item>)
+                                })}
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
+                  </Theme>
+
 
             </div>
             <div className='flex flex-col md:flex-row gap-3 items-center p-4 justify-items-center '>
-                <div className='flex divide-x divide-gray-400 border-gray-400 p-2 border rounded-xl shadow-md w-max'>
+                <div className='flex divide-x divide-dark p-2 bg-gray-200 rounded-xl shadow-md w-max'>
 
                     <div className="flex flex-col items-center px-5">
-                        <div>Total Sent</div>
-                        <div className='font-bold text-3xl'>{total}</div>
+                        <div className='text-textsecondary'>Total Sent</div>
+                        <div className='font-extrabold text-3xl'>{total}</div>
                     </div>
 
                     <div className="flex flex-col items-center px-5">
-                        <div>Flash</div>
-                        <div className='font-bold text-3xl'>{flash?.length}</div>
+                        <div className='text-textsecondary'>Flash</div>
+                        <div className='font-extrabold text-3xl'>{flash?.length}</div>
                     </div>
 
                     <div className="flex flex-col items-center px-5">
-                        <div>Onsight</div>
-                        <div className='font-bold text-3xl'>{onsight?.length}</div>
+                        <div className='text-textsecondary'>Onsight</div>
+                        <div className='font-extrabold text-3xl'>{onsight?.length}</div>
                     </div>
 
                 </div>
 
-                <div className='gap-2 font-bold justify-items-center border bg-dark rounded-xl border-gray-400 shadow-md p-4 w-max max-w-fit'>
-                    <Medal size={50} className='flex'></Medal>
-                    <TopClimb style="Style" name={allClimbs[0]?.name ?? "N/A"} grade={allClimbs[0]?.grade ?? "N/A"} colour={allClimbs[0]?.grade != null ? "blue" : "grey"} />
-                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "blue" : "grey"} />
-                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "blue" : "grey"} />
+                <div className='gap-2 font-bold justify-items-center bg-gray-200 rounded-xl  shadow-md p-4 w-max max-w-fit'>
+                    {/* <Medal size={50} className='flex'></Medal> */}
+                    <div className='font-extrabold text-3xl'>Top Climbs</div>
+                    <TopClimb style="Worked" name={allClimbs[0]?.name ?? "N/A"} grade={allClimbs[0]?.grade ?? "N/A"} colour={allClimbs[0]?.grade != null ? "primary" : "disabled"} />
+                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "primary" : "disabled"} />
+                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "primary" : "disabled"} />
 
                 </div>
             </div>
@@ -150,15 +153,15 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
 
             {allClimbs.length > 0 ?
                 <GradeGraph data={climbDataSet} />
-                : 
+                :
                 <div className='w-full h-full text-center'>No Logged Climbs</div>
-                }
+            }
             {allClimbs.length > 0 ?
-                <TimelineGraph data={timelineData} presentGrades={presentGrades}/>
+                <TimelineGraph data={timelineData} presentGrades={presentGrades} />
 
                 :
                 <div className='w-full h-full text-center'>No Logged Climbs</div>
-                }
+            }
 
         </div>
     )

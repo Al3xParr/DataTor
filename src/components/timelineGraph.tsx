@@ -1,7 +1,6 @@
 import { ChartContainer, ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis } from "@mui/x-charts";
 import { ChartsLegend, legendClasses } from "@mui/x-charts/ChartsLegend";
-import { LineChart, LineChartProps, LinePlot } from "@mui/x-charts/LineChart";
-
+import { LinePlot } from "@mui/x-charts/LineChart";
 
 
 interface TimelineGraphProps {
@@ -11,7 +10,6 @@ interface TimelineGraphProps {
 
 
 const fontStyling = { fontSize: 18, fontWeight: "bold" }
-
 
 
 export default function TimelineGraph({ data, presentGrades }: TimelineGraphProps) {

@@ -1,26 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
-/* @font-face {
-  font-family: "Nunito Sans";
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100,
-    "YTLC" 500;
-  src: url(https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap) format('woff2');
-
-} */
-
 :root {
-  --background: #ffffff;
+  --background: #e5e7eb ;
   --foreground: #171717;
-}
-
-@theme {
-  --color-dark: "#127475";
-  --color-highlight: "#a6b07e";
 }
 
 @theme inline {
@@ -28,7 +11,18 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-general: "Nunito Sans", sans-serif;
+  --font-primary: "Nunito", "serif";
+
+  --color-highlight: oklch(73.66% 0.069 117.33);
+  --color-text: oklch(21% 0.034 264.665);
+  --color-textsecondary: oklch(70.7% 0.022 261.325);
+
+  --color-lightprimary: oklch(76.08% 0.116 169.27);
+  --color-primary: oklch(67.40% 0.128 158.88);
+  --color-secondary: oklch(51.25% 0.031 148.42);
+  --color-darksecondary: oklch(31.37% 0.027 342.06);
+  --color-dark: oklch(25.85% 0.030 318.93);
+
 
 }
 
