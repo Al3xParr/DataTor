@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/x-charts": "^8.4.0",
     "@radix-ui/themes": "^3.2.1",
+    "javascript-color-gradient": "^2.5.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "radix-ui": "^1.4.2",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/javascript-color-gradient": "^2.4.2",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.16",
     "@types/react": "^19",
