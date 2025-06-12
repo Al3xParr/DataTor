@@ -1,29 +1,28 @@
-import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, labelMarkClasses, chartsTooltipClasses } from "@mui/x-charts";
+import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, chartsTooltipClasses } from "@mui/x-charts";
 import { lineElementClasses, LinePlot, markElementClasses } from "@mui/x-charts/LineChart";
-import { useState } from "react";
+import React, { useState } from "react";
 import { rainbowSurgePalette } from "@mui/x-charts";
 import { mediumFontStyling, smallFontStyling } from "../../../resources/utils";
-
+import { Audio } from 'react-loading-icons';
 
 interface TimelineGraphProps {
     data: { [key: string]: Date | number }[],
-    presentGrades: string[]
+    presentGrades: string[],
+    className?: string
 }
 
-export default function TimelineGraph({ data, presentGrades }: TimelineGraphProps) {
+export default function TimelineGraph({ data, presentGrades, className = "" }: TimelineGraphProps) {
 
     const [highlightedItem, setHighlightedItem] = useState<HighlightItemData | null>(null)
 
 
+
     return (
-        <div className="flex items-center ">
+        <div className={`flex ${className}`}>
 
             <ChartDataProvider
-
                 dataset={data}
-
                 height={600}
-
                 colors={rainbowSurgePalette}
 
                 series={presentGrades.map((grade) => ({
@@ -37,7 +36,6 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
                 }))}
                 highlightedItem={highlightedItem}
-
 
                 xAxis={[{
                     id: "date",
@@ -72,7 +70,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                         trigger="axis"
                         sx={{
                             [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
-                     
+
                                 ...mediumFontStyling,
                             },
                         }}
@@ -82,7 +80,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
                 <ChartsLegend
 
-                    onItemClick={(event, legendItem, index) => {
+                    onItemClick={(_, legendItem) => {
                         if (legendItem.seriesId == highlightedItem?.seriesId) setHighlightedItem(null)
                         else setHighlightedItem({ seriesId: legendItem.seriesId })
                     }}

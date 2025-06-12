@@ -1,4 +1,5 @@
 import { Badge } from "./badge"
+import React from "react";
 
 interface TopClimbProps {
     style: string,

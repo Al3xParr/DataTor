@@ -1,11 +1,11 @@
 {
-  "name": "climbing-stats",
+  "name": "data-tor",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "next lint"
   },
   "dependencies": {
@@ -13,12 +13,14 @@
     "@emotion/styled": "^11.14.0",
     "@mui/x-charts": "^8.4.0",
     "@radix-ui/themes": "^3.2.1",
+    "classnames": "^2.5.1",
     "javascript-color-gradient": "^2.5.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "radix-ui": "^1.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-loading-icons": "^1.1.0",
     "react-papaparse": "^4.4.0",
     "tailwind-merge": "^3.3.0"
   },
@@ -32,6 +34,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "eslint-plugin-react": "^7.37.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -22,3 +22,19 @@ export type Log = {
     partner: string,
     country: string
 }
+
+
+export interface GradeGraphData {
+    "grade": string,
+    "send": number,
+    "flash": number,
+    "onsight": number
+}
+
+export interface TopClimbsGraphData {
+    [key: string]: number
+}
+
+export interface TimelineGraphData {
+    [key: string]: Date | number
+}

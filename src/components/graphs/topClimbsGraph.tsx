@@ -1,23 +1,27 @@
-import {  BarPlot, ChartContainer, ChartsTooltip, ChartsXAxis, ChartsYAxis, barLabelClasses, chartsTooltipClasses } from "@mui/x-charts"
+import { BarPlot, ChartContainer, ChartsTooltip, ChartsXAxis, ChartsYAxis, barLabelClasses, chartsTooltipClasses } from "@mui/x-charts"
 import { GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import Gradient from "javascript-color-gradient"
-
+import React from "react";
+import { Audio } from 'react-loading-icons';
 
 interface TopClimbsGraphProps {
     data: { [key: string]: number }[],
     presentGrades: string[],
-    climbNames: Record<string, string[]>
+    climbNames: Record<string, string[]>,
+    className?: string
 }
 
 
 
-export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopClimbsGraphProps) {
+export default function TopClimbsGraph({ data, presentGrades, climbNames, className = "" }: TopClimbsGraphProps) {
 
     const gradeConverter = new GradeConverter()
-    const colours = new Gradient().setColorGradient("#40ae79", "#2a1f2d").setMidpoint(presentGrades.length).getColors();
+    const colours = new Gradient().setColorGradient("#40ae79", "#2a1f2d").setMidpoint(Math.max(presentGrades.length, 2)).getColors();
+
 
     return (
         <ChartContainer
+            className={className}
             dataset={data}
             height={450}
 
@@ -25,16 +29,17 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
                 id: grade,
                 dataKey: grade,
                 label: grade,
+                
                 type: "bar",
                 stack: "total",
                 color: colours[index],
                 valueFormatter: (v, context) => {
                     const yearGradeString = data[context.dataIndex].year + "-" + grade
                     return climbNames[yearGradeString].join("\n")
-                }
+                },
 
             }))}
-
+            
             xAxis={[{
                 dataKey: "year",
                 disableTicks: true,
@@ -45,8 +50,9 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
             sx={{
                 [`.${barLabelClasses.root}`]: {
                     ...mediumFontStyling
-                },
+                }
             }}
+
 
         >
             <BarPlot

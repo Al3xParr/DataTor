@@ -15,7 +15,8 @@
 
   --color-highlight: oklch(73.66% 0.069 117.33);
   --color-text: oklch(21% 0.034 264.665);
-  --color-textsecondary: oklch(70.7% 0.022 261.325);
+  --color-textlight: oklch(70.7% 0.022 261.325);
+  --color-textsecondary: oklch(49.10% 0.014 259.82);
 
   --color-lightprimary: oklch(76.08% 0.116 169.27);
   --color-primary: oklch(67.40% 0.128 158.88);
