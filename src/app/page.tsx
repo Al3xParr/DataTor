@@ -5,7 +5,7 @@ import { Log } from "../../resources/types"
 import { useCSVReader } from "react-papaparse"
 import StyleSummary from "@/components/styleSummary"
 import { GradeConverter, cleanGrade, createDate, getStyle } from "../../resources/utils"
-import { Mountain, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
 
 
 
@@ -20,6 +20,7 @@ export default function Stats() {
     return (
         <>
             <CSVReader
+            
                 onUploadAccepted={(results: { data: [] }) => {
                     const climbs = [] as Log[]
 
@@ -55,25 +56,25 @@ export default function Stats() {
                     getRootProps,
                     acceptedFile
                 }: any) => (
-                    <div className="flex flex-col w-screen h-screen m-5 max-w-[1500px]  items-center">
-                        
+                     <div className="flex flex-col h-full w-full items-center">
 
                         {acceptedFile ?
 
-                            <div className="w-full h-full flex flex-col space-y-5 ">
+                            <div className="w-full h-full flex flex-col sm:p-5 space-y-5">
+                                
                                 <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
                                 <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear} />
                                 <StyleSummary title={"Trad"} logs={logbook?.filter((log) => log.type == "Trad") ?? []} firstYear={firstYear} />
+                            
                             </div>
                             :
                             <>
                                 <div className="text-center text-2xl m-20">
                                     Navigate to <a href="https://www.ukclimbing.com/logbook">https://www.ukclimbing.com/logbook</a> and download your logbook
-                                    </div>
+                                </div>
+
                                 <div
-                                //onMouseEnter={() => } 
-                                
-                                className="text-2xl cursor-pointer w-2/3 h-2/3 border-3 space-y-10 border-dark shadow-lg border-dashed rounded-3xl bg-white font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl hover:scale-101"
+                                    className="text-2xl cursor-pointer w-2/3 h-2/3 border-3 space-y-10 p-10 border-dark shadow-lg border-dashed rounded-3xl bg-white font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl hover:scale-101"
                                     {...getRootProps()}>
                                     <Upload size={80} color="#2a1f2d " />
                                     <div className="text-textsecondary">Drag & drop to upload climbing DLOG (.csv format)</div>

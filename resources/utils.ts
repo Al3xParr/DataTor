@@ -1,4 +1,4 @@
-import { GradeGraphData, Log, TimelineGraphData, TopClimbsGraphData } from "./types";
+import { Log } from "./types";
 
 
 export class GradeConverter {
@@ -78,9 +78,12 @@ export function getStyle(style: string) {
         case "Lead rpt": return "Repeat"
         case "Lead dnf": return "DNF"
         case "Lead dog": return "Dogged"
+        case "Solo": return "Sent"
+        case "Solo β": return "Flash"
+        case "Solo O/S": return "Onsight"
+        default : return "Sent"
     }
 }
-
 
 
 export function cleanGrade(grade: string, type: string) {

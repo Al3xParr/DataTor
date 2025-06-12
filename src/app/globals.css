@@ -23,8 +23,6 @@
   --color-secondary: oklch(51.25% 0.031 148.42);
   --color-darksecondary: oklch(31.37% 0.027 342.06);
   --color-dark: oklch(25.85% 0.030 318.93);
-
-
 }
 
 @media (prefers-color-scheme: dark) {

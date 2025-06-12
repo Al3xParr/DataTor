@@ -7,8 +7,6 @@ import { useAnimate } from '@mui/x-charts/hooks';
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 import { mediumFontStyling, smallFontStyling } from '../../../resources/utils';
 import React from "react";
-import { Audio } from 'react-loading-icons';
-
 
 interface GradeGraphProps {
     data: {
@@ -75,53 +73,60 @@ export default function GradeGraph({ data, className = "" }: GradeGraphProps) {
 
 
     return (
-        <ChartContainer
-            className={className}
-            dataset={data}
-            height={450}
+        <div className="flex flex-col items-start h-full">
 
-            series={[
-                { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
-                { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
-                { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79 ", type: "bar" }
-            ]}
-            xAxis={[{
-                dataKey: "grade",
-                disableTicks: true,
-                disableLine: true,
-                scaleType: "band",
-                height: 50
-            }]}
+            <h4 className="font-bold shrink pt-3">Climb Count</h4>
+            <ChartContainer
+                className={className}
+                dataset={data}
 
-        >
-            <ChartsGrid horizontal />
-            <BarPlot
+                series={[
+                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
+                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
+                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79 ", type: "bar" }
+                ]}
+                xAxis={[{
+                    dataKey: "grade",
+                    disableTicks: true,
+                    disableLine: true,
+                    scaleType: "band",
+                    height: 50
+                }]}
+                yAxis={[{
+                    width: 0
+                }]}
+                margin={0}
 
-                barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
-                borderRadius={7}
-                slots={{
-                    barLabel: BarLabel
-                }}
+            >
+                <ChartsGrid horizontal />
+                <BarPlot
 
-            />
-            <ChartsTooltip
-                sx={{
-                    [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
-                        ...mediumFontStyling,
-                    },
-                }}
-            />
-            <ChartsXAxis
+                    barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
+                    borderRadius={7}
+                    slots={{
+                        barLabel: BarLabel
+                    }}
 
-                tickLabelStyle={{ angle: 45, ...smallFontStyling }}
+                />
+                <ChartsTooltip
+                    sx={{
+                        [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
+                            ...mediumFontStyling,
+                        },
+                    }}
+                />
+                <ChartsXAxis
 
-                sx={{
-                    "& .MuiChartsXAxis-tickContainer": {
-                        height: "90px !important"
-                    },
-                }}
-            />
-        </ChartContainer>
+                    tickLabelStyle={{ angle: 45, ...smallFontStyling }}
+
+                    sx={{
+                        "& .MuiChartsXAxis-tickContainer": {
+                            height: "5.625rem !important"
+                        },
+                    }}
+                />
+            </ChartContainer>
+        </div>
     )
 
 }

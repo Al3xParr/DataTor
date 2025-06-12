@@ -6,7 +6,7 @@ import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { getGradeData, getTimelineData, getTopClimbsPerYear, GradeDataRtn } from '../../resources/serverUtils';
+import { getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
 import { Audio } from 'react-loading-icons';
 
 
@@ -51,16 +51,17 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
             setGradesInTopClimbs(data.gradesInTopClimbs)
             setTopClimbNames(data.topClimbNames)
         })
-        
-    
+
+
     }, [logs, selectedYear])
 
 
     if (logs.length == 0) return (<></>)
-    
+
     return (
-        <div className="flex flex-col p-6 rounded-xl shadow-md  bg-white">
-            <div className="font-extrabold text-3xl w-full  flex justify-between">{title}
+        <div className="w-full h-max flex flex-col p-6 sm:rounded-xl shadow-md  bg-white">
+            <div className="font-extrabold text-3xl w-full  flex justify-between">
+                <h3>{title}</h3>
 
                 <Theme style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}>
                     <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
@@ -81,21 +82,21 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
             </div>
 
 
-            <div className='flex flex-col md:flex-row gap-3 items-center p-4 justify-around mb-10'>
+            <div className='flex flex-col md:flex-row md:space-x-10 space-y-10 items-center m-4 justify-around mb-10'>
+                
                 <div className='flex divide-x divide-dark p-2 bg-gray-200 rounded-xl shadow-md w-max'>
-
                     <div className="flex flex-col items-center px-5">
-                        <div className='text-textlight'>Total Sent</div>
+                        <div className='text-textsecondary'>Total Sent</div>
                         <div className='font-extrabold text-3xl'>{filteredClimbs.length}</div>
                     </div>
 
                     <div className="flex flex-col items-center px-5">
-                        <div className='text-textlight'>Flash</div>
+                        <div className='text-textsecondary'>Flash</div>
                         <div className='font-extrabold text-3xl'>{flash?.length}</div>
                     </div>
 
                     <div className="flex flex-col items-center px-5">
-                        <div className='text-textlight'>Onsight</div>
+                        <div className='text-textsecondary'>Onsight</div>
                         <div className='font-extrabold text-3xl'>{onsight?.length}</div>
                     </div>
 
@@ -110,49 +111,46 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                 </div>
             </div>
 
-            <div className='grid grid-cols-2'>
+            <div className='w-full grid grid-cols-2 h-max md:p-4'>
+
                 {
                     gradeDataSet.length == 0 ?
-                        <div className='w-full h-full flex flex-col items-center'>
+                        <div className='w-full h-full flex flex-col  col-span-2 items-center md:col-span-1'>
                             <Audio fill="#40ae79" />
                             <p>Processing...</p>
                         </div>
                         :
+                        <div className='w-full h-[400px] col-span-2 md:col-span-1'>
+                            <GradeGraph data={gradeDataSet.reverse()} />
+                        </div>
 
-                        <GradeGraph data={gradeDataSet.reverse()} />
                 }
 
                 {
                     topClimbsPerYear.length == 0 ?
-                        <div className='w-full h-full flex flex-col items-center'>
+                        <div className='w-full h-full flex flex-col col-span-2  items-center md:col-span-1'>
                             <Audio fill="#40ae79" />
                             <p>Processing...</p>
                         </div>
                         :
-
-                        <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
+                        <div className='w-full h-[400px] col-span-2 md:col-span-1'>
+                            <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
+                        </div>
                 }
 
                 {
                     timelineData.length == 0 ?
-                        <div className='w-full h-full flex flex-col items-center'>
+                        <div className='w-full h-full flex flex-col items-center col-span-2'>
                             <Audio fill="#40ae79" />
                             <p>Processing...</p>
                         </div>
                         :
-
-                        <TimelineGraph className={"col-span-2"} data={timelineData} presentGrades={presentGrades} />
+                        <div className='w-full h-[500px] max-h-[500px] col-span-2'>
+                            <TimelineGraph data={timelineData} presentGrades={presentGrades} />
+                        </div>
                 }
 
-
-
-
-
             </div>
-
-
-
-
         </div>
     )
 }

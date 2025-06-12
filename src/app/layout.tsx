@@ -6,31 +6,34 @@ import { Mountain } from "lucide-react";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "DataTor - The UKC Climbing Logbook Analyser",
-  description: "Gain deeper insight into your climbing logbook, looking at stats and graphs",
+    title: "DataTor - The UKC Climbing Logbook Analyser",
+    description: "Gain deeper insight into your climbing logbook, looking at stats and graphs",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`antialiased`}
-      >
+    return (
+        <html lang="en">
+            <body
+                className={`antialiased flex flex-col items-center`}
+            >
 
-          <span className="w-screen py-2 bg-primary flex font-primary font-extrabold text-3xl font-bolder text-dark">
-            <Mountain className="ml-5 mr-1" strokeWidth="3" size={30} color="#2a1f2d"/>
-            <div className="flex items-center whitespace-pre">DataTor&nbsp;<p className="text-xl items-end ">- The Climbing Logbook Analyser</p></div>
-            
-          </span>
-          <div className="w-screen text-dark font-primary font-medium text-lg flex justify-around">
-            {children}
-            </div>
+                <header className="w-screen py-2 bg-primary flex items-center font-primary font-extrabold font-bolder text-dark  align-middle leading-0">
+                    <Mountain className="ml-5 mr-1 mb-1" strokeWidth="3" size={30} color="#2a1f2d" />
+                    <h1 className="text-3xl whitespace-pre max-h-min">
+                        DataTor&nbsp;&nbsp;
+                    </h1>
+                    <h2 className="text-xl h-full">The Climbing Logbook Analyser</h2>
 
-      </body>
-    </html>
-  );
+                </header>
+                <div className="w-screen max-w-[93.75rem] text-dark font-primary font-medium text-lg flex flex-col items-center justify-around">
+                    {children}
+                </div>
+
+            </body>
+        </html>
+    );
 }
