@@ -6,7 +6,7 @@ import { Mountain } from "lucide-react";
 import React from "react";
 
 export const metadata: Metadata = {
-    title: "DataTor - The UKC Climbing Logbook Analyser",
+    title: "DataTor - The Climbing Logbook Analyser",
     description: "Gain deeper insight into your climbing logbook, looking at stats and graphs",
 };
 

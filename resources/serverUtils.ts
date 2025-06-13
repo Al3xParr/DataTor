@@ -6,7 +6,9 @@ const styleIndex : Record<string, number> = {
     "Flash": 1,
     "Onsight": 2,
     "Sent": 0,
-    "Redpoint": 0
+    "Redpoint": 0,
+    "GroundUp" : 0,
+    "Repeat": 0
 }
 
 export interface TopClimbsDataRtn {

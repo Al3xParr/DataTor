@@ -44,9 +44,9 @@ export default function Stats() {
                             pitches: climb[10],
                             type: climb[11]
                         } as Log
-
+                         
                         if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
-                        climbs.push(newLog)
+                        if (newLog.style != "DNF" && newLog.style != "Dogged") climbs.push(newLog)
                     })
                     setLogbook(climbs.sort((a, b) => gradeConverter.compareLog(a, b)))
                 }}

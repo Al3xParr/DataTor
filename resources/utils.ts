@@ -68,11 +68,13 @@ export function getStyle(style: string) {
     switch (style) {
         case "Sent x": return "Sent"
         case "Sent β": return "Flash"
+        case "Sent Î²": return "Flash"
         case "Sent O/S": return "Onsight"
         case "Sent rpt": return "Repeat"
         case "Sent dnf": return "DNF"
         case "Lead RP": return "Redpoint"
         case "Lead β": return "Flash"
+        case "Lead Î²": return "Flash"
         case "Lead G/U": return "GroundUp"
         case "Lead O/S": return "Onsight"
         case "Lead rpt": return "Repeat"
@@ -80,6 +82,7 @@ export function getStyle(style: string) {
         case "Lead dog": return "Dogged"
         case "Solo": return "Sent"
         case "Solo β": return "Flash"
+        case "Solo Î²": return "Flash"
         case "Solo O/S": return "Onsight"
         default : return "Sent"
     }
