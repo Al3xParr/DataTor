@@ -20,9 +20,9 @@ export class GradeConverter {
         let aIndex = this.font.indexOf(aGrade) + this.v.indexOf(aGrade) + 1
         let bIndex = this.font.indexOf(bGrade) + this.v.indexOf(bGrade) + 1
         if (aIndex == -1) aIndex = this.french.indexOf(aGrade)
-        if (aIndex == -1) aIndex = this.britTrad.indexOf(aGrade.split(" ")[0])
+        if (aIndex == -1) aIndex = this.britTrad.indexOf(aGrade)
         if (bIndex == -1) bIndex = this.french.indexOf(bGrade)
-        if (bIndex == -1) bIndex = this.britTrad.indexOf(bGrade.split(" ")[0])
+        if (bIndex == -1) bIndex = this.britTrad.indexOf(bGrade)
 
         if (aIndex == bIndex) return a.date.getTime() - b.date.getTime()
 
@@ -34,9 +34,9 @@ export class GradeConverter {
         let aIndex = this.font.indexOf(a) + this.v.indexOf(a) + 1
         let bIndex = this.font.indexOf(b) + this.v.indexOf(b) + 1
         if (aIndex == -1) aIndex = this.french.indexOf(a)
-        if (aIndex == -1) aIndex = this.britTrad.indexOf(a.split(" ")[0])
+        if (aIndex == -1) aIndex = this.britTrad.indexOf(a)
         if (bIndex == -1) bIndex = this.french.indexOf(b)
-        if (bIndex == -1) bIndex = this.britTrad.indexOf(b.split(" ")[0])
+        if (bIndex == -1) bIndex = this.britTrad.indexOf(b)
 
         return bIndex - aIndex
     }
@@ -90,9 +90,9 @@ export function getStyle(style: string) {
 
 
 export function cleanGrade(grade: string, type: string) {
-    if (type == "Bouldering") return new GradeConverter().getBoulderGrade(grade)
-    if (type == "Trad") return grade.split(" ")[0]
-    return grade
+    const splitGrade = grade.split(" ")[0]
+    if (type == "Bouldering") return new GradeConverter().getBoulderGrade(splitGrade)
+    return splitGrade
 }
 
 export function createDate(date: string) {

@@ -121,7 +121,7 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                         </div>
                         :
                         <div className='w-full h-[400px] col-span-2 md:col-span-1'>
-                            <GradeGraph data={gradeDataSet.reverse()} />
+                            <GradeGraph data={gradeDataSet} />
                         </div>
 
                 }

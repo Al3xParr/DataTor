@@ -14,8 +14,7 @@ interface GradeGraphProps {
         "send": number,
         "flash": number,
         "onsight": number
-    }[],
-    className?: string
+    }[]
 }
 
 const Text = styled('text')(({ theme }) => ({
@@ -61,7 +60,7 @@ function BarLabel(props: BarLabelProps) {
     );
 }
 
-export default function GradeGraph({ data, className = "" }: GradeGraphProps) {
+export default function GradeGraph({ data }: GradeGraphProps) {
 
     function getTotalForGrade(index: number, seriesId: string) {
         const total = (data[index]?.send + data[index]?.flash + data[index]?.onsight + 0).toString()
@@ -77,7 +76,7 @@ export default function GradeGraph({ data, className = "" }: GradeGraphProps) {
 
             <h4 className="font-bold shrink pt-3">Climb Count</h4>
             <ChartContainer
-                className={className}
+
                 dataset={data}
 
                 series={[
@@ -95,7 +94,7 @@ export default function GradeGraph({ data, className = "" }: GradeGraphProps) {
                 yAxis={[{
                     width: 0
                 }]}
-                margin={0}
+                margin={{ top: 20 }}
 
             >
                 <ChartsGrid horizontal />
