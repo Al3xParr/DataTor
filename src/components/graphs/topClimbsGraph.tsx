@@ -2,6 +2,7 @@ import { BarPlot, ChartContainer, ChartsTooltip, ChartsXAxis, ChartsYAxis, barLa
 import { GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import Gradient from "javascript-color-gradient"
 import React from "react";
+import { Card } from "../ui/card";
 
 interface TopClimbsGraphProps {
     data: { [key: string]: number }[],
@@ -17,9 +18,9 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
     const colours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(Math.max(presentGrades.length, 2)).getColors();
 
     return (
-        <div className="flex flex-col items-start h-full">
+        <Card className="flex flex-col items-start h-full ">
 
-            <h4 className="font-bold shrink pt-3">Top 10 hardest climbs per year</h4>
+            <h4 className="font-bold shrink">Top 10 hardest climbs per year</h4>
             <ChartContainer
                 className={"h-max"}
                 dataset={data}
@@ -50,7 +51,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                     width: 20
                 }]}
 
-                margin={{ top: 5 }}
+                margin={{ top: 10 }}
 
                 sx={{
                     [`.${barLabelClasses.root}`]: {
@@ -88,6 +89,6 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                 />
 
             </ChartContainer>
-        </div>
+        </Card>
     )
 }

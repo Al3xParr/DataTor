@@ -9,19 +9,21 @@ import { TopClimb } from './topClimb';
 import { getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
 import { Audio } from 'react-loading-icons';
 import TotalClimb from './totalClimb';
+import { Card } from './ui/card';
 
 
 interface StyleSummaryProps {
-    title: string,
     logs: Log[],
-    firstYear: number
+    firstYear: number,
+    owner: string
 }
 
-export default function StyleSummary({ title, logs, firstYear }: StyleSummaryProps) {
+export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
+    const [selectedType, setselectedType] = useState<string>("Bouldering");
 
-    const filteredClimbs = logs.filter((l) => selectedYear == 0 || l.date.getFullYear() == selectedYear)
+    const filteredClimbs = logs.filter((l) => (selectedYear == 0 || l.date.getFullYear() == selectedYear) && l.type == selectedType)
     const flash = filteredClimbs.filter((l) => l.style == "Flash")
     const onsight = filteredClimbs.filter((l) => l.style == "Onsight")
 
@@ -47,24 +49,45 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
             getTimelineData(filteredClimbs, data.presentGrades).then((d) => setTimelineData(d))
         })
 
-        getTopClimbsPerYear(logs, yearList).then((data) => {
+        getTopClimbsPerYear(logs.filter((l) => l.type == selectedType), yearList).then((data) => {
             setTopClimbsPerYear(data.topClimbsPerYear)
             setGradesInTopClimbs(data.gradesInTopClimbs)
             setTopClimbNames(data.topClimbNames)
         })
 
 
-    }, [logs, selectedYear])
+    }, [logs, selectedYear, selectedType])
 
 
     if (logs.length == 0) return (<></>)
 
     return (
-        <div className="w-full h-max flex flex-col p-6 sm:rounded-xl shadow-md  bg-new-white">
-            <div className=" w-full mb-6 flex justify-between">
-                <h3 className='font-extrabold text-3xl'>{title}</h3>
+        <div className="w-full h-max grid grid-cols-2 gap-4 flex-col pb-10">
+            <Card className='p-6 col-span-2 w-full flex justify-between'>
+                <div className='flex flex-col'>
+                    <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
+                    <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>
+                </div>
 
-                <Theme style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}>
+                <Theme
+                    style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}
+                    className='flex gap-4'
+
+                >
+                    <Select.Root defaultValue='Bouldering' onValueChange={(value) => setselectedType(value)} >
+                        <Select.Trigger className='SelectTrigger min-h-min' >
+                        </Select.Trigger>
+                        <Select.Content>
+                            <Select.Group>
+                                <Select.Label>Disciplines</Select.Label>
+                                <Select.Item key={"Bouldering"} value={"Bouldering"}>Bouldering</Select.Item>
+                                <Select.Item key={"Sport"} value={"Sport"}>Sport</Select.Item>
+                                <Select.Item key={"Trad"} value={"Trad"}>Trad</Select.Item>
+
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
+
                     <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
                         <Select.Trigger className='SelectTrigger min-h-min' >
                         </Select.Trigger>
@@ -78,73 +101,71 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                             </Select.Group>
                         </Select.Content>
                     </Select.Root>
+
                 </Theme>
 
-            </div>
+            </Card>
 
-
-            <div className='text-base flex flex-col md:flex-row gap-5 items-center m-4 justify-around mb-10'>
-
+            <div className='col-span-2 flex flex-col md:flex-row gap-5 items-center p-4 justify-around'>
                 <div>
                     <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
-                    <div className='flex divide-x py-4 divide-secondary bg-primary rounded-xl shadow-md w-max'>
+                    <Card className='flex divide-x px-0 divide-secondary  w-max'>
                         <TotalClimb type='Sent' total={filteredClimbs.length} />
                         <TotalClimb type='Flash' total={flash?.length} />
                         <TotalClimb type='Onsight' total={onsight?.length} />
-                    </div>
+                    </Card>
                 </div>
 
                 <div>
                     <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
-                    <div className='flex gap-3 divide-secondary divide-x bg-primary rounded-xl py-4 shadow-md'>
+                    <Card className='flex gap-3 divide-secondary divide-x px-0'>
                         <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
-                    </div>
+                    </Card>
                 </div>
 
-            </div>
-
-            <div className='w-full grid grid-cols-2 h-max md:p-4'>
-
-                {
-                    gradeDataSet.length == 0 ?
-                        <div className='w-full h-full flex flex-col col-span-2 items-center md:col-span-1'>
-                            <Audio fill="#0a595c" />
-                            <p className='text-tertiary'>Processing...</p>
-                        </div>
-                        :
-                        <div className='w-full h-[400px] col-span-2 md:col-span-1'>
-                            <GradeGraph data={gradeDataSet} />
-                        </div>
-
-                }
-
-                {
-                    topClimbsPerYear.length == 0 ?
-                        <div className='w-full h-full flex flex-col col-span-2  items-center md:col-span-1'>
-                            <Audio fill="#0a595c" />
-                            <p className='text-tertiary'>Processing...</p>
-                        </div>
-                        :
-                        <div className='w-full h-[400px] col-span-2 md:col-span-1'>
-                            <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
-                        </div>
-                }
-
-                {
-                    timelineData.length == 0 ?
-                        <div className='w-full h-full flex flex-col items-center col-span-2'>
-                            <Audio fill="#0a595c" />
-                            <p className='text-tertiary'>Processing...</p>
-                        </div>
-                        :
-                        <div className='w-full h-[500px] max-h-[500px] col-span-2'>
-                            <TimelineGraph data={timelineData} presentGrades={presentGrades} />
-                        </div>
-                }
 
             </div>
+
+            {
+                gradeDataSet.length == 0 ?
+                    <Card className='w-full h-full flex flex-col justify-center  col-span-2 items-center md:col-span-1'>
+                        <Audio fill="#0a595c" />
+                        <p className='text-tertiary'>Processing...</p>
+                    </Card>
+                    :
+                    <div className='w-full h-[400px] col-span-2 md:col-span-1'>
+                        <GradeGraph data={gradeDataSet} />
+                    </div>
+
+            }
+
+            {
+                topClimbsPerYear.length == 0 ?
+                    <Card className='w-full h-full flex flex-col col-span-2   justify-center  items-center md:col-span-1'>
+                        <Audio fill="#0a595c" />
+                        <p className='text-tertiary'>Processing...</p>
+                    </Card>
+                    :
+                    <div className='w-full h-[400px] col-span-2 md:col-span-1'>
+                        <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
+                    </div>
+            }
+
+            {
+                timelineData.length == 0 ?
+                    <Card className='w-full h-full flex flex-col  justify-center items-center col-span-2'>
+                        <Audio fill="#0a595c" />
+                        <p className='text-tertiary'>Processing...</p>
+                    </Card>
+                    :
+                    <div className='w-full h-[500px] max-h-[500px] col-span-2'>
+                        <TimelineGraph data={timelineData} presentGrades={presentGrades} />
+                    </div>
+            }
+
         </div>
+
     )
 }

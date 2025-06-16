@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { rainbowSurgePalette } from "@mui/x-charts";
 import { mediumFontStyling, smallFontStyling } from "../../../resources/utils";
 import Gradient from "javascript-color-gradient";
+import { Card } from "../ui/card";
 
 interface TimelineGraphProps {
     data: { [key: string]: Date | number }[],
@@ -14,7 +15,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
     const [highlightedItem, setHighlightedItem] = useState<HighlightItemData | null>(null)
 
-    const baseColours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(presentGrades.length).getColors()
+    const baseColours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(Math.max(presentGrades.length, 2)).getColors()
 
     const [showColours, setShowColours] = useState<string[]>(baseColours)
 
@@ -32,8 +33,8 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
 
     return (
-        <div className="flex flex-col items-start h-full">
-            <h4 className="font-bold shrink pt-3">Accumulation of climbs over time</h4>
+        <Card className="flex flex-col items-start h-full ">
+            <h4 className="font-bold shrink">Accumulation of climbs over time</h4>
 
             <ChartDataProvider
                 dataset={data}
@@ -71,12 +72,13 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                             :
                             new Date(value).getFullYear().toString()
                     },
+                
                 }]}
 
                 yAxis={[{
                     width: 30
                 }]}
-                margin={0}
+                margin={{top: 20}}
 
 
             >
@@ -149,7 +151,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
             </ChartDataProvider>
 
-        </div>
+        </Card>
         // </div>
     )
 

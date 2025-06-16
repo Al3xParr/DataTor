@@ -60,12 +60,10 @@ export default function Stats() {
 
                         {acceptedFile ?
 
-                            <div className="w-full h-full flex flex-col sm:p-5 sm:pt-0 pt-0 space-y-5">
+                            <div className="w-full h-full flex flex-col sm:p-10 sm:pt-5 pt-5">
                                 
-                                <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
-                                <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear} />
-                                <StyleSummary title={"Trad"} logs={logbook?.filter((log) => log.type == "Trad") ?? []} firstYear={firstYear} />
-                            
+                                <StyleSummary logs={logbook ?? []} firstYear={firstYear} owner={acceptedFile.name.split("_")[0] ?? ""} />
+
                             </div>
                             :
                             <div className="w-full h-full flex flex-col items-center">

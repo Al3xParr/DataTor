@@ -7,6 +7,7 @@ import { useAnimate } from '@mui/x-charts/hooks';
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 import { mediumFontStyling, smallFontStyling } from '../../../resources/utils';
 import React from "react";
+import { Card } from '../ui/card';
 
 interface GradeGraphProps {
     data: {
@@ -72,9 +73,9 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
 
     return (
-        <div className="flex flex-col items-start h-full">
+        <Card className="flex flex-col items-start h-full">
 
-            <h4 className="font-bold shrink pt-3 ">Climb Count</h4>
+            <h4 className="font-bold shrink pt-1 pl-1">Climb Count</h4>
             <ChartContainer
 
                 dataset={data}
@@ -89,12 +90,12 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                     disableTicks: true,
                     disableLine: true,
                     scaleType: "band",
-                    height: 50
+                    height: 25
                 }]}
                 yAxis={[{
                     width: 0
                 }]}
-                margin={{ top: 20 }}
+                margin={{ top: 30 }}
 
             >
                 <ChartsGrid horizontal />
@@ -125,7 +126,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                     }}
                 />
             </ChartContainer>
-        </div>
+        </Card>
     )
 
 }
