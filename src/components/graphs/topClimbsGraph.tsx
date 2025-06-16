@@ -14,7 +14,7 @@ interface TopClimbsGraphProps {
 export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopClimbsGraphProps) {
 
     const gradeConverter = new GradeConverter()
-    const colours = new Gradient().setColorGradient("#40ae79", "#2a1f2d").setMidpoint(Math.max(presentGrades.length, 2)).getColors();
+    const colours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(Math.max(presentGrades.length, 2)).getColors();
 
     return (
         <div className="flex flex-col items-start h-full">

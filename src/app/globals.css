@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #e5e7eb ;
+  --background: #d9f2da;
   --foreground: #171717;
 }
 
@@ -13,22 +13,19 @@
   --font-mono: var(--font-geist-mono);
   --font-primary: "Nunito", "serif";
 
-  --color-highlight: oklch(73.66% 0.069 117.33);
-  --color-text: oklch(21% 0.034 264.665);
-  --color-textlight: oklch(70.7% 0.022 261.325);
-  --color-textsecondary: oklch(49.10% 0.014 259.82);
+  --color-primary: hsl(122, 50%, 90%);
+  --color-secondary: hsl(122, 50%, 10%);
+  --color-secondary-light: hsl(122, 50%, 20%);
+  --color-tertiary: hsl(182, 80%, 20%);
+  --color-accent: hsl(62, 80%, 20%);
 
-  --color-lightprimary: oklch(76.08% 0.116 169.27);
-  --color-primary: oklch(67.40% 0.128 158.88);
-  --color-secondary: oklch(51.25% 0.031 148.42);
-  --color-darksecondary: oklch(31.37% 0.027 342.06);
-  --color-dark: oklch(25.85% 0.030 318.93);
+  --color-new-white: hsl(120, 52%, 97%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #d9f2da;
   }
 }
 

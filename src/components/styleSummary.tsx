@@ -8,6 +8,7 @@ import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
 import { getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
 import { Audio } from 'react-loading-icons';
+import TotalClimb from './totalClimb';
 
 
 interface StyleSummaryProps {
@@ -59,9 +60,9 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
     if (logs.length == 0) return (<></>)
 
     return (
-        <div className="w-full h-max flex flex-col p-6 sm:rounded-xl shadow-md  bg-white">
-            <div className="font-extrabold text-3xl w-full  flex justify-between">
-                <h3>{title}</h3>
+        <div className="w-full h-max flex flex-col p-6 sm:rounded-xl shadow-md  bg-new-white">
+            <div className=" w-full mb-6 flex justify-between">
+                <h3 className='font-extrabold text-3xl'>{title}</h3>
 
                 <Theme style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}>
                     <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
@@ -82,42 +83,35 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
             </div>
 
 
-            <div className='flex flex-col md:flex-row md:space-x-10 space-y-10 items-center m-4 justify-around mb-10'>
-                
-                <div className='flex divide-x divide-dark p-2 bg-gray-200 rounded-xl shadow-md w-max'>
-                    <div className="flex flex-col items-center px-5">
-                        <div className='text-textsecondary'>Total Sent</div>
-                        <div className='font-extrabold text-3xl'>{filteredClimbs.length}</div>
-                    </div>
+            <div className='text-base flex flex-col md:flex-row gap-5 items-center m-4 justify-around mb-10'>
 
-                    <div className="flex flex-col items-center px-5">
-                        <div className='text-textsecondary'>Flash</div>
-                        <div className='font-extrabold text-3xl'>{flash?.length}</div>
+                <div>
+                    <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
+                    <div className='flex divide-x py-4 divide-secondary bg-primary rounded-xl shadow-md w-max'>
+                        <TotalClimb type='Sent' total={filteredClimbs.length} />
+                        <TotalClimb type='Flash' total={flash?.length} />
+                        <TotalClimb type='Onsight' total={onsight?.length} />
                     </div>
-
-                    <div className="flex flex-col items-center px-5">
-                        <div className='text-textsecondary'>Onsight</div>
-                        <div className='font-extrabold text-3xl'>{onsight?.length}</div>
-                    </div>
-
                 </div>
 
-                <div className='flex flex-col space-y-3 items-center font-bold justify-items-center bg-gray-200 rounded-xl  shadow-md p-4 w-max max-w-fit'>
-                    <div className='font-extrabold text-3xl'>Top Climbs</div>
-
-                    <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "primary" : "disabled"} />
-                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "primary" : "disabled"} />
-                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "primary" : "disabled"} />
+                <div>
+                    <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
+                    <div className='flex gap-3 divide-secondary divide-x bg-primary rounded-xl py-4 shadow-md'>
+                        <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
+                        <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
+                        <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
+                    </div>
                 </div>
+
             </div>
 
             <div className='w-full grid grid-cols-2 h-max md:p-4'>
 
                 {
                     gradeDataSet.length == 0 ?
-                        <div className='w-full h-full flex flex-col  col-span-2 items-center md:col-span-1'>
-                            <Audio fill="#40ae79" />
-                            <p>Processing...</p>
+                        <div className='w-full h-full flex flex-col col-span-2 items-center md:col-span-1'>
+                            <Audio fill="#0a595c" />
+                            <p className='text-tertiary'>Processing...</p>
                         </div>
                         :
                         <div className='w-full h-[400px] col-span-2 md:col-span-1'>
@@ -129,8 +123,8 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                 {
                     topClimbsPerYear.length == 0 ?
                         <div className='w-full h-full flex flex-col col-span-2  items-center md:col-span-1'>
-                            <Audio fill="#40ae79" />
-                            <p>Processing...</p>
+                            <Audio fill="#0a595c" />
+                            <p className='text-tertiary'>Processing...</p>
                         </div>
                         :
                         <div className='w-full h-[400px] col-span-2 md:col-span-1'>
@@ -141,8 +135,8 @@ export default function StyleSummary({ title, logs, firstYear }: StyleSummaryPro
                 {
                     timelineData.length == 0 ?
                         <div className='w-full h-full flex flex-col items-center col-span-2'>
-                            <Audio fill="#40ae79" />
-                            <p>Processing...</p>
+                            <Audio fill="#0a595c" />
+                            <p className='text-tertiary'>Processing...</p>
                         </div>
                         :
                         <div className='w-full h-[500px] max-h-[500px] col-span-2'>

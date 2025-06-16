@@ -18,18 +18,18 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`antialiased flex flex-col items-center`}
+                className={`antialiased flex flex-col items-center h-screen min-h-screen`}
             >
 
-                <header className="w-screen py-2 bg-primary flex items-center font-primary font-extrabold font-bolder text-dark  align-middle leading-0">
-                    <Mountain className="ml-5 mr-1 mb-1" strokeWidth="3" size={30} color="#2a1f2d" />
+                <header className="w-screen py-2 sticky top-0 flex bg-primary z-50 items-center font-primary font-extrabold font-bolder text-secondary  align-middle leading-0">
+                    <Mountain className="ml-5 mr-1 mb-1" strokeWidth="3" size={30} color="#0d260e " />
                     <h1 className="text-3xl whitespace-pre max-h-min">
                         DataTor&nbsp;&nbsp;
                     </h1>
                     <h2 className="text-xl h-full">The Climbing Logbook Analyser</h2>
 
                 </header>
-                <div className="w-screen max-w-[93.75rem] text-dark font-primary font-medium text-lg flex flex-col items-center justify-around">
+                <div className="w-screen h-full max-w-[93.75rem] text-secondary font-primary font-normal text-base flex flex-col items-center justify-around">
                     {children}
                 </div>
 

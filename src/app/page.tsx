@@ -60,7 +60,7 @@ export default function Stats() {
 
                         {acceptedFile ?
 
-                            <div className="w-full h-full flex flex-col sm:p-5 space-y-5">
+                            <div className="w-full h-full flex flex-col sm:p-5 sm:pt-0 pt-0 space-y-5">
                                 
                                 <StyleSummary title={"Bouldering"} logs={logbook?.filter((log) => log.type == "Bouldering") ?? []} firstYear={firstYear} />
                                 <StyleSummary title={"Sport"} logs={logbook?.filter((log) => log.type == "Sport") ?? []} firstYear={firstYear} />
@@ -68,20 +68,20 @@ export default function Stats() {
                             
                             </div>
                             :
-                            <>
-                                <div className="text-center text-2xl m-20">
+                            <div className="w-full h-full flex flex-col items-center">
+                                <div className="text-center text-2xl m-20 ">
                                     Navigate to <a href="https://www.ukclimbing.com/logbook">https://www.ukclimbing.com/logbook</a> and download your logbook
                                 </div>
 
                                 <div
-                                    className="text-2xl cursor-pointer w-2/3 h-2/3 border-3 space-y-10 p-10 border-dark shadow-lg border-dashed rounded-3xl bg-white font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl hover:scale-101"
+                                    className="text-2xl cursor-pointer w-2/3 h-2/3 border-3 space-y-10 p-10 border-dark shadow-lg border-dashed rounded-3xl bg-new-white font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl hover:scale-101"
                                     {...getRootProps()}>
-                                    <Upload size={80} color="#2a1f2d " />
-                                    <div className="text-textsecondary">Drag & drop to upload climbing DLOG (.csv format)</div>
-                                    <div className="text-textsecondary">OR</div>
-                                    <div className="p-3 border bg-dark text-white rounded-lg ">Browse Files</div>
+                                    <Upload size={80} color="#0d260e" />
+                                    <div className="">Drag & drop to upload climbing DLOG (.csv format)</div>
+                                    <div className="">OR</div>
+                                    <div className="p-4 border bg-secondary text-primary rounded-lg ">Browse Files</div>
                                 </div>
-                            </>
+                            </div>
                         }
                     </div>
                 )}

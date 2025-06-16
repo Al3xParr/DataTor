@@ -25,9 +25,9 @@ const Text = styled('text')(({ theme }) => ({
     textAnchor: 'middle',
     dominantBaseline: 'central',
     pointerEvents: 'none',
-    fontWeight: 800,
+    fontWeight: 600,
     fontFamily: "Nunito",
-    fontSize: 15
+    fontSize: 14
 }));
 
 function BarLabel(props: BarLabelProps) {
@@ -74,15 +74,15 @@ export default function GradeGraph({ data }: GradeGraphProps) {
     return (
         <div className="flex flex-col items-start h-full">
 
-            <h4 className="font-bold shrink pt-3">Climb Count</h4>
+            <h4 className="font-bold shrink pt-3 ">Climb Count</h4>
             <ChartContainer
 
                 dataset={data}
 
                 series={[
-                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
-                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
-                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79 ", type: "bar" }
+                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#0a595c", type: "bar" },
+                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#72a69b", type: "bar" },
+                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#d9f2da", type: "bar" }
                 ]}
                 xAxis={[{
                     dataKey: "grade",
@@ -116,7 +116,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                 />
                 <ChartsXAxis
 
-                    tickLabelStyle={{ angle: 45, ...smallFontStyling }}
+                    tickLabelStyle={{ ...smallFontStyling }}
 
                     sx={{
                         "& .MuiChartsXAxis-tickContainer": {
