@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { Log } from "../../resources/types"
 import { useCSVReader } from "react-papaparse"
 import Summary from "@/components/summary"
-import { GradeConverter, cleanGrade, createDate, getStyle } from "../../resources/utils"
+import { GradeConverter, cleanGrade, cleanName, createDate, getStyle } from "../../resources/utils"
 import { Upload } from "lucide-react"
 
 
@@ -48,6 +48,7 @@ export default function Stats() {
                     if (newLog.style != "DNF" && newLog.style != "Dogged") climbs.push(newLog)
                 })
                 setLogbook(climbs.sort((a, b) => gradeConverter.compareLog(a, b)))
+                
             }}
 
         >
@@ -61,7 +62,7 @@ export default function Stats() {
 
                         <div className="w-full h-full flex flex-col sm:p-10 sm:pt-5 pt-5">
 
-                            <Summary logs={logbook ?? []} firstYear={firstYear} owner={acceptedFile.name.split("_")[0] ?? ""} />
+                            <Summary logs={logbook ?? []} firstYear={firstYear} owner={cleanName(acceptedFile.name)} />
 
                         </div>
                         :

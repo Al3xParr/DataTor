@@ -59,7 +59,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
 
     useEffect(() => {
-
+        console.table(logs?.slice(20))
         getGradeData(filteredClimbs).then((data) => {
             setGradeDataSet(data.gradeDataSet)
             setPresentGrades(data.presentGrades)

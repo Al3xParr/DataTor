@@ -123,3 +123,7 @@ export function createDate(date: string) {
     return new Date(date.replace("???", "01/Jan").replace("??", "01"))
 }
 
+export function cleanName(filename: string): string{
+    const re = /_Logbook_DLOG( \(\d+\))*.csv/
+    return filename.replace(re, "")
+}
