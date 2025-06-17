@@ -29,9 +29,13 @@ export default function RootLayout({
                     <h2 className="text-lg font-medium h-full content-center">The Climbing Logbook Analyser</h2>
 
                 </header>
-                <div className="w-screen h-full max-w-[93.75rem] text-secondary font-primary font-normal text-base flex flex-col items-center justify-around">
+                <div className="w-screen h-max max-w-[93.75rem] text-secondary font-primary font-normal text-base flex flex-col items-center justify-around">
                     {children}
                 </div>
+
+                <footer className="bg-primary w-screen py-2 font-primary text-center" >
+                    None of your data is saved, when you leave the site all data is deleted
+                </footer>
 
             </body>
         </html>

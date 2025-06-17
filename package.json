@@ -15,7 +15,6 @@
     "@radix-ui/themes": "^3.2.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
-    "javascript-color-gradient": "^2.5.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",
     "radix-ui": "^1.4.2",
@@ -23,12 +22,12 @@
     "react-dom": "^19.0.0",
     "react-loading-icons": "^1.1.0",
     "react-papaparse": "^4.4.0",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "tinygradient": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/javascript-color-gradient": "^2.4.2",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.16",
     "@types/react": "^19",

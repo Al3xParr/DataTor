@@ -1,10 +1,9 @@
-import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, chartsTooltipClasses } from "@mui/x-charts";
-import { lineElementClasses, LinePlot, markElementClasses } from "@mui/x-charts/LineChart";
+import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, chartsTooltipClasses, ChartsAxisHighlight, ChartsReferenceLine, ChartsClipPath } from "@mui/x-charts";
+import { LineChartProps, lineElementClasses, LineHighlightPlot, LinePlot, markElementClasses } from "@mui/x-charts/LineChart";
 import React, { useState } from "react";
 import { rainbowSurgePalette } from "@mui/x-charts";
-import { mediumFontStyling, smallFontStyling } from "../../../resources/utils";
-import Gradient from "javascript-color-gradient";
-import { Card } from "../ui/card";
+import { globalColours, mediumFontStyling, smallFontStyling } from "../../../resources/utils";
+import { ChartsOverlay } from "@mui/x-charts/ChartsOverlay";
 
 interface TimelineGraphProps {
     data: { [key: string]: Date | number }[],
@@ -14,15 +13,11 @@ interface TimelineGraphProps {
 export default function TimelineGraph({ data, presentGrades }: TimelineGraphProps) {
 
     const [highlightedItem, setHighlightedItem] = useState<HighlightItemData | null>(null)
-
-    const baseColours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(Math.max(presentGrades.length, 2)).getColors()
-
-    const [showColours, setShowColours] = useState<string[]>(baseColours)
-
+    const [showColours, setShowColours] = useState<string[]>(globalColours)
 
     function highlightSeries(index: number) {
         if (index == -1) {
-            setShowColours(baseColours)
+            setShowColours(globalColours)
         } else {
             const highlightColours = Array(presentGrades.length).fill("#6b7280")
             highlightColours[index] = "#fc1e98"
@@ -30,16 +25,37 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
         }
 
     }
+// const LineChart = React.forwardRef(function LineChart(
+//   inProps: LineChartProps,
+//   ref: React.Ref<SVGSVGElement>,
+// ) {
+//   const props = useThemeProps({ props: inProps, name: 'MuiLineChart' });
+//   const {
+//     chartsWrapperProps,
+//     chartContainerProps,
+//     gridProps,
+//     clipPathProps,
+//     clipPathGroupProps,
+//     areaPlotProps,
+//     linePlotProps,
+//     markPlotProps,
+//     overlayProps,
+//     chartsAxisProps,
+//     axisHighlightProps,
+//     lineHighlightPlotProps,
+//     legendProps,
+//     children,
+//   } = useLineChartProps(props);
 
 
     return (
-        <Card className="flex flex-col items-start h-full ">
-            <h4 className="font-bold shrink">Accumulation of climbs over time</h4>
+        <div className="flex flex-col items-start h-full ">
+            <h4 className="font-bold shrink">Accumulation of climbs by grade</h4>
 
             <ChartDataProvider
                 dataset={data}
                 colors={rainbowSurgePalette}
-
+                
                 series={presentGrades.map((grade, index) => ({
                     id: grade,
                     dataKey: grade,
@@ -49,7 +65,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                     curve: "stepAfter",
                     labelMarkType: "circle",
                     highlightScope: { highlight: "item", fade: "global" } as HighlightScope,
-                    color: showColours[index],
+                    color: showColours[index % showColours.length],
 
 
                 }))}
@@ -57,9 +73,9 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                     highlightSeries(presentGrades.indexOf(highlightedItem?.seriesId.toString() ?? ""))
                 }
                 }
+
                 highlightedItem={highlightedItem}
-
-
+                
                 xAxis={[{
                     id: "date",
                     dataKey: "date",
@@ -76,7 +92,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                 }]}
 
                 yAxis={[{
-                    width: 30
+                    width: 45
                 }]}
                 margin={{top: 20}}
 
@@ -84,7 +100,8 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
             >
 
                 <ChartsSurface
-                    className=""
+                
+                    
 
                     sx={{
                         [`.${lineElementClasses.root}, .${markElementClasses.root}`]: {
@@ -98,6 +115,12 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                     <LinePlot />
                     <ChartsXAxis tickLabelStyle={{ ...smallFontStyling }} />
                     <ChartsYAxis tickLabelStyle={{ ...smallFontStyling }} />
+                    <LineHighlightPlot />
+                    <ChartsOverlay />
+                    {/* <ChartsClipPath /> */}
+                    {/* <LineElement />
+                    <LineHighlightElement  /> */}
+                    <LinePlot />
                     <ChartsTooltip
                         trigger="axis"
                         sx={{
@@ -123,7 +146,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                         }
                         
                     }}
-                    // direction="vertical"
+                    
                     sx={{
                         flexWrap: "wrap",
                         overflow: "auto",
@@ -151,8 +174,12 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
             </ChartDataProvider>
 
-        </Card>
-        // </div>
+        </div>
+
     )
 
 }
+
+function useThemeProps(arg0: { props: LineChartProps; name: string; }) {
+        throw new Error("Function not implemented.");
+    }

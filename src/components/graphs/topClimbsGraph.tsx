@@ -1,8 +1,9 @@
 import { BarPlot, ChartContainer, ChartsTooltip, ChartsXAxis, ChartsYAxis, barLabelClasses, chartsTooltipClasses } from "@mui/x-charts"
-import { GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
-import Gradient from "javascript-color-gradient"
+import { globalColours, GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import React from "react";
 import { Card } from "../ui/card";
+import tinygradient from "tinygradient";
+
 
 interface TopClimbsGraphProps {
     data: { [key: string]: number }[],
@@ -15,10 +16,14 @@ interface TopClimbsGraphProps {
 export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopClimbsGraphProps) {
 
     const gradeConverter = new GradeConverter()
-    const colours = new Gradient().setColorGradient("#d9f2da", "#0a595c").setMidpoint(Math.max(presentGrades.length, 2)).getColors();
+    const numberOfGrades = Math.max(presentGrades.length, 2)
+    const globalColourList = globalColours.slice(0, Math.min(numberOfGrades, globalColours.length))
+
+    const grad = tinygradient(globalColourList)
+    const colours = grad.rgb(numberOfGrades)
 
     return (
-        <Card className="flex flex-col items-start h-full ">
+        <div className="flex flex-col items-start h-full ">
 
             <h4 className="font-bold shrink">Top 10 hardest climbs per year</h4>
             <ChartContainer
@@ -39,6 +44,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                     },
 
                 }))}
+                
 
                 xAxis={[{
                     dataKey: "year",
@@ -48,10 +54,10 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
 
                 }]}
                 yAxis={[{
-                    width: 20
+                    width: 25
                 }]}
 
-                margin={{ top: 10 }}
+                margin={{ top: 20 }}
 
                 sx={{
                     [`.${barLabelClasses.root}`]: {
@@ -60,6 +66,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                 }}
             >
                 <BarPlot
+                    
                     borderRadius={7}
                     barLabel={(item, _) => {
                         if (item.value == 0) return ""
@@ -75,8 +82,10 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                 />
 
                 <ChartsTooltip
+                    
                     trigger="item"
                     sx={{
+                        
                         [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.valueCell}`]: {
                             display: "inline !important",
                             whiteSpace: "pre-line !important"
@@ -89,6 +98,6 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames}: TopCl
                 />
 
             </ChartContainer>
-        </Card>
+        </div>
     )
 }

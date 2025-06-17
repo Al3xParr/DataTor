@@ -73,17 +73,17 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
 
     return (
-        <Card className="flex flex-col items-start h-full">
+        <div className="flex flex-col items-start h-full">
 
-            <h4 className="font-bold shrink pt-1 pl-1">Climb Count</h4>
+            <h4 className="font-bold shrink pt-1 pl-1">Climb count by grade</h4>
             <ChartContainer
 
                 dataset={data}
 
                 series={[
-                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#0a595c", type: "bar" },
-                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#72a69b", type: "bar" },
-                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#d9f2da", type: "bar" }
+                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
+                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
+                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79", type: "bar" }
                 ]}
                 xAxis={[{
                     dataKey: "grade",
@@ -126,7 +126,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                     }}
                 />
             </ChartContainer>
-        </Card>
+        </div>
     )
 
 }

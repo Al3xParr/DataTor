@@ -7,6 +7,9 @@ export function cn(...inputs: ClassValue[]){
     return twMerge(clsx(inputs))
 }
 
+
+export const globalColours = ["#40AE79","#F39B6D", "#E5BEED", "#007991","#222E50"]
+
 export class GradeConverter {
 
     font = ["f3", "f3+", "f4", "f4+", "f5", "f5+", "f6A", "f6A+", "f6B", "f6B+", "f6C", "f6C+", "f7A", "f7A+", "f7B", "f7B+", "f7C", "f7C+", "f8A", "f8A+", "f8B", "f8B+", "f8C", "f8C+", "f9A"]

@@ -10,6 +10,7 @@ import { getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resour
 import { Audio } from 'react-loading-icons';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
+import GraphContainer from './ui/graphContainer';
 
 
 interface StyleSummaryProps {
@@ -39,6 +40,10 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
     const [gradesInTopClimbs, setGradesInTopClimbs] = useState<string[]>([])
     const [topClimbNames, setTopClimbNames] = useState<Record<string, string[]>>({})
 
+    const [timelineProcessing, setTimelineProcessing] = useState(true)
+    const [gradesProcessing, setGradesProcessing] = useState(true)
+    const [topClimbsProcessing, setTopClimbsProcessing] = useState(true)
+
 
 
     useEffect(() => {
@@ -46,13 +51,18 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
         getGradeData(filteredClimbs).then((data) => {
             setGradeDataSet(data.gradeDataSet)
             setPresentGrades(data.presentGrades)
-            getTimelineData(filteredClimbs, data.presentGrades).then((d) => setTimelineData(d))
+            setGradesProcessing(false)
+            getTimelineData(filteredClimbs, data.presentGrades, selectedYear == 0).then((d) => {
+                setTimelineData(d)
+                setTimelineProcessing(false)
+            })
         })
 
         getTopClimbsPerYear(logs.filter((l) => l.type == selectedType), yearList).then((data) => {
             setTopClimbsPerYear(data.topClimbsPerYear)
             setGradesInTopClimbs(data.gradesInTopClimbs)
             setTopClimbNames(data.topClimbNames)
+            setTopClimbsProcessing(false)
         })
 
 
@@ -71,7 +81,7 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
 
                 <Theme
                     style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}
-                    className='flex gap-4'
+                    className='flex gap-4 self-end'
 
                 >
                     <Select.Root defaultValue='Bouldering' onValueChange={(value) => setselectedType(value)} >
@@ -106,7 +116,7 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
 
             </Card>
 
-            <div className='col-span-2 flex flex-col md:flex-row gap-5 items-center p-4 justify-around'>
+            <div className='col-span-2 flex flex-col md:flex-row gap-5 items-center p-4 justify-evenly'>
                 <div>
                     <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
                     <Card className='flex divide-x px-0 divide-secondary  w-max'>
@@ -128,42 +138,18 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
 
             </div>
 
-            {
-                gradeDataSet.length == 0 ?
-                    <Card className='w-full h-full flex flex-col justify-center  col-span-2 items-center md:col-span-1'>
-                        <Audio fill="#0a595c" />
-                        <p className='text-tertiary'>Processing...</p>
-                    </Card>
-                    :
-                    <div className='w-full h-[400px] col-span-2 md:col-span-1'>
-                        <GradeGraph data={gradeDataSet} />
-                    </div>
 
-            }
+            <GraphContainer processing={gradesProcessing} dependantNum={gradeDataSet.length}>
+                <GradeGraph data={gradeDataSet} />
+            </GraphContainer>
 
-            {
-                topClimbsPerYear.length == 0 ?
-                    <Card className='w-full h-full flex flex-col col-span-2   justify-center  items-center md:col-span-1'>
-                        <Audio fill="#0a595c" />
-                        <p className='text-tertiary'>Processing...</p>
-                    </Card>
-                    :
-                    <div className='w-full h-[400px] col-span-2 md:col-span-1'>
-                        <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
-                    </div>
-            }
+            <GraphContainer processing={topClimbsProcessing} dependantNum={topClimbsPerYear.length}>
+                <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
+            </GraphContainer>
 
-            {
-                timelineData.length == 0 ?
-                    <Card className='w-full h-full flex flex-col  justify-center items-center col-span-2'>
-                        <Audio fill="#0a595c" />
-                        <p className='text-tertiary'>Processing...</p>
-                    </Card>
-                    :
-                    <div className='w-full h-[500px] max-h-[500px] col-span-2'>
-                        <TimelineGraph data={timelineData} presentGrades={presentGrades} />
-                    </div>
-            }
+            <GraphContainer processing={timelineProcessing} dependantNum={timelineData.length} className='col-span-2'>
+                <TimelineGraph data={timelineData} presentGrades={presentGrades} />
+            </GraphContainer>
 
         </div>
 
