@@ -65,8 +65,23 @@ export class GradeConverter {
             if (gradeScale == "font") return grade
             return this.getVGrade(grade)
         }
+    }
 
+    getGradeIndex(grade: string){
+        let index = this.font.indexOf(grade)
+        if (index == -1) index = this.v.indexOf(grade)
+        if (index == -1) index = this.britTrad.indexOf(grade)
+        if (index == -1) index = this.french.indexOf(grade)
+        return index
+    }
 
+    getGradeFromIndex(index: number, scale: "font" | "v" | "french" | "britTrad"){
+        switch (scale) {
+            case "v": return this.v[index]
+            case "french": return this.french[index]
+            case "britTrad": return this.britTrad[index]
+            default: return this.font[index]
+        }
     }
 }
 

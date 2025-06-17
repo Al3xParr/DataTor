@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { Log } from "../../resources/types"
 import { useCSVReader } from "react-papaparse"
-import StyleSummary from "@/components/styleSummary"
+import Summary from "@/components/summary"
 import { GradeConverter, cleanGrade, createDate, getStyle } from "../../resources/utils"
 import { Upload } from "lucide-react"
 
@@ -62,7 +62,7 @@ export default function Stats() {
 
                             <div className="w-full h-full flex flex-col sm:p-10 sm:pt-5 pt-5">
                                 
-                                <StyleSummary logs={logbook ?? []} firstYear={firstYear} owner={acceptedFile.name.split("_")[0] ?? ""} />
+                                <Summary logs={logbook ?? []} firstYear={firstYear} owner={acceptedFile.name.split("_")[0] ?? ""} />
 
                             </div>
                             :
@@ -77,7 +77,7 @@ export default function Stats() {
                                     <Upload size={80} color="#0d260e" />
                                     <div className="">Drag & drop to upload climbing DLOG (.csv format)</div>
                                     <div className="">OR</div>
-                                    <div className="p-4 border bg-secondary text-primary rounded-lg ">Browse Files</div>
+                                    <div className="p-4 bg-secondary text-new-white rounded-lg ">Browse Files</div>
                                 </div>
                             </div>
                         }

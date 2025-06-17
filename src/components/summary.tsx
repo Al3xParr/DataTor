@@ -6,11 +6,12 @@ import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
+import { AvgMaxData, AvgMaxDataRtn, getAvgMaxData, getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
 import { Audio } from 'react-loading-icons';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
+import AvgMaxGraph from './graphs/avgMaxGraph';
 
 
 interface StyleSummaryProps {
@@ -19,11 +20,12 @@ interface StyleSummaryProps {
     owner: string
 }
 
-export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryProps) {
+export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
     const [selectedType, setselectedType] = useState<string>("Bouldering");
 
+    const climbsInStyle = logs.filter((l) => l.type == selectedType)
     const filteredClimbs = logs.filter((l) => (selectedYear == 0 || l.date.getFullYear() == selectedYear) && l.type == selectedType)
     const flash = filteredClimbs.filter((l) => l.style == "Flash")
     const onsight = filteredClimbs.filter((l) => l.style == "Onsight")
@@ -39,10 +41,16 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
     const [topClimbsPerYear, setTopClimbsPerYear] = useState<TopClimbsGraphData[]>([])
     const [gradesInTopClimbs, setGradesInTopClimbs] = useState<string[]>([])
     const [topClimbNames, setTopClimbNames] = useState<Record<string, string[]>>({})
-
+    
+    const [avgMaxData, setAvgMaxData] = useState<AvgMaxData[]>([])
+    const [minGrade, setMinGrade] = useState<number>(0)
+    
     const [timelineProcessing, setTimelineProcessing] = useState(true)
     const [gradesProcessing, setGradesProcessing] = useState(true)
     const [topClimbsProcessing, setTopClimbsProcessing] = useState(true)
+    const [avgMaxProcessing, setAvgMaxProcessing] = useState(true)
+
+
 
 
 
@@ -58,13 +66,18 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
             })
         })
 
-        getTopClimbsPerYear(logs.filter((l) => l.type == selectedType), yearList).then((data) => {
+        getTopClimbsPerYear(climbsInStyle, yearList).then((data) => {
             setTopClimbsPerYear(data.topClimbsPerYear)
             setGradesInTopClimbs(data.gradesInTopClimbs)
             setTopClimbNames(data.topClimbNames)
             setTopClimbsProcessing(false)
         })
 
+        getAvgMaxData(climbsInStyle, yearList).then((data) => {
+            setAvgMaxData(data.data)
+            setMinGrade(data.min)
+            setAvgMaxProcessing(false)
+        })
 
     }, [logs, selectedYear, selectedType])
 
@@ -72,17 +85,18 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
     if (logs.length == 0) return (<></>)
 
     return (
-        <div className="w-full h-max grid grid-cols-2 gap-4 flex-col pb-10">
-            <Card className='p-6 col-span-2 w-full flex justify-between'>
+        <div className="w-full h-max grid grid-cols-2 gap-4 flex-col">
+            
+            <Card className='p-6 col-span-2 w-full flex flex-col gap-3 md:flex-row justify-between'>
+                
                 <div className='flex flex-col'>
                     <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
                     <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>
                 </div>
 
                 <Theme
-                    style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito" }}
+                    style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
                     className='flex gap-4 self-end'
-
                 >
                     <Select.Root defaultValue='Bouldering' onValueChange={(value) => setselectedType(value)} >
                         <Select.Trigger className='SelectTrigger min-h-min' >
@@ -126,7 +140,7 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
                     </Card>
                 </div>
 
-                <div>
+                <div className=''>
                     <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
                     <Card className='flex gap-3 divide-secondary divide-x px-0'>
                         <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
@@ -147,8 +161,13 @@ export default function StyleSummary({ logs, firstYear, owner }: StyleSummaryPro
                 <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
             </GraphContainer>
 
-            <GraphContainer processing={timelineProcessing} dependantNum={timelineData.length} className='col-span-2'>
+            <GraphContainer processing={timelineProcessing} dependantNum={timelineData.length} className='md:col-span-2'>
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
+            </GraphContainer>
+
+
+            <GraphContainer processing={avgMaxProcessing} dependantNum={avgMaxData.length}>
+                <AvgMaxGraph data={avgMaxData} min={minGrade} type={selectedType}/>
             </GraphContainer>
 
         </div>

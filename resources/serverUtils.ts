@@ -1,13 +1,14 @@
 'use server'
 
 import { GradeGraphData, Log, TimelineGraphData, TopClimbsGraphData } from "./types"
+import { GradeConverter } from "./utils"
 
-const styleIndex : Record<string, number> = {
+const styleIndex: Record<string, number> = {
     "Flash": 1,
     "Onsight": 2,
     "Sent": 0,
     "Redpoint": 0,
-    "GroundUp" : 0,
+    "GroundUp": 0,
     "Repeat": 0
 }
 
@@ -121,4 +122,52 @@ export async function getGradeData(logs: Log[]): Promise<GradeDataRtn> {
         resolve({ gradeDataSet, presentGrades })
     })
     return rtn
+}
+
+export interface AvgMaxData{
+        year: number,
+        max: number,
+        avg: number
+    }
+
+export interface AvgMaxDataRtn {
+    data: AvgMaxData[],
+    min: number
+}
+
+
+export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<AvgMaxDataRtn> {
+
+    if (logs.length == 0) return {data: [], min: 0}
+
+    const gradeConverter = new GradeConverter()
+
+    let scale: "font" | "v" | "french" | "britTrad" = "font"
+    switch (logs[0].type) {
+        case "Sport": scale = "french"
+        case "Trad": scale = "britTrad"
+    }
+
+    const avgMaxData: AvgMaxData[] = []
+
+    let min = 100
+
+    yearList.forEach((y) => {
+        const yearLogs = logs.filter((l) => l.date.getFullYear() == y)
+
+        if (yearLogs.length > 0) {
+            const max = gradeConverter.getGradeIndex(yearLogs[0].grade)
+            const avgList = yearLogs.map((l) => gradeConverter.getGradeIndex(l.grade))
+            const avg = Math.floor(avgList.reduce((acc, val) => acc + val) / yearLogs.length)
+            // const avgGrade = gradeConverter.getGradeFromIndex(avg, scale)
+            avgMaxData.push({ year: y, max: max, avg: avg })
+
+            if (avg < min) min = avg
+
+        }
+
+
+    })
+    return {data: avgMaxData, min: min}
+
 }

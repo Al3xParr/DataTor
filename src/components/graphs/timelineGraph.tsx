@@ -179,7 +179,3 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
     )
 
 }
-
-function useThemeProps(arg0: { props: LineChartProps; name: string; }) {
-        throw new Error("Function not implemented.");
-    }

@@ -14,7 +14,7 @@ export default function GraphContainer({ processing, dependantNum, className, ch
 
 
     return (
-        <Card className={`w-full h-full flex flex-col  justify-center items-center ${className}`}>
+        <Card className={`w-full h-full flex flex-col  justify-center items-center col-span-2 md:col-span-1 ${className}`}>
             {
                 processing ?
                     <>
@@ -22,7 +22,7 @@ export default function GraphContainer({ processing, dependantNum, className, ch
                         <p className='text-tertiary'>Processing...</p>
                     </>
                     :
-                    <div className={`w-full h-[500px] max-h-[500px] content-center text-center ${className}`}>
+                    <div className={`w-full h-[500px] max-h-[500px] content-center text-center col-span-2 md:col-span-1 ${className}`}>
                         {dependantNum > 0 ?
                             <>
                                 {children}
