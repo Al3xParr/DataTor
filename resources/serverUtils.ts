@@ -124,11 +124,11 @@ export async function getGradeData(logs: Log[]): Promise<GradeDataRtn> {
     return rtn
 }
 
-export interface AvgMaxData{
-        year: number,
-        max: number,
-        avg: number
-    }
+export interface AvgMaxData {
+    year: number,
+    max: number,
+    avg: number
+}
 
 export interface AvgMaxDataRtn {
     data: AvgMaxData[],
@@ -138,7 +138,7 @@ export interface AvgMaxDataRtn {
 
 export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<AvgMaxDataRtn> {
 
-    if (logs.length == 0) return {data: [], min: 0}
+    if (logs.length == 0) return { data: [], min: 0 }
 
     const gradeConverter = new GradeConverter()
 
@@ -159,15 +159,40 @@ export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<Av
             const max = gradeConverter.getGradeIndex(yearLogs[0].grade)
             const avgList = yearLogs.map((l) => gradeConverter.getGradeIndex(l.grade))
             const avg = Math.floor(avgList.reduce((acc, val) => acc + val) / yearLogs.length)
-            // const avgGrade = gradeConverter.getGradeFromIndex(avg, scale)
             avgMaxData.push({ year: y, max: max, avg: avg })
 
             if (avg < min) min = avg
-
         }
-
-
     })
-    return {data: avgMaxData, min: min}
+    return { data: avgMaxData, min: min }
 
+}
+
+
+export interface RegionData {
+    regions: string[],
+    count: number[]
+}
+
+
+
+export async function getRegionData(logs: Log[]): Promise<RegionData> {
+    const regions: string[] = []
+    const count: number[] = []
+
+    logs.forEach((l) => {
+
+        if (l.county != null) {
+            if (regions.includes(l.county)) {
+                const index = regions.indexOf(l.county)
+                count[index]++
+            } else {
+                regions.push(l.county)
+                count.push(1)
+            }
+        }
+        }
+    )
+
+    return { regions, count }
 }

@@ -6,12 +6,13 @@ import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { AvgMaxData, AvgMaxDataRtn, getAvgMaxData, getGradeData, getTimelineData, getTopClimbsPerYear } from '../../resources/serverUtils';
-import { Audio } from 'react-loading-icons';
+import { AvgMaxData, getAvgMaxData, getGradeData, getRegionData, getTimelineData, getTopClimbsPerYear, RegionData } from '../../resources/serverUtils';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
 import AvgMaxGraph from './graphs/avgMaxGraph';
+import PartnerGraph from './graphs/regionGraph';
+import RegionGraph from './graphs/regionGraph';
 
 
 interface StyleSummaryProps {
@@ -44,11 +45,14 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
     
     const [avgMaxData, setAvgMaxData] = useState<AvgMaxData[]>([])
     const [minGrade, setMinGrade] = useState<number>(0)
+
+    const [regionData, setRegionData] = useState<RegionData>({} as RegionData)
     
     const [timelineProcessing, setTimelineProcessing] = useState(true)
     const [gradesProcessing, setGradesProcessing] = useState(true)
     const [topClimbsProcessing, setTopClimbsProcessing] = useState(true)
     const [avgMaxProcessing, setAvgMaxProcessing] = useState(true)
+    const [regionProcessing, setRegionProcessing] = useState(true)
 
 
 
@@ -77,6 +81,11 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
             setAvgMaxData(data.data)
             setMinGrade(data.min)
             setAvgMaxProcessing(false)
+        })
+
+        getRegionData(filteredClimbs).then((data) => {
+            setRegionData(data)
+            setRegionProcessing(false)
         })
 
     }, [logs, selectedYear, selectedType])
@@ -153,21 +162,25 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
             </div>
 
 
-            <GraphContainer processing={gradesProcessing} dependantNum={gradeDataSet.length}>
+            <GraphContainer processing={gradesProcessing} title='Climb count by grade' dependantNum={gradeDataSet.length}>
                 <GradeGraph data={gradeDataSet} />
             </GraphContainer>
 
-            <GraphContainer processing={topClimbsProcessing} dependantNum={topClimbsPerYear.length}>
+            <GraphContainer processing={topClimbsProcessing} title='Top 10 hardest climbs per year' dependantNum={topClimbsPerYear.length}>
                 <TopClimbsGraph data={topClimbsPerYear} presentGrades={gradesInTopClimbs} climbNames={topClimbNames} />
             </GraphContainer>
 
-            <GraphContainer processing={timelineProcessing} dependantNum={timelineData.length} className='md:col-span-2'>
+            <GraphContainer processing={timelineProcessing} title='Accumulation of climbs by grade' dependantNum={timelineData.length} className='md:col-span-2 md:h-[600px]'>
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
 
-            <GraphContainer processing={avgMaxProcessing} dependantNum={avgMaxData.length}>
+            <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' dependantNum={avgMaxData.length}>
                 <AvgMaxGraph data={avgMaxData} min={minGrade} type={selectedType}/>
+            </GraphContainer>
+
+            <GraphContainer processing={regionProcessing} title='Climbs per region' dependantNum={regionData?.regions?.length}>
+                <RegionGraph data={regionData} />
             </GraphContainer>
 
         </div>

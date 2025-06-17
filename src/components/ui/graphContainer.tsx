@@ -5,16 +5,17 @@ import { Audio } from 'react-loading-icons';
 
 interface GraphContainerProps {
     processing: boolean,
+    title: string,
     dependantNum: number,
     className?: string
 }
 
 
-export default function GraphContainer({ processing, dependantNum, className, children }: PropsWithChildren<GraphContainerProps>) {
+export default function GraphContainer({ processing, title, dependantNum, className, children }: PropsWithChildren<GraphContainerProps>) {
 
 
     return (
-        <Card className={`w-full h-full flex flex-col  justify-center items-center col-span-2 md:col-span-1 ${className}`}>
+        <Card className={`w-full h-[500px] flex flex-col justify-center items-center col-span-2 md:col-span-1 ${className}`}>
             {
                 processing ?
                     <>
@@ -22,10 +23,13 @@ export default function GraphContainer({ processing, dependantNum, className, ch
                         <p className='text-tertiary'>Processing...</p>
                     </>
                     :
-                    <div className={`w-full h-[500px] max-h-[500px] content-center text-center col-span-2 md:col-span-1 ${className}`}>
+                    <div className={`w-full h-full content-center text-center`}>
                         {dependantNum > 0 ?
                             <>
-                                {children}
+                                <div className="flex flex-col items-start h-full w-full">
+                                    <h4 className="font-bold shrink">{title}</h4>
+                                    {children}
+                                </div>
                             </>
                             :
                             <div>No Data</div>

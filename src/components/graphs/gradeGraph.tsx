@@ -73,60 +73,57 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
 
     return (
-        <div className="flex flex-col items-start h-full">
+        <ChartContainer
 
-            <h4 className="font-bold shrink pt-1 pl-1">Climb count by grade</h4>
-            <ChartContainer
+            dataset={data}
 
-                dataset={data}
+            series={[
+                { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
+                { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
+                { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79", type: "bar" }
+            ]}
+            xAxis={[{
+                dataKey: "grade",
+                disableTicks: true,
+                disableLine: true,
+                scaleType: "band",
+                height: 25
+            }]}
+            yAxis={[{
+                width: 0
+            }]}
+            margin={{ top: 30 }}
 
-                series={[
-                    { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
-                    { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
-                    { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79", type: "bar" }
-                ]}
-                xAxis={[{
-                    dataKey: "grade",
-                    disableTicks: true,
-                    disableLine: true,
-                    scaleType: "band",
-                    height: 25
-                }]}
-                yAxis={[{
-                    width: 0
-                }]}
-                margin={{ top: 30 }}
+        >
+            <ChartsGrid horizontal />
+            <BarPlot
 
-            >
-                <ChartsGrid horizontal />
-                <BarPlot
+                barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
+                borderRadius={7}
+                slots={{
+                    barLabel: BarLabel
+                }}
 
-                    barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
-                    borderRadius={7}
-                    slots={{
-                        barLabel: BarLabel
-                    }}
+            />
+            <ChartsTooltip
+                sx={{
+                    [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
+                        ...mediumFontStyling,
+                    },
+                }}
+            />
+            <ChartsXAxis
 
-                />
-                <ChartsTooltip
-                    sx={{
-                        [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
-                            ...mediumFontStyling,
-                        },
-                    }}
-                />
-                <ChartsXAxis
+                tickLabelStyle={{ ...smallFontStyling }}
 
-                    tickLabelStyle={{ ...smallFontStyling }}
+                sx={{
+                    "& .MuiChartsXAxis-tickContainer": {
+                        height: "5.625rem !important"
+                    },
+                }}
+            />
+        </ChartContainer>
 
-                    sx={{
-                        "& .MuiChartsXAxis-tickContainer": {
-                            height: "5.625rem !important"
-                        },
-                    }}
-                />
-            </ChartContainer>
-        </div>
     )
 
 }
