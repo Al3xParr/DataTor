@@ -60,6 +60,8 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
 
     useEffect(() => {
+        if (logs.length == 0) return
+
         getGradeData(filteredClimbs).then((data) => {
             setGradeDataSet(data.gradeDataSet)
             setPresentGrades(data.presentGrades)
@@ -94,7 +96,6 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
         })
 
     }, [logs, selectedYear, selectedType])
-
 
     if (logs.length == 0) return (<></>)
 
@@ -154,7 +155,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                     </Card>
                 </div>
 
-                <div className=''>
+                <div >
                     <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
                     <Card className='flex gap-3 divide-secondary divide-x px-0'>
                         <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
@@ -162,8 +163,6 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                         <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
                     </Card>
                 </div>
-
-
             </div>
 
 
@@ -179,7 +178,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
-            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full'>
+            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full' padded={false}>
                 <CountyMap data={mapData} />
             </GraphContainer>
 

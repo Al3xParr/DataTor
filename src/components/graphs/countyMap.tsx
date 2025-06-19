@@ -27,7 +27,7 @@ export default function CountyMap({ data }: CountyMapProps) {
     return (
         <>
             {county != "" ?
-                <Card className="bg-gray-200  absolute top-10 right-8 px-3 py-1">
+                <Card className="bg-primary absolute top-20 right-8 px-3 py-1">
                     {county} - {data[county] ?? 0} ascents
                 </Card>
                 :
@@ -35,7 +35,6 @@ export default function CountyMap({ data }: CountyMapProps) {
             }
             <ComposableMap
                 className="h-full w-full"
-
                 projectionConfig={{
                     scale: 6000,
                     center: [-3.2, 54],

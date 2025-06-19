@@ -7,15 +7,16 @@ interface GraphContainerProps {
     processing: boolean,
     title: string,
     dependantNum: number,
+    padded?: boolean,
     className?: string
 }
 
 
-export default function GraphContainer({ processing, title, dependantNum, className, children }: PropsWithChildren<GraphContainerProps>) {
+export default function GraphContainer({ processing, title, dependantNum, className, padded = true, children }: PropsWithChildren<GraphContainerProps>) {
 
 
     return (
-        <Card className={`w-full h-[500px] flex flex-col justify-center items-center col-span-2 md:col-span-1 ${className}`}>
+        <Card className={`w-full h-[500px] flex flex-col justify-center items-center col-span-2 md:col-span-1 ${!padded ? "p-0" : ""} ${className}`}>
             {
                 processing ?
                     <>
@@ -27,7 +28,7 @@ export default function GraphContainer({ processing, title, dependantNum, classN
                         {dependantNum > 0 ?
 
                             <div className="flex flex-col items-start h-full w-full relative">
-                                <h4 className="font-bold shrink">{title}</h4>
+                                <h4 className={`font-bold shrink ${!padded ? "p-4" : ""}`}>{title}</h4>
                                 {children}
                             </div>
                             :
