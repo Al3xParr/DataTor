@@ -169,30 +169,39 @@ export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<Av
 }
 
 
-export interface RegionData {
-    regions: string[],
+export interface CountryData {
+    countries: string[],
     count: number[]
 }
 
 
 
-export async function getRegionData(logs: Log[]): Promise<RegionData> {
-    const regions: string[] = []
+export async function getCountryData(logs: Log[]): Promise<CountryData> {
+    const countries: string[] = []
     const count: number[] = []
 
     logs.forEach((l) => {
 
-        if (l.county != null) {
-            if (regions.includes(l.county)) {
-                const index = regions.indexOf(l.county)
+        if (l.country != null) {
+            if (countries.includes(l.country)) {
+                const index = countries.indexOf(l.country)
                 count[index]++
             } else {
-                regions.push(l.county)
+                countries.push(l.country)
                 count.push(1)
             }
         }
-        }
+    }
     )
 
-    return { regions, count }
+    return { countries, count }
+}
+
+export async function getMapData(logs: Log[]) {
+    const countyFreq: Record<string, number> = {}
+    logs.forEach((l) => {
+        const temp = countyFreq[l.county] ?? 0
+        countyFreq[l.county] = temp + 1
+    })
+    return countyFreq
 }

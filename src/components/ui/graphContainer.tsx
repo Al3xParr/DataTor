@@ -25,12 +25,11 @@ export default function GraphContainer({ processing, title, dependantNum, classN
                     :
                     <div className={`w-full h-full content-center text-center`}>
                         {dependantNum > 0 ?
-                            <>
-                                <div className="flex flex-col items-start h-full w-full">
-                                    <h4 className="font-bold shrink">{title}</h4>
-                                    {children}
-                                </div>
-                            </>
+
+                            <div className="flex flex-col items-start h-full w-full relative">
+                                <h4 className="font-bold shrink">{title}</h4>
+                                {children}
+                            </div>
                             :
                             <div>No Data</div>
                         }

@@ -6,13 +6,14 @@ import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { AvgMaxData, getAvgMaxData, getGradeData, getRegionData, getTimelineData, getTopClimbsPerYear, RegionData } from '../../resources/serverUtils';
+import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, getTopClimbsPerYear, CountryData } from '../../resources/serverUtils';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
 import AvgMaxGraph from './graphs/avgMaxGraph';
-import PartnerGraph from './graphs/regionGraph';
-import RegionGraph from './graphs/regionGraph';
+import CountryGraph from './graphs/countryGraph';
+import CountyMap from './graphs/countyMap';
+import { dataListItemPropDefs } from '@radix-ui/themes/props';
 
 
 interface StyleSummaryProps {
@@ -42,24 +43,23 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
     const [topClimbsPerYear, setTopClimbsPerYear] = useState<TopClimbsGraphData[]>([])
     const [gradesInTopClimbs, setGradesInTopClimbs] = useState<string[]>([])
     const [topClimbNames, setTopClimbNames] = useState<Record<string, string[]>>({})
-    
+
     const [avgMaxData, setAvgMaxData] = useState<AvgMaxData[]>([])
     const [minGrade, setMinGrade] = useState<number>(0)
 
-    const [regionData, setRegionData] = useState<RegionData>({} as RegionData)
-    
+    const [countryData, setCountryData] = useState<CountryData>({} as CountryData)
+    const [mapData, setMapData] = useState<Record<string, number>>({})
+
+
     const [timelineProcessing, setTimelineProcessing] = useState(true)
     const [gradesProcessing, setGradesProcessing] = useState(true)
     const [topClimbsProcessing, setTopClimbsProcessing] = useState(true)
     const [avgMaxProcessing, setAvgMaxProcessing] = useState(true)
     const [regionProcessing, setRegionProcessing] = useState(true)
-
-
-
+    const [mapProcessing, setMapProcessing] = useState(true)
 
 
     useEffect(() => {
-        console.table(logs?.slice(20))
         getGradeData(filteredClimbs).then((data) => {
             setGradeDataSet(data.gradeDataSet)
             setPresentGrades(data.presentGrades)
@@ -83,9 +83,14 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
             setAvgMaxProcessing(false)
         })
 
-        getRegionData(filteredClimbs).then((data) => {
-            setRegionData(data)
+        getCountryData(filteredClimbs).then((data) => {
+            setCountryData(data)
             setRegionProcessing(false)
+        })
+
+        getMapData(filteredClimbs.filter((l) => ["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country))).then((data) => {
+            setMapData(data)
+            setMapProcessing(false)
         })
 
     }, [logs, selectedYear, selectedType])
@@ -95,9 +100,9 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     return (
         <div className="w-full h-max grid grid-cols-2 gap-4 flex-col">
-            
+
             <Card className='p-6 col-span-2 w-full flex flex-col gap-3 md:flex-row justify-between'>
-                
+
                 <div className='flex flex-col'>
                     <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
                     <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>
@@ -174,13 +179,16 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
-
-            <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' dependantNum={avgMaxData.length}>
-                <AvgMaxGraph data={avgMaxData} min={minGrade} type={selectedType}/>
+            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:col-span-2'>
+                <CountyMap data={mapData} />
             </GraphContainer>
 
-            <GraphContainer processing={regionProcessing} title='Climbs per region' dependantNum={regionData?.regions?.length}>
-                <RegionGraph data={regionData} />
+            <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' dependantNum={avgMaxData.length}>
+                <AvgMaxGraph data={avgMaxData} min={minGrade} type={selectedType} />
+            </GraphContainer>
+
+            <GraphContainer processing={regionProcessing} title='Climbs per country' dependantNum={countryData?.countries?.length}>
+                <CountryGraph data={countryData} />
             </GraphContainer>
 
         </div>

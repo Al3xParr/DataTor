@@ -1,14 +1,14 @@
-import { BarPlot, ChartContainer, ChartsTooltip, chartsTooltipClasses, ChartsXAxis, ChartsYAxis } from "@mui/x-charts";
-import { RegionData } from "../../../resources/serverUtils";
+import { BarPlot, ChartContainer, ChartsGrid, ChartsTooltip, chartsTooltipClasses, ChartsXAxis, ChartsYAxis } from "@mui/x-charts";
+import { CountryData } from "../../../resources/serverUtils";
 import { globalColours, mediumFontStyling, smallFontStyling } from "../../../resources/utils";
 
 
-interface PartnerGraphProps {
-    data: RegionData
+interface CountryGraphProps {
+    data: CountryData
 }
 
 
-export default function RegionGraph({ data }: PartnerGraphProps) {
+export default function CountryGraph({ data }: CountryGraphProps) {
     return (
 
         <ChartContainer
@@ -20,18 +20,22 @@ export default function RegionGraph({ data }: PartnerGraphProps) {
                 layout: "horizontal"
             }]}
 
+
             yAxis={[{
-                data: data.regions,
+                data: data.countries,
                 scaleType: "band",
                 tickLabelStyle: { ...smallFontStyling },
-                width: 120,
+                width: 80,
                 valueFormatter: (value) => value
             }]}
 
             xAxis={[{
                 tickLabelStyle: { ...smallFontStyling }
             }]}
+
+
         >
+            <ChartsGrid vertical />
             <BarPlot />
             <ChartsTooltip
                 trigger="axis"

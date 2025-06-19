@@ -74,7 +74,6 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
     return (
         <ChartContainer
-
             dataset={data}
 
             series={[

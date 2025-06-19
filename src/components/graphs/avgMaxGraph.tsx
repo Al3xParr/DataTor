@@ -1,4 +1,4 @@
-import { ChartContainer, ChartDataProvider, ChartsGrid, chartsTooltipClasses, ChartsXAxis, ChartsYAxis, LineChart, LinePlot } from "@mui/x-charts"
+import { ChartContainer, ChartDataProvider, ChartsGrid, chartsTooltipClasses, ChartsXAxis, ChartsYAxis, LineChart, lineElementClasses, LinePlot } from "@mui/x-charts"
 import { globalColours, GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import { Direction } from "radix-ui"
 
@@ -37,6 +37,7 @@ export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
                 max: data[data.length - 1]?.year,
                 valueFormatter: (value: number) => value.toString(),
                 tickLabelStyle: { ...smallFontStyling },
+
             }]}
 
             yAxis={[{
@@ -54,8 +55,19 @@ export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
                         },
                     },
                 },
-            }}
+                legend: {
+                    sx: {
 
+                    }
+
+                }
+            }}
+            sx={{
+                [`& .${lineElementClasses.root}`]: {
+                    strokeDasharray: '10 5',
+                    strokeWidth: 3,
+                }
+            }}
         />
 
     )
