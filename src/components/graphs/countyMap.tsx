@@ -34,11 +34,11 @@ export default function CountyMap({ data }: CountyMapProps) {
                 <></>
             }
             <ComposableMap
-                className="w-full"
+                className="h-full w-full"
 
                 projectionConfig={{
                     scale: 6000,
-                    center: [-3, 54],
+                    center: [-3.2, 54],
                 }}
             >
                 <ZoomableGroup >

@@ -179,7 +179,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
-            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:col-span-2'>
+            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full'>
                 <CountyMap data={mapData} />
             </GraphContainer>
 
