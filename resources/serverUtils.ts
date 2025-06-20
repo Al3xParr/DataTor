@@ -197,11 +197,44 @@ export async function getCountryData(logs: Log[]): Promise<CountryData> {
     return { countries, count }
 }
 
+export interface CountyData {
+    freq: number,
+    topClimbs: string[],
+    gradeDistribution: number[],
+    minGrade: string,
+    maxGrade: string
+}
+
 export async function getMapData(logs: Log[]) {
-    const countyFreq: Record<string, number> = {}
-    logs.forEach((l) => {
-        const temp = countyFreq[l.county] ?? 0
-        countyFreq[l.county] = temp + 1
+    const countyFreq: Record<string, CountyData> = {}
+
+    const gradeConverter = new GradeConverter()
+
+    function getScale(style: string) {
+        switch (style) {
+            case "Sport": return "french"
+            case "Trad": return "britTrad"
+            default: return "font"
+        }
+    }
+
+    const counties = new Set(logs.map((log) => log.county))
+    counties.forEach((county) => {
+        const climbs = logs.filter((log) => log.county == county).sort((a, b) => gradeConverter.compareLog(a, b))
+        const { minIndex: min,
+            maxIndex: max,
+            distribution: gradeDistribution
+        } = gradeConverter.getGradeDistribution(climbs.map((climb) => climb.grade))
+
+        countyFreq[county] = {
+            freq: climbs.length,
+            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
+            gradeDistribution: gradeDistribution,
+            minGrade: gradeConverter.getGradeFromIndex(min, getScale(logs[0].style)),
+            maxGrade: gradeConverter.getGradeFromIndex(max, getScale(logs[0].style))
+        } as CountyData
+
     })
+
     return countyFreq
 }

@@ -12,8 +12,8 @@ export const globalColours = ["#40AE79","#F39B6D", "#E5BEED", "#007991","#222E50
 
 export class GradeConverter {
 
-    font = ["f3", "f3+", "f4", "f4+", "f5", "f5+", "f6A", "f6A+", "f6B", "f6B+", "f6C", "f6C+", "f7A", "f7A+", "f7B", "f7B+", "f7C", "f7C+", "f8A", "f8A+", "f8B", "f8B+", "f8C", "f8C+", "f9A"]
-    v = ["VB", "V0-", "V0", "V0+", "V1", "V2", "V3", "V3+", "V4", "V4+", "V5", "V5+", "V6", "V7", "V8", "V8+", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17"]
+    font = ["f2", "f2+", "f3", "f3+", "f4", "f4+", "f5", "f5+", "f6A", "f6A+", "f6B", "f6B+", "f6C", "f6C+", "f7A", "f7A+", "f7B", "f7B+", "f7C", "f7C+", "f8A", "f8A+", "f8B", "f8B+", "f8C", "f8C+", "f9A"]
+    v = ["VE", "VM", "VB", "V0-", "V0", "V0+", "V1", "V2", "V3", "V3+", "V4", "V4+", "V5", "V5+", "V6", "V7", "V8", "V8+", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17"]
 
     french = ["1", "2", "2+", "3a", "3b", "3c", "4a", "4b", "4c", "5a", "5b", "5c", "6a", "6a+", "6b", "6b+", "6c", "6c+", "7a", "7a+", "7b", "7b+", "7c", "7c+", "8a", "8a+", "8b", "8b+", "8c", "8c+", "9a", "9a+", "9b", "9b+", "9c"]
 
@@ -82,6 +82,20 @@ export class GradeConverter {
             case "britTrad": return this.britTrad[index]
             default: return this.font[index]
         }
+    }
+
+    getGradeDistribution(grades: string[]){
+        const gradesIndex = grades.map((grade) => this.getGradeIndex(grade)).sort((a, b) => a - b)
+        const minIndex = gradesIndex[0]
+        const maxIndex = gradesIndex[gradesIndex.length - 1]
+        const distribution : number[] = new Array(maxIndex - minIndex + 1).fill(0)
+
+        gradesIndex.forEach((index) => {
+            distribution[index - minIndex] ++
+        })
+
+        return {minIndex, maxIndex, distribution}
+
     }
 }
 

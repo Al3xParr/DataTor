@@ -6,14 +6,13 @@ import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, getTopClimbsPerYear, CountryData } from '../../resources/serverUtils';
+import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, getTopClimbsPerYear, CountryData, CountyData } from '../../resources/serverUtils';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
 import AvgMaxGraph from './graphs/avgMaxGraph';
 import CountryGraph from './graphs/countryGraph';
 import CountyMap from './graphs/countyMap';
-import { dataListItemPropDefs } from '@radix-ui/themes/props';
 
 
 interface StyleSummaryProps {
@@ -48,7 +47,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
     const [minGrade, setMinGrade] = useState<number>(0)
 
     const [countryData, setCountryData] = useState<CountryData>({} as CountryData)
-    const [mapData, setMapData] = useState<Record<string, number>>({})
+    const [mapData, setMapData] = useState<Record<string, CountyData>>({})
 
 
     const [timelineProcessing, setTimelineProcessing] = useState(true)
