@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import React, { useState } from "react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps"
 import tinygradient from "tinygradient";
 import { Card } from "../ui/card";
@@ -7,9 +7,7 @@ import { AreaData } from "../../../resources/serverUtils";
 import { BarPlot, ChartContainer, ChartsXAxis } from "@mui/x-charts";
 import { smallFontStyling } from "../../../resources/utils";
 import { Badge } from "../ui/badge";
-
-
-const geoUrl = require("../../../resources/uk_and_world.json")
+import geoUrl from "../../../resources/uk_and_world.json";
 
 
 interface AreaMapProps {
@@ -117,7 +115,7 @@ export default function AreaMap({ data }: AreaMapProps) {
                                 const colour = getColour(freq)
                                 return (
                                     <Geography
-                                        onClick={() => { setArea(name), setDefaultArea(name) }}
+                                        onClick={() => { setArea(name); setDefaultArea(name) }}
                                         onMouseEnter={() => setArea(name)}
                                         onMouseLeave={() => setArea(defaultArea)}
 

@@ -1,6 +1,6 @@
-import { ChartContainer, ChartDataProvider, ChartsGrid, chartsTooltipClasses, ChartsXAxis, ChartsYAxis, LineChart, lineElementClasses, LinePlot } from "@mui/x-charts"
+import { chartsTooltipClasses, LineChart, lineElementClasses } from "@mui/x-charts"
 import { globalColours, GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
-import { Direction } from "radix-ui"
+import React from "react"
 
 interface AvgMaxGraphProps {
     data: { "year": number, "avg": number, "max": number }[],

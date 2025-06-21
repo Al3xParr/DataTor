@@ -25,8 +25,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
     const [selectedType, setSelectedType] = useState<string>("Bouldering");
-
-    const climbsInStyle = logs.filter((l) => l.type == selectedType)
+    
     const filteredClimbs = logs.filter((l) => (selectedYear == 0 || l.date.getFullYear() == selectedYear) && l.type == selectedType)
     const flash = filteredClimbs.filter((l) => l.style == "Flash")
     const onsight = filteredClimbs.filter((l) => l.style == "Onsight")
@@ -60,7 +59,9 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     useEffect(() => {
         if (logs.length == 0) return
-
+        
+        const climbsInStyle = logs.filter((l) => l.type == selectedType)
+        
         getGradeData(filteredClimbs).then((data) => {
             setGradeDataSet(data.gradeDataSet)
             setPresentGrades(data.presentGrades)

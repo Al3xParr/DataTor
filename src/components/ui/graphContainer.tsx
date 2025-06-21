@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { Card } from './card';
 import { Audio } from 'react-loading-icons';
-
+import React from "react"
 
 interface GraphContainerProps {
     processing: boolean,

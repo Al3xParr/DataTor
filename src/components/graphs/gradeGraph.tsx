@@ -7,7 +7,6 @@ import { useAnimate } from '@mui/x-charts/hooks';
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 import { mediumFontStyling, smallFontStyling } from '../../../resources/utils';
 import React from "react";
-import { Card } from '../ui/card';
 
 interface GradeGraphProps {
     data: {

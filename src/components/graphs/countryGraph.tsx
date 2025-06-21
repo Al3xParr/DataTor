@@ -1,6 +1,7 @@
 import { BarPlot, ChartContainer, ChartsGrid, ChartsTooltip, chartsTooltipClasses, ChartsXAxis, ChartsYAxis } from "@mui/x-charts";
 import { CountryData } from "../../../resources/serverUtils";
 import { globalColours, mediumFontStyling, smallFontStyling } from "../../../resources/utils";
+import React from "react"
 
 
 interface CountryGraphProps {

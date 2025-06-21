@@ -1,7 +1,6 @@
 import { BarPlot, ChartContainer, ChartsTooltip, ChartsXAxis, ChartsYAxis, barLabelClasses, chartsTooltipClasses } from "@mui/x-charts"
 import { globalColours, GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import React from "react";
-import { Card } from "../ui/card";
 import tinygradient from "tinygradient";
 
 
