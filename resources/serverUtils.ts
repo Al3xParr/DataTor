@@ -197,7 +197,16 @@ export async function getCountryData(logs: Log[]): Promise<CountryData> {
     return { countries, count }
 }
 
-export interface CountyData {
+
+function cleanAreaName(name: string){
+    switch (name){
+        case "USA" : return "United States of America"
+        case "Borders": return "Scottish Borders"
+        default: return name
+    }
+}
+
+export interface AreaData {
     freq: number,
     topClimbs: string[],
     gradeDistribution: number[],
@@ -206,7 +215,7 @@ export interface CountyData {
 }
 
 export async function getMapData(logs: Log[]) {
-    const countyFreq: Record<string, CountyData> = {}
+    const areaFreq: Record<string, AreaData> = {}
 
     const gradeConverter = new GradeConverter()
 
@@ -218,23 +227,42 @@ export async function getMapData(logs: Log[]) {
         }
     }
 
-    const counties = new Set(logs.map((log) => log.county))
+    const counties = new Set(logs.filter((l) => ["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.county))
+    const countries = new Set(logs.filter((l) => !["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.country))
+    
     counties.forEach((county) => {
+        const cleanedName = cleanAreaName(county)
         const climbs = logs.filter((log) => log.county == county).sort((a, b) => gradeConverter.compareLog(a, b))
         const { minIndex: min,
             maxIndex: max,
             distribution: gradeDistribution
         } = gradeConverter.getGradeDistribution(climbs.map((climb) => climb.grade))
 
-        countyFreq[county] = {
+        areaFreq[cleanedName] = {
             freq: climbs.length,
             topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
             gradeDistribution: gradeDistribution,
             minGrade: gradeConverter.getGradeFromIndex(min, getScale(logs[0].style)),
             maxGrade: gradeConverter.getGradeFromIndex(max, getScale(logs[0].style))
-        } as CountyData
-
+        } as AreaData
     })
 
-    return countyFreq
+    countries.forEach((country) => {
+        const cleanedName = cleanAreaName(country)
+        const climbs = logs.filter((log) => log.country == country).sort((a, b) => gradeConverter.compareLog(a, b))
+        const { minIndex: min,
+            maxIndex: max,
+            distribution: gradeDistribution
+        } = gradeConverter.getGradeDistribution(climbs.map((climb) => climb.grade))
+
+        areaFreq[cleanedName] = {
+            freq: climbs.length,
+            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
+            gradeDistribution: gradeDistribution,
+            minGrade: gradeConverter.getGradeFromIndex(min, getScale(logs[0].style)),
+            maxGrade: gradeConverter.getGradeFromIndex(max, getScale(logs[0].style))
+        } as AreaData
+    })
+
+    return areaFreq
 }

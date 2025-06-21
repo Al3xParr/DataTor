@@ -12,6 +12,7 @@ export function Badge({ text, colour }: BadgeProps) {
         "primary": "bg-primary text-new-white",
         "secondary": "bg-secondary text-new-white",
         "tertiary": "bg-tertiary text-new-white",
+        "tertiary-gray": "bg-tertiary text-gray-200",
         "accent": "bg-accent text-primary",
         "disabled": "",
     }

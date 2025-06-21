@@ -1,18 +1,18 @@
 
-import { Select, Theme } from '@radix-ui/themes';
+import { Select, Switch, Theme } from '@radix-ui/themes';
 import React, { useEffect, useState } from 'react';
 import { GradeGraphData, Log, TimelineGraphData, TopClimbsGraphData } from "../../resources/types";
 import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
 import { TopClimb } from './topClimb';
-import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, getTopClimbsPerYear, CountryData, CountyData } from '../../resources/serverUtils';
+import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, getTopClimbsPerYear, CountryData, AreaData } from '../../resources/serverUtils';
 import TotalClimb from './totalClimb';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
 import AvgMaxGraph from './graphs/avgMaxGraph';
 import CountryGraph from './graphs/countryGraph';
-import CountyMap from './graphs/countyMap';
+import AreaMap from './graphs/areaMap';
 
 
 interface StyleSummaryProps {
@@ -24,7 +24,8 @@ interface StyleSummaryProps {
 export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
-    const [selectedType, setselectedType] = useState<string>("Bouldering");
+    const [selectedType, setSelectedType] = useState<string>("Bouldering");
+    const [selectedFont, setSelectedFont] = useState(true);
 
     const climbsInStyle = logs.filter((l) => l.type == selectedType)
     const filteredClimbs = logs.filter((l) => (selectedYear == 0 || l.date.getFullYear() == selectedYear) && l.type == selectedType)
@@ -47,7 +48,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
     const [minGrade, setMinGrade] = useState<number>(0)
 
     const [countryData, setCountryData] = useState<CountryData>({} as CountryData)
-    const [mapData, setMapData] = useState<Record<string, CountyData>>({})
+    const [mapData, setMapData] = useState<Record<string, AreaData>>({})
 
 
     const [timelineProcessing, setTimelineProcessing] = useState(true)
@@ -89,7 +90,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
             setRegionProcessing(false)
         })
 
-        getMapData(filteredClimbs.filter((l) => ["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country))).then((data) => {
+        getMapData(filteredClimbs).then((data) => {
             setMapData(data)
             setMapProcessing(false)
         })
@@ -105,14 +106,13 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
                 <div className='flex flex-col'>
                     <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
-                    <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>
-                </div>
+                    <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>                </div>
 
                 <Theme
                     style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
-                    className='flex gap-4 self-end'
+                    className='flex gap-4 self-end items-center'
                 >
-                    <Select.Root defaultValue='Bouldering' onValueChange={(value) => setselectedType(value)} >
+                    <Select.Root defaultValue='Bouldering' onValueChange={(value) => setSelectedType(value)} >
                         <Select.Trigger className='SelectTrigger min-h-min' >
                         </Select.Trigger>
                         <Select.Content>
@@ -139,6 +139,8 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                             </Select.Group>
                         </Select.Content>
                     </Select.Root>
+
+                    <Switch size={"2"} defaultChecked onCheckedChange={(checked) => setSelectedFont(checked)}/> 
 
                 </Theme>
 
@@ -177,8 +179,8 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
-            <GraphContainer processing={mapProcessing} title='UK climb heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full' padded={false}>
-                <CountyMap data={mapData} />
+            <GraphContainer processing={mapProcessing} title='World heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full' padded={false}>
+                <AreaMap data={mapData} />
             </GraphContainer>
 
             <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' dependantNum={avgMaxData.length}>
