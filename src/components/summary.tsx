@@ -25,7 +25,6 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
     const [selectedType, setSelectedType] = useState<string>("Bouldering");
-    const [selectedFont, setSelectedFont] = useState(true);
 
     const climbsInStyle = logs.filter((l) => l.type == selectedType)
     const filteredClimbs = logs.filter((l) => (selectedYear == 0 || l.date.getFullYear() == selectedYear) && l.type == selectedType)
@@ -139,8 +138,6 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                             </Select.Group>
                         </Select.Content>
                     </Select.Root>
-
-                    <Switch size={"2"} defaultChecked onCheckedChange={(checked) => setSelectedFont(checked)}/> 
 
                 </Theme>
 

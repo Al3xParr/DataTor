@@ -18,8 +18,6 @@ interface AreaMapProps {
 
 export default function AreaMap({ data }: AreaMapProps) {
 
-    console.log(data)
-
     const grad = tinygradient(["#aef5d3", "#0e251a"])
     const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
     const colours = grad.rgb(max)
