@@ -35,78 +35,18 @@ export default function AreaMap({ data }: AreaMapProps) {
 
     return (
         <>
-            {area != "" ?
-                <Card className="bg-gray-200 w-[20rem] absolute top-20 right-8 flex flex-col p-0 items-start overflow-hidden">
-                    <p className={`bg-tertiary text-gray-200 w-full ${data[area] == null ? "rounded-xl" : "rounded-t-xl"} px-3 py-1 font-bold`}>{area}</p>
 
-                    {data[area] != null ?
-                        <div className="p-3 flex flex-col items-start text-sm">
-
-                            <div className="flex"><div className="font-bold ">{data[area]?.freq ?? 0}</div>&nbsp;Ascents</div>
-                            <div className="mt-5">Top Climbs</div>
-                            <div className="flex w-full justify-around mb-5">
-                                {data[area]?.topClimbs.map((topClimb) => {
-                                    return (
-                                        <div key={topClimb} className="basis-1 grow-1 flex flex-col items-center pt-1 mx-1 overflow-clip">
-                                            <Badge text={topClimb.split("/-")[0]} colour="tertiary-gray" />
-                                            <div className="w-fit font-bold mt-1">{topClimb.split("/-")[1]}</div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                            <div className="w-full h-32 ">
-                                <ChartContainer
-
-                                    series={[{ data: data[area].gradeDistribution, label: "g", type: "bar", color: "#00778f" }]}
-                                    xAxis={[{
-                                        scaleType: "band",
-                                        disableLine: true,
-                                        disableTicks: true,
-                                        data: getAxisList(data[area]),
-                                        valueFormatter(value) {
-                                            if (Number(value)) return ""
-                                            return value
-                                        },
-                                        height: 25,
-                                        tickLabelStyle: {
-                                            overflow: "visible",
-                                            ...smallFontStyling
-                                        },
-                                        sx: { overflow: "visisble" }
-                                    }]}
-                                    margin={{ top: 10, left: 10, right: 10, bottom: 0 }}
-                                    yAxis={[{ width: 0 }]}
-                                >
-                                    <BarPlot borderRadius={7} />
-                                    <ChartsXAxis />
-
-                                </ChartContainer>
-
-
-                            </div>
-                        </div>
-                        :
-                        <></>
-
-                    }
-
-
-
-                </Card>
-                :
-                <></>
-            }
             <ComposableMap
-                className="h-full w-full"
+                className="md:h-full h-[28rem] w-full"
                 projection={"geoMercator"}
             >
-                <ZoomableGroup 
-                zoom={6}
-                maxZoom={ 500}
-                center={[0, 45]}
+                <ZoomableGroup
+                    zoom={6}
+                    maxZoom={500}
+                    center={[0, 45]}
                 >
                     <Geographies
-             
+
                         geography={geoUrl}>
                         {({ geographies }) =>
                             geographies.map((geo) => {
@@ -134,6 +74,68 @@ export default function AreaMap({ data }: AreaMapProps) {
                     </Geographies>
                 </ZoomableGroup>
             </ComposableMap>
+
+            {area != "" ?
+                <Card className="bg-gray-200 not-md:w-full not-md:h-[13.5rem] md:w-[20rem] md:absolute md:top-17 md:right-4 flex flex-col p-0 items-start overflow-hidden not-md:rounded-none ">
+                    <p className={`bg-tertiary text-gray-200 w-full px-3 py-1 font-bold`}>{area}</p>
+
+                    {data[area] != null ?
+                        <div className="p-4 grid not-md:h-full not-md:max-h-full not-md:w-full not-md:overflow-clip md:grid-cols-1 md:grid-rows-2 not-md:grid-cols-2 not-md:grid-rows-1 items-start text-sm">
+                            <div className="not-md:h-full">
+                                <div className="flex md:col-span-2">
+                                    <div className="font-bold ">{data[area]?.freq ?? 0}</div>
+                                    &nbsp;Ascents
+                                </div>
+
+                                <div className="mt-5">Top Climbs</div>
+                                <div className="flex flex-col md:flex-row md:w-full justify-around mb-5">
+                                    {data[area]?.topClimbs.map((topClimb) => {
+                                        return (
+                                            <div key={topClimb} className="md:basis-1 md:grow-1 flex md:flex-col items-center pt-1 mx-1 overflow-clip">
+                                                <Badge text={topClimb.split("/-")[0]} colour="tertiary-gray" />
+                                                <div className="w-fit font-bold mt-1 not-md:line-clamp-1 pl-2">{topClimb.split("/-")[1]}</div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="md:w-full md:h-32 not-md:h-fit md:shrink">
+                                <ChartContainer
+
+                                    series={[{ data: data[area].gradeDistribution, label: "g", type: "bar", color: "#00778f" }]}
+                                    xAxis={[{
+                                        scaleType: "band",
+                                        disableLine: true,
+                                        disableTicks: true,
+                                        data: getAxisList(data[area]),
+                                        valueFormatter(value) {
+                                            if (Number(value)) return ""
+                                            return value
+                                        },
+                                        height: 25,
+                                        tickLabelStyle: {
+                                            overflow: "visible",
+                                            ...smallFontStyling
+                                        },
+                                        sx: { overflow: "visisble" }
+                                    }]}
+                                    margin={{ top: 10, left: 10, right: 10, bottom: 0 }}
+                                    yAxis={[{ width: 0 }]}
+                                >
+                                    <BarPlot borderRadius={7} />
+                                    <ChartsXAxis />
+
+                                </ChartContainer>
+
+                            </div>
+                        </div>
+                        :
+                        <></>
+                    }
+                </Card>
+                :
+                <></>
+            }
         </>
     )
 }

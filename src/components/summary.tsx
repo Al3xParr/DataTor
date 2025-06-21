@@ -156,7 +156,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
                 <div >
                     <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
-                    <Card className='flex gap-3 divide-secondary divide-x px-0'>
+                    <Card className='flex flex-col md:flex-row gap-3 divide-secondary not-md:divide-y md:divide-x px-0'>
                         <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
@@ -177,7 +177,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                 <TimelineGraph data={timelineData} presentGrades={presentGrades} />
             </GraphContainer>
 
-            <GraphContainer processing={mapProcessing} title='World heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2 md:h-full' padded={false}>
+            <GraphContainer processing={mapProcessing} title='World heatmap' dependantNum={Object.keys(mapData).length} className='md:row-span-2  md:h-full not-md:h-[45rem]' padded={false}>
                 <AreaMap data={mapData} />
             </GraphContainer>
 
