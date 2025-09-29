@@ -16,11 +16,11 @@ export default function GraphContainer({ processing, title, dependantNum, classN
 
 
     return (
-        <Card className={`w-full h-[500px] flex flex-col justify-center items-center col-span-2 md:col-span-1 ${!padded ? "p-0" : ""} ${className}`}>
+        <Card className={`w-full h-[500px] fill-tertiary flex flex-col justify-center items-center col-span-2 md:col-span-1 ${!padded ? "p-0" : ""} ${className}`}>
             {
                 processing ?
                     <>
-                        <Audio fill="#0a595c" />
+                        <Audio fill="190 100 28" />
                         <p className='text-tertiary'>Processing...</p>
                     </>
                     :

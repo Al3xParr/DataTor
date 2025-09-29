@@ -93,13 +93,20 @@ export default function GradeGraph({ data }: GradeGraphProps) {
             margin={{ top: 30 }}
 
         >
-            <ChartsGrid horizontal />
+            <ChartsGrid horizontal  />
             <BarPlot
 
                 barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
                 borderRadius={7}
                 slots={{
                     barLabel: BarLabel
+                }}
+
+                slotProps={{
+                    barLabel: {
+                        
+                        style:{fill: "var(--color-txt)"}
+                    }
                 }}
 
             />
@@ -116,7 +123,8 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
                 sx={{
                     "& .MuiChartsXAxis-tickContainer": {
-                        height: "5.625rem !important"
+                        height: "5.625rem !important",
+                        
                     },
                 }}
             />

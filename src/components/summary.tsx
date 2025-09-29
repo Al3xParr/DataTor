@@ -109,13 +109,13 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                     <p className='pl-1 pt-1 text-txt-muted'>Explore insights into your logbook and see your progress over time</p>                </div>
 
                 <Theme
-                    style={{backgroundColor: "#f1f2f4", color:"#ff1265", height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
+                    style={{background: "var(--color-bg)", height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
                     className='flex gap-4 self-end items-center'
                 >
                     <Select.Root defaultValue='Bouldering' onValueChange={(value) => setSelectedType(value)}>
-                        <Select.Trigger className='SelectTrigger min-h-min'>
+                        <Select.Trigger className='SelectTrigger' style={{background:"var(--color-bg-light)", color:"var(--color-txt)"}}>
                         </Select.Trigger>
-                        <Select.Content>
+                        <Select.Content style={{background:"var(--color-bg-light)", color:"var(--color-txt)"}}>
                             <Select.Group>
                                 <Select.Label>Disciplines</Select.Label>
                                 <Select.Item key={"Bouldering"} value={"Bouldering"}>Bouldering</Select.Item>
@@ -127,9 +127,9 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
                     </Select.Root>
 
                     <Select.Root defaultValue='0' onValueChange={(value) => setSelectedYear(parseInt(value))} >
-                        <Select.Trigger className='SelectTrigger min-h-min' >
+                        <Select.Trigger className='SelectTrigger' style={{background:"var(--color-bg-light)", color:"var(--color-txt)"}} >
                         </Select.Trigger>
-                        <Select.Content>
+                        <Select.Content  style={{background:"var(--color-bg-light)", color:"var(--color-txt)"}}>
                             <Select.Group>
                                 <Select.Label>Years</Select.Label>
                                 <Select.Item value={"0"}>All Time</Select.Item>

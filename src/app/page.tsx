@@ -72,12 +72,12 @@ export default function Stats() {
                             </div>
 
                             <div
-                                className="txt-txt sm:text-2xl text-xl cursor-pointer w-2/3 h-min border-3 border-txt space-y-5 sm:space-y-10 p-10 mb-10 border-dark shadow-lg border-dashed rounded-3xl bg-bg font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl"
+                                className="txt-txt sm:text-2xl text-xl fill-txt cursor-pointer w-2/3 h-min not-dark:border-2 border-txt space-y-5 sm:space-y-10 p-10 mb-10 shadow-lg border-dashed rounded-3xl bg-bg font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl"
                                 {...getRootProps()}>
-                                <Upload size={60} color="#0b0c0e" />
+                                <Upload size={60} />
                                 <div className="text-center">Drag & drop to upload climbing DLOG (.csv format)</div>
                                 <div className="">OR</div>
-                                <div className="p-4 bg-bg-light border text-center border-txt  rounded-lg transition duration-300 ease-in-out hover:scale-103">Browse Files</div>
+                                <div className="p-4 bg-bg-light text-center border-txt rounded-lg transition duration-300 ease-in-out hover:scale-103">Browse Files</div>
                             </div>
                         </div>
                     }

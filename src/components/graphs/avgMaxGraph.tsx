@@ -1,4 +1,4 @@
-import { chartsTooltipClasses, LineChart, lineElementClasses } from "@mui/x-charts"
+import { chartsTooltipClasses, LineChart, lineElementClasses, markElementClasses, MarkElementClasses } from "@mui/x-charts"
 import { globalColours, GradeConverter, mediumFontStyling, smallFontStyling } from "../../../resources/utils"
 import React from "react"
 
@@ -57,16 +57,20 @@ export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
                 },
                 legend: {
                     sx: {
-
+                       ...mediumFontStyling, 
                     }
-
                 }
             }}
             sx={{
                 [`& .${lineElementClasses.root}`]: {
                     strokeDasharray: '10 5',
                     strokeWidth: 3,
-                }
+                },
+                [`& .${markElementClasses.root}`]: {
+                    fill: "var(--color-bg)",
+                },
+                
+                
             }}
         />
 

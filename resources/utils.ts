@@ -99,8 +99,8 @@ export class GradeConverter {
     }
 }
 
-export const smallFontStyling = { fontSize: 12, fontWeight: 400, fontFamily: "Nunito" }
-export const mediumFontStyling = { fontSize: 14, fontWeight: 600, fontFamily: "Nunito" }
+export const smallFontStyling = { fontSize: 12, color: "var(--color-txt)", fill: "var(--color-txt)", fontWeight: 400, fontFamily: "Nunito" }
+export const mediumFontStyling = { fontSize: 14, color: "var(--color-txt)",  fill: "var(--color-txt)", fontWeight: 600, fontFamily: "Nunito" }
 
 export function getStyle(style: string) {
     switch (style) {

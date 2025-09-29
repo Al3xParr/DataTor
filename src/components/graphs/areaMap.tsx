@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps"
 import tinygradient from "tinygradient";
 import { Card } from "../ui/card";
@@ -14,16 +14,36 @@ interface AreaMapProps {
     data: Record<string, AreaData>
 }
 
+const GREENLIGHT = "#aef5d3"
+const GREENDARK = "#0e251a"
+
 export default function AreaMap({ data }: AreaMapProps) {
 
-    const grad = tinygradient(["#aef5d3", "#0e251a"])
+    let lowCol = GREENDARK
+    let highCol = GREENLIGHT
+    const grad = tinygradient([lowCol, highCol])
     const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
-    const colours = grad.rgb(max)
+    const [colours, setColours] = useState(grad.rgb(max))
+
     const [defaultArea, setDefaultArea] = useState("")
     const [area, setArea] = useState("")
 
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        if (event.matches) {
+            lowCol = GREENDARK
+            highCol = GREENLIGHT
+        } else {
+            lowCol = GREENLIGHT
+            highCol = GREENDARK
+        }
+
+        const grad = tinygradient([lowCol, highCol])
+        const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
+        setColours(grad.rgb(max))
+    });
+
     function getColour(freq: number) {
-        return freq == 0 ? "#e5e7eb" : colours[freq - 1]
+        return freq == 0 ? "var(--color-bg-light)" : colours[freq - 1]
     }
 
     function getAxisList(areaData: AreaData) {

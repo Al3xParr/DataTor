@@ -115,6 +115,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                 sx={{
                     flexWrap: "wrap",
                     overflow: "auto",
+                    //color: "var(--color-txt)",
 
 
                     "& .MuiChartsLegend-series": {
@@ -123,8 +124,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
                     },
                     "& .MuiChartsLegend-series:hover": {
-                        backgroundColor: "#e5e7eb !important",
-
+                        backgroundColor: "var(--color-bg-dark) !important",
                     },
 
                     [`.${legendClasses.mark}`]: {

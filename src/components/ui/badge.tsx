@@ -9,7 +9,7 @@ interface BadgeProps {
 export function Badge({ text, colour="default" }: BadgeProps) {
 
     const colourVariants : Record<string, string> = {
-        "default": "bg-tertiary text-bg-dark",
+        "default": "bg-tertiary text-bg",
         "light-text": "bg-tertiary text-bg-light",
     }
 
