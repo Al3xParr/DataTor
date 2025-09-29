@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #e5e7eb;
+  --background: hsl(220, 13%, 90%);
   --foreground: #171717;
 }
 
@@ -14,18 +14,22 @@
   --font-primary: "Nunito", "serif";
 
   --color-primary: hsl(151, 46%, 47%);
-  --color-secondary: hsl(151, 46%, 10%);
-  --color-secondary-light: hsl(120, 15%, 35%);
   --color-tertiary: hsl(190, 100%, 28%);
-  --color-accent: hsl(91, 46%, 47%);
 
-  --color-new-white: hsl(120, 52%, 97%);
+  --color-bg-dark: hsl(220, 13%, 90%);
+  --color-bg-light: hsl(220, 13%, 100%);
+  --color-bg: hsl(220, 13%, 95%);
+  --color-bg-accent: hsl(151, 46%, 30%);
+
+  --color-txt: hsl(220, 13%, 5%) ;
+  --color-txt-muted: hsl(220, 13%, 30%);
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #f3fbf3;
+    --background: #0a0a0a; /*not used*/
+    --foreground: #f3fbf3; /*not used*/
   }
 }
 

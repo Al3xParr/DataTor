@@ -202,6 +202,18 @@ function cleanAreaName(name: string){
     switch (name){
         case "USA" : return "United States of America"
         case "Borders": return "Scottish Borders"
+        case "Invernesshire": return "Highland"
+        case "Lochaber": return "Highland"
+        case "Isle of Skye": return "Highland"
+        case "Caithness": return "Highland"
+        case "Ross and Cromarty": return "Highland"
+        case "Sutherland": return "Highland"
+        case "Stirlingshire": return "Stirling"
+        case "Perthshire": return "Perth and Kinross"
+        case "Hebrides": return "Argyll and Bute"
+        case "Herefordshire": return "Herefordshire, County of"
+        case "Isle of Man": return "Man, Isle of"
+
         default: return name
     }
 }
@@ -219,20 +231,21 @@ export async function getMapData(logs: Log[]) {
 
     const gradeConverter = new GradeConverter()
 
-    function getScale(style: string) {
-        switch (style) {
+    const scale = (() => {
+        switch (logs[0].type){            
             case "Sport": return "french"
             case "Trad": return "britTrad"
-            default: return "font"
+            default: return "font" 
         }
-    }
+    })()
 
+ 
     const counties = new Set(logs.filter((l) => ["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.county))
     const countries = new Set(logs.filter((l) => !["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.country))
     
     counties.forEach((county) => {
         const cleanedName = cleanAreaName(county)
-        const climbs = logs.filter((log) => log.county == county).sort((a, b) => gradeConverter.compareLog(a, b))
+        const climbs = logs.filter((log) => cleanAreaName(log.county) == cleanedName).sort((a, b) => gradeConverter.compareLog(a, b))
         const { minIndex: min,
             maxIndex: max,
             distribution: gradeDistribution
@@ -242,8 +255,8 @@ export async function getMapData(logs: Log[]) {
             freq: climbs.length,
             topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
             gradeDistribution: gradeDistribution,
-            minGrade: gradeConverter.getGradeFromIndex(min, getScale(logs[0].style)),
-            maxGrade: gradeConverter.getGradeFromIndex(max, getScale(logs[0].style))
+            minGrade: gradeConverter.getGradeFromIndex(min, scale),
+            maxGrade: gradeConverter.getGradeFromIndex(max, scale)
         } as AreaData
     })
 
@@ -259,8 +272,8 @@ export async function getMapData(logs: Log[]) {
             freq: climbs.length,
             topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
             gradeDistribution: gradeDistribution,
-            minGrade: gradeConverter.getGradeFromIndex(min, getScale(logs[0].style)),
-            maxGrade: gradeConverter.getGradeFromIndex(max, getScale(logs[0].style))
+            minGrade: gradeConverter.getGradeFromIndex(min, scale),
+            maxGrade: gradeConverter.getGradeFromIndex(max, scale)
         } as AreaData
     })
 

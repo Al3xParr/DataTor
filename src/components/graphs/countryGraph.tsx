@@ -37,7 +37,8 @@ export default function CountryGraph({ data }: CountryGraphProps) {
 
         >
             <ChartsGrid vertical />
-            <BarPlot />
+            <BarPlot 
+            borderRadius={7}/>
             <ChartsTooltip
                 trigger="axis"
                 sx={{

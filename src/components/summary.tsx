@@ -106,14 +106,14 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
                 <div className='flex flex-col'>
                     <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
-                    <p className='pl-1 pt-1'>Explore insights into your logbook and see your progress over time</p>                </div>
+                    <p className='pl-1 pt-1 text-txt-muted'>Explore insights into your logbook and see your progress over time</p>                </div>
 
                 <Theme
-                    style={{ height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
+                    style={{backgroundColor: "#f1f2f4", color:"#ff1265", height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
                     className='flex gap-4 self-end items-center'
                 >
-                    <Select.Root defaultValue='Bouldering' onValueChange={(value) => setSelectedType(value)} >
-                        <Select.Trigger className='SelectTrigger min-h-min' >
+                    <Select.Root defaultValue='Bouldering' onValueChange={(value) => setSelectedType(value)}>
+                        <Select.Trigger className='SelectTrigger min-h-min'>
                         </Select.Trigger>
                         <Select.Content>
                             <Select.Group>
@@ -147,7 +147,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
             <div className='col-span-2 flex flex-col md:flex-row gap-5 items-center p-4 justify-evenly'>
                 <div>
                     <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
-                    <Card className='flex divide-x px-0 divide-secondary  w-max'>
+                    <Card className='flex divide-x px-0 divide-txt w-max'>
                         <TotalClimb type='Sent' total={filteredClimbs.length} />
                         <TotalClimb type='Flash' total={flash?.length} />
                         <TotalClimb type='Onsight' total={onsight?.length} />
@@ -156,7 +156,7 @@ export default function Summary({ logs, firstYear, owner }: StyleSummaryProps) {
 
                 <div >
                     <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
-                    <Card className='flex flex-col md:flex-row gap-3 divide-secondary not-md:divide-y md:divide-x px-0'>
+                    <Card className='flex flex-col md:flex-row gap-3 divide-txt not-md:divide-y md:divide-x px-0'>
                         <TopClimb style="Worked" name={filteredClimbs[0]?.name ?? "N/A"} grade={filteredClimbs[0]?.grade ?? "N/A"} colour={filteredClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
                         <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />

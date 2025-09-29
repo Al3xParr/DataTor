@@ -20,7 +20,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
             setShowColours(globalColours)
         } else {
             const highlightColours = Array(presentGrades.length).fill("#6b7280")
-            highlightColours[index] = "#fc1e98"
+            highlightColours[index] = "#41af7a"
             setShowColours(highlightColours)
         }
     }

@@ -76,8 +76,8 @@ export default function AreaMap({ data }: AreaMapProps) {
             </ComposableMap>
 
             {area != "" ?
-                <Card className="bg-gray-200 not-md:w-full not-md:h-[13.5rem] md:w-[20rem] md:absolute md:top-17 md:right-4 flex flex-col p-0 items-start overflow-hidden not-md:rounded-none ">
-                    <p className={`bg-tertiary text-gray-200 w-full px-3 py-1 font-bold`}>{area}</p>
+                <Card className="bg-bg-light not-md:w-full not-md:h-[13.5rem] md:w-[20rem] md:absolute md:top-17 md:right-4 flex flex-col p-0 items-start overflow-hidden not-md:rounded-none ">
+                    <p className={`bg-tertiary text-bg-light w-full px-3 py-1 font-bold`}>{area}</p>
 
                     {data[area] != null ?
                         <div className="p-4 grid not-md:h-full not-md:max-h-full not-md:w-full not-md:overflow-clip md:grid-cols-1 md:grid-rows-2 not-md:grid-cols-2 not-md:grid-rows-1 items-start text-sm">
@@ -92,8 +92,8 @@ export default function AreaMap({ data }: AreaMapProps) {
                                     {data[area]?.topClimbs.map((topClimb) => {
                                         return (
                                             <div key={topClimb} className="md:basis-1 md:grow-1 flex md:flex-col items-center pt-1 mx-1 overflow-clip">
-                                                <Badge text={topClimb.split("/-")[0]} colour="tertiary-gray" />
-                                                <div className="w-fit font-bold mt-1 not-md:line-clamp-1 pl-2">{topClimb.split("/-")[1]}</div>
+                                                <Badge text={topClimb.split("/-")[0]} colour="light-text" />
+                                                <div className="w-fit font-bold mt-1 not-md:line-clamp-1 pl-1 md:pl-0 text-left md:text-center">{topClimb.split("/-")[1]}</div>
                                             </div>
                                         )
                                     })}

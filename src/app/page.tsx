@@ -67,17 +67,17 @@ export default function Stats() {
                         </div>
                         :
                         <div className="w-full h-full flex flex-col items-center">
-                            <div className="text-center text-2xl m-20 ">
+                            <div className="text-center sm:text-2xl text-xl m-10 sm:m-20 text-text-muted">
                                 Navigate to <a href="https://www.ukclimbing.com/logbook">https://www.ukclimbing.com/logbook</a> and download your logbook
                             </div>
 
                             <div
-                                className="text-2xl cursor-pointer w-2/3 h-2/3 border-3 space-y-10 p-10 mb-10 border-dark shadow-lg border-dashed rounded-3xl bg-new-white font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl hover:scale-101"
+                                className="txt-txt sm:text-2xl text-xl cursor-pointer w-2/3 h-min border-3 border-txt space-y-5 sm:space-y-10 p-10 mb-10 border-dark shadow-lg border-dashed rounded-3xl bg-bg font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl"
                                 {...getRootProps()}>
-                                <Upload size={80} color="#0d260e" />
-                                <div className="">Drag & drop to upload climbing DLOG (.csv format)</div>
+                                <Upload size={60} color="#0b0c0e" />
+                                <div className="text-center">Drag & drop to upload climbing DLOG (.csv format)</div>
                                 <div className="">OR</div>
-                                <div className="p-4 bg-secondary text-new-white rounded-lg ">Browse Files</div>
+                                <div className="p-4 bg-bg-light border text-center border-txt  rounded-lg transition duration-300 ease-in-out hover:scale-103">Browse Files</div>
                             </div>
                         </div>
                     }

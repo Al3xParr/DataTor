@@ -85,7 +85,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                 disableTicks: true,
                 disableLine: true,
                 scaleType: "band",
-                height: 25
+                height: 25,
             }]}
             yAxis={[{
                 width: 0
