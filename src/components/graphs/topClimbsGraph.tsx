@@ -13,7 +13,7 @@ interface TopClimbsGraphProps {
 
 
 export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopClimbsGraphProps) {
-
+    
     const gradeConverter = new GradeConverter()
     const numberOfGrades = Math.max(presentGrades.length, 2)
     const globalColourList = globalColours.slice(0, Math.min(numberOfGrades, globalColours.length))
@@ -24,7 +24,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
     return (
 
         <ChartContainer
-            className={"h-max"}
+            className="h-max"
             dataset={data}
 
             series={presentGrades.sort((a, b) => gradeConverter.compareGrade(a, b)).reverse().map((grade, index) => ({
@@ -89,6 +89,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
                     },
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
                         ...mediumFontStyling,
+                        color: "var(--color-title)"
                     }
                 }}
 

@@ -4,12 +4,11 @@ import React from "react"
 
 interface AvgMaxGraphProps {
     data: { "year": number, "avg": number, "max": number }[],
-    min: number,
     type: string
 }
 
 
-export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
+export default function AvgMaxGraph({ data, type }: AvgMaxGraphProps) {
 
     const scale: Record<string, "font" | "v" | "french" | "britTrad"> = {
         "Bouldering": "font",
@@ -41,7 +40,7 @@ export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
             }]}
 
             yAxis={[{
-                min: Math.max(min - 4, 0),
+                domainLimit : (minVal, maxVal) => ({ min: minVal-4, max: maxVal + 1}),
                 valueFormatter: (value: number) => gradeConverter.getGradeFromIndex(value, scale[type]),
                 tickLabelStyle: { ...smallFontStyling }
             }]}
@@ -51,7 +50,8 @@ export default function AvgMaxGraph({ data, min, type }: AvgMaxGraphProps) {
                 tooltip: {
                     sx: {
                         [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
-                            ...mediumFontStyling
+                            ...mediumFontStyling,
+                        color: "var(--color-title)"
                         },
                     },
                 },

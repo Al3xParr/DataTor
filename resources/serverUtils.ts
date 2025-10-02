@@ -1,6 +1,6 @@
 'use server'
 
-import { GradeGraphData, Log, TimelineGraphData, TopClimbsGraphData } from "./types"
+import { GradeGraphData, Log, TimelineData, TopClimbsGraphData } from "./types"
 import { GradeConverter } from "./utils"
 
 const styleIndex: Record<string, number> = {
@@ -8,100 +8,126 @@ const styleIndex: Record<string, number> = {
     "Onsight": 2,
     "Sent": 0,
     "Redpoint": 0,
-    "GroundUp": 0,
-    "Repeat": 0
+    "Ground Up": 3,
+    "Repeat": 4
 }
 
 export interface TopClimbsDataRtn {
     topClimbsPerYear: TopClimbsGraphData[],
-    gradesInTopClimbs: string[],
-    topClimbNames: Record<string, string[]>
+    gradeList: string[],
+    names: Record<string, string[]>
 }
 
-export async function getTopClimbsPerYear(logs: Log[], yearList: number[]): Promise<TopClimbsDataRtn> {
+export async function getTopClimbsData(logs: Log[]): Promise<TopClimbsDataRtn> {
     const rtn = new Promise<TopClimbsDataRtn>((resolve) => {
 
         const topClimbsPerYear: TopClimbsGraphData[] = []
         // e.g {0: {year:2017, f7a: 1, f7c: 9}
         //      1: {year:2018, f7c: 7, f8a: 3}}
-        const gradesInTopClimbs: string[] = []
+        const gradeList: string[] = []
         // e.g ["6a+", "6b", "7b", "7b+", "7c"]
-        const topClimbNames: Record<string, string[]> = {}
+        const names: Record<string, string[]> = {}
         // e.g {2020-7a: ["green traverse"],
         //      2020-7a+: ["wish"]}
 
         let yearInc: { [key: string]: number }
-        yearList.forEach((year) => {
-            yearInc = { "year": year }
-            const topClimbForYear = logs.filter((l) => l.date.getFullYear() == year).slice(0, 10)
+
+        let count = 0
+        let currentYear = new Date().getFullYear()
+
+        while (count != logs.length) {
+            yearInc = { "year": currentYear }
+            const climbsInyear = logs.filter((l) => l.date.getFullYear() == currentYear)
+            const topClimbForYear = climbsInyear.slice(0, 10)
 
             topClimbForYear.forEach((l) => {
 
-                topClimbNames[year + "-" + l.grade] = [...topClimbNames[year + "-" + l.grade] ?? []].concat([l.name])
+                names[currentYear + "-" + l.grade] = [...names[currentYear + "-" + l.grade] ?? []].concat([l.name])
 
                 const temp = yearInc[l.grade] ?? 0
                 yearInc[l.grade] = temp + 1
-                if (!gradesInTopClimbs.includes(l.grade)) gradesInTopClimbs.push(l.grade)
+                if (!gradeList.includes(l.grade)) gradeList.push(l.grade)
             })
             topClimbsPerYear.push(yearInc)
-        })
+
+            count += climbsInyear.length
+            currentYear -= 1
+        }
 
         const templateyear: { [key: string]: number } = {}
-        for (const grade of gradesInTopClimbs.values()) templateyear[grade] = 0
+        for (const grade of gradeList.values()) templateyear[grade] = 0
         topClimbsPerYear.map((c) => {
             return { ...templateyear, ...c }
         })
 
 
-        resolve({ topClimbsPerYear, gradesInTopClimbs, topClimbNames })
+        resolve({ topClimbsPerYear: topClimbsPerYear.reverse(), gradeList, names })
     })
 
     return rtn
 }
 
+export interface TimelineDataRtn {
+    data: DatePoint[],
+    presentGrades: string[]
+}
+
+export interface DatePoint {
+    date: number,
+    freq: {[key: string]: number}
+    
+}
 
 
-export async function getTimelineData(climbs: Log[], presentGrades: string[], extendToToday: boolean = true): Promise<TimelineGraphData[]> {
-    const rtn = new Promise<TimelineGraphData[]>((resolve) => {
-        const climbDate: TimelineGraphData[] = []
+// export async function getTimelineData(climbs: Log[], extendToToday: boolean = true): Promise<TimelineData[]> {
+export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
+    const rtn = new Promise<TimelineDataRtn>((resolve) => {
+        const climbDate: DatePoint[] = []
 
-        function newDate(date: number = new Date().getTime()): { [key: string]: number } {
-            const a: { [key: string]: number } = { "date": date }
-            for (const grade of presentGrades.values()) a[grade] = 0
+        const presentGradesNew = [] as string[]
+
+        function newDate(date: number = new Date().getTime()): DatePoint {
+            const a: DatePoint = { date: date, freq: {} }
+            for (const grade of presentGradesNew.values()) a.freq[grade] = 0
             return a
         }
 
         let currentDate = newDate()
         structuredClone(climbs).sort((a, b) => a.date.valueOf() - b.date.valueOf()).forEach((climb, index) => {
-            if (index == 0) currentDate["date"] = climb.date.getTime()
-            if (currentDate["date"] != climb.date.getTime()) {
 
-                climbDate.push({ ...currentDate })
+            if (index == 0) currentDate.date = climb.date.getTime()
 
-                currentDate["date"] = climb.date.getTime()
+            if (currentDate.date != climb.date.getTime()) {
+
+                climbDate.push({ ...structuredClone(currentDate) })
+
+                currentDate.date = climb.date.getTime()
             }
-            const temp = currentDate[climb.grade] ?? 0
-            if (typeof (temp) == "number") currentDate[climb.grade] = temp + 1
+
+            if (!presentGradesNew.includes(climb.grade)){
+                presentGradesNew.push(climb.grade)
+                climbDate.forEach((val) => val.freq[climb.grade] = 0)
+            }
+
+            const temp = currentDate.freq[climb.grade] ?? 0
+            currentDate.freq[climb.grade] = temp + 1
 
         })
-        if (climbDate.length > 0 && extendToToday) {
+        // if (climbDate.length > 0 && extendToToday) {
+        if (climbDate.length > 0) {
             climbDate.push({ ...climbDate[climbDate.length - 1], "date": new Date().getTime() })
         }
 
 
-        resolve(climbDate)
+        resolve({data: climbDate, presentGrades: presentGradesNew.sort().reverse()} as TimelineDataRtn)
     })
 
     return rtn
 }
 
-export interface GradeDataRtn {
-    gradeDataSet: GradeGraphData[]
-    presentGrades: string[]
-}
 
-export async function getGradeData(logs: Log[]): Promise<GradeDataRtn> {
-    const rtn = new Promise<GradeDataRtn>((resolve) => {
+export async function getGradeData(logs: Log[]): Promise<GradeGraphData[]> {
+    const rtn = new Promise<GradeGraphData[]>((resolve) => {
         const presentGrades: string[] = []
         const climbFreq: Record<string, number[]> = {}
         const gradeDataSet: GradeGraphData[] = []
@@ -110,16 +136,22 @@ export async function getGradeData(logs: Log[]): Promise<GradeDataRtn> {
 
             if (!presentGrades.includes(climb.grade)) presentGrades.push(climb.grade)
 
-            const temp = climbFreq[climb.grade] ?? [0, 0, 0] // send, flash, onsight
+            const temp = climbFreq[climb.grade] ?? [0, 0, 0, 0, 0] // send, flash, onsight, groundup, repeat
             temp[styleIndex[climb.style]] = temp[styleIndex[climb.style]] + 1
             climbFreq[climb.grade] = temp
         })
 
         for (const key in climbFreq) {
-            gradeDataSet.push({ "grade": key, "send": climbFreq[key][0].valueOf(), "flash": climbFreq[key][1].valueOf(), "onsight": climbFreq[key][2].valueOf() })
+            gradeDataSet.push({
+                "grade": key, "send": climbFreq[key][0].valueOf(),
+                "flash": climbFreq[key][1].valueOf(),
+                "onsight": climbFreq[key][2].valueOf(),
+                "groundup": climbFreq[key][3].valueOf(),
+                "repeat": climbFreq[key][4].valueOf()
+            })
         }
 
-        resolve({ gradeDataSet, presentGrades })
+        resolve(gradeDataSet)
     })
     return rtn
 }
@@ -130,19 +162,14 @@ export interface AvgMaxData {
     avg: number
 }
 
-export interface AvgMaxDataRtn {
-    data: AvgMaxData[],
-    min: number
-}
 
+export async function getAvgMaxData(logs: Log[]): Promise<AvgMaxData[]> {
 
-export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<AvgMaxDataRtn> {
-
-    if (logs.length == 0) return { data: [], min: 0 }
+    if (logs.length == 0) return [] as AvgMaxData[]
 
     const gradeConverter = new GradeConverter()
 
-    let scale: "font" | "v" | "french" | "britTrad" = "font"
+    let scale: "font" | "v" | "french" | "britTrad" | "yds" = "font"
     switch (logs[0].type) {
         case "Sport": scale = "french"
         case "Trad": scale = "britTrad"
@@ -150,22 +177,24 @@ export async function getAvgMaxData(logs: Log[], yearList: number[]): Promise<Av
 
     const avgMaxData: AvgMaxData[] = []
 
-    let min = 100
+    let count = 0
+    let currentYear = new Date().getFullYear()
 
-    yearList.forEach((y) => {
-        const yearLogs = logs.filter((l) => l.date.getFullYear() == y)
+    while (count != logs.length) {
+        const yearLogs = logs.filter((l) => l.date.getFullYear() == currentYear)
 
         if (yearLogs.length > 0) {
             const max = gradeConverter.getGradeIndex(yearLogs[0].grade)
             const avgList = yearLogs.map((l) => gradeConverter.getGradeIndex(l.grade))
             const avg = Math.floor(avgList.reduce((acc, val) => acc + val) / yearLogs.length)
-            avgMaxData.push({ year: y, max: max, avg: avg })
-
-            if (avg < min) min = avg
+            avgMaxData.push({ year: currentYear, max: max, avg: avg })
         }
-    })
-    return { data: avgMaxData, min: min }
 
+        count += yearLogs.length
+        currentYear -= 1
+    }
+
+    return avgMaxData.reverse()
 }
 
 
@@ -198,9 +227,9 @@ export async function getCountryData(logs: Log[]): Promise<CountryData> {
 }
 
 
-function cleanAreaName(name: string){
-    switch (name){
-        case "USA" : return "United States of America"
+function cleanAreaName(name: string) {
+    switch (name) {
+        case "USA": return "United States of America"
         case "Borders": return "Scottish Borders"
         case "Invernesshire": return "Highland"
         case "Lochaber": return "Highland"
@@ -232,17 +261,17 @@ export async function getMapData(logs: Log[]) {
     const gradeConverter = new GradeConverter()
 
     const scale = (() => {
-        switch (logs[0].type){            
+        switch (logs[0].type) {
             case "Sport": return "french"
             case "Trad": return "britTrad"
-            default: return "font" 
+            default: return "font"
         }
     })()
 
- 
+
     const counties = new Set(logs.filter((l) => ["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.county))
     const countries = new Set(logs.filter((l) => !["England", "Wales", "Scotland", "Northern Ireland"].includes(l.country)).map((log) => log.country))
-    
+
     counties.forEach((county) => {
         const cleanedName = cleanAreaName(county)
         const climbs = logs.filter((log) => cleanAreaName(log.county) == cleanedName).sort((a, b) => gradeConverter.compareLog(a, b))
@@ -253,7 +282,7 @@ export async function getMapData(logs: Log[]) {
 
         areaFreq[cleanedName] = {
             freq: climbs.length,
-            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
+            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" + climb.name),
             gradeDistribution: gradeDistribution,
             minGrade: gradeConverter.getGradeFromIndex(min, scale),
             maxGrade: gradeConverter.getGradeFromIndex(max, scale)
@@ -270,7 +299,7 @@ export async function getMapData(logs: Log[]) {
 
         areaFreq[cleanedName] = {
             freq: climbs.length,
-            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" +climb.name),
+            topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" + climb.name),
             gradeDistribution: gradeDistribution,
             minGrade: gradeConverter.getGradeFromIndex(min, scale),
             maxGrade: gradeConverter.getGradeFromIndex(max, scale)

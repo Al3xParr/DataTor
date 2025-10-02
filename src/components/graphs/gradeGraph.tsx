@@ -7,14 +7,10 @@ import { useAnimate } from '@mui/x-charts/hooks';
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 import { mediumFontStyling, smallFontStyling } from '../../../resources/utils';
 import React from "react";
+import { GradeGraphData } from '../../../resources/types';
 
 interface GradeGraphProps {
-    data: {
-        "grade": string,
-        "send": number,
-        "flash": number,
-        "onsight": number
-    }[]
+    data: GradeGraphData[]
 }
 
 const Text = styled('text')(({ theme }) => ({
@@ -63,22 +59,32 @@ function BarLabel(props: BarLabelProps) {
 export default function GradeGraph({ data }: GradeGraphProps) {
 
     function getTotalForGrade(index: number, seriesId: string) {
-        const total = (data[index]?.send + data[index]?.flash + data[index]?.onsight + 0).toString()
-        if (seriesId == "flash" && data[index]?.send == 0 && data[index]?.flash != 0) return total
-        if (seriesId == "onsight" && data[index]?.send == 0 && data[index]?.flash == 0 && data[index]?.onsight != 0) return total
-        if (seriesId == "send" && data[index]?.send != 0) return total
-        return ""
+
+        const gradeData = data[index] || {}
+
+        const total = (gradeData.send + gradeData.flash + gradeData.onsight + gradeData.groundup + gradeData.repeat + 0).toString()
+
+        switch (seriesId) {
+            case "repeat": return total
+            case "send": if (gradeData.repeat == 0) return total
+            case "groundup": if (gradeData.send + gradeData.repeat == 0) return total
+            case "flash": if (gradeData.groundup + gradeData.send + gradeData.repeat == 0) return total
+            case "onsight": if (gradeData.flash + gradeData.groundup + gradeData.send + gradeData.repeat == 0) return total
+            default: return ""
+        }
     }
 
 
     return (
         <ChartContainer
-            dataset={data}
+            dataset={data as any[]}
 
             series={[
                 { id: "onsight", dataKey: "onsight", stack: "total", label: "Onsight", color: "#E5BEED", type: "bar" },
                 { id: "flash", dataKey: "flash", stack: "total", label: "Flash", color: "#F39B6D", type: "bar" },
-                { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79", type: "bar" }
+                { id: "groundup", dataKey: "groundup", stack: "total", label: "Ground Up", color: "#007991", type: "bar" },
+                { id: "send", dataKey: 'send', stack: "total", label: "Send", color: "#40ae79", type: "bar" },
+                { id: "repeat", dataKey: 'repeat', stack: "total", label: "Repeat", color: "#222E50", type: "bar" }
             ]}
             xAxis={[{
                 dataKey: "grade",
@@ -93,10 +99,10 @@ export default function GradeGraph({ data }: GradeGraphProps) {
             margin={{ top: 30 }}
 
         >
-            <ChartsGrid horizontal  />
+            <ChartsGrid horizontal />
             <BarPlot
 
-                barLabel={(item) => getTotalForGrade(item.dataIndex, item.seriesId.toString())}
+                barLabel={(item, context) =>  context.bar.height != 0 ? getTotalForGrade(item.dataIndex, item.seriesId.toString()) : ""}
                 borderRadius={7}
                 slots={{
                     barLabel: BarLabel
@@ -104,8 +110,8 @@ export default function GradeGraph({ data }: GradeGraphProps) {
 
                 slotProps={{
                     barLabel: {
-                        
-                        style:{fill: "var(--color-txt)"}
+
+                        style: { fill: "var(--color-txt)" }
                     }
                 }}
 
@@ -114,6 +120,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                 sx={{
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
                         ...mediumFontStyling,
+                        color: "var(--color-title)"
                     },
                 }}
             />
@@ -124,7 +131,7 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                 sx={{
                     "& .MuiChartsXAxis-tickContainer": {
                         height: "5.625rem !important",
-                        
+
                     },
                 }}
             />

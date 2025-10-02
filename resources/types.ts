@@ -20,7 +20,8 @@ export type Log = {
     region: string,
     pitches: number,
     partner: string,
-    country: string
+    country: string,
+    yds: boolean
 }
 
 
@@ -28,13 +29,19 @@ export interface GradeGraphData {
     "grade": string,
     "send": number,
     "flash": number,
-    "onsight": number
+    "onsight": number,
+    "groundup": number,
+    "repeat": number
 }
 
 export interface TopClimbsGraphData {
     [key: string]: number
 }
 
-export interface TimelineGraphData {
-    [key: string]: Date | number
+export interface TimelineData {
+    [key: string]: Date | number,
 }
+
+
+
+export type DataRetrievalFunc = (logs: Log[], args: any[]) => Promise<any>

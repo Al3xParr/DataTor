@@ -27,7 +27,7 @@ export default function GraphContainer({ processing, title, dependantNum, classN
                     <div className={`w-full h-full content-center text-center`}>
                         {dependantNum > 0 ?
 
-                            <div className="flex flex-col items-start h-full w-full relative">
+                            <div className="flex flex-col items-start h-full w-full relative select-none">
                                 <h4 className={`font-bold shrink ${!padded ? "p-4" : ""}`}>{title}</h4>
                                 {children}
                             </div>

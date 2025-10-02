@@ -44,6 +44,7 @@ export default function CountryGraph({ data }: CountryGraphProps) {
                 sx={{
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
                         ...mediumFontStyling,
+                        color: "var(--color-title)"
                     },
                 }}
             />

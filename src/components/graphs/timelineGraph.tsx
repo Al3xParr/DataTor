@@ -1,16 +1,19 @@
-import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, chartsTooltipClasses} from "@mui/x-charts";
+import { ChartsGrid, ChartsTooltip, ChartsXAxis, ChartsYAxis, ChartsLegend, ChartDataProvider, ChartsSurface, legendClasses, HighlightScope, HighlightItemData, chartsTooltipClasses } from "@mui/x-charts";
 import { lineElementClasses, LineHighlightPlot, LinePlot, markElementClasses } from "@mui/x-charts/LineChart";
 import React, { useState } from "react";
 import { rainbowSurgePalette } from "@mui/x-charts";
 import { globalColours, mediumFontStyling, smallFontStyling } from "../../../resources/utils";
 import { ChartsOverlay } from "@mui/x-charts/ChartsOverlay";
+import { DatePoint } from "../../../resources/serverUtils";
 
 interface TimelineGraphProps {
-    data: { [key: string]: Date | number }[],
+    data: DatePoint[],
     presentGrades: string[]
 }
 
 export default function TimelineGraph({ data, presentGrades }: TimelineGraphProps) {
+
+    const dataset : {[key: string]: number}[] = data.map((val) => ({"date": val.date, ...val.freq}))
 
     const [highlightedItem, setHighlightedItem] = useState<HighlightItemData | null>(null)
     const [showColours, setShowColours] = useState<string[]>(globalColours)
@@ -27,7 +30,8 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
     return (
         <ChartDataProvider
-            dataset={data}
+
+            dataset={dataset}
             colors={rainbowSurgePalette}
 
             series={presentGrades.map((grade, index) => ({
@@ -92,6 +96,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
                         [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
 
                             ...mediumFontStyling,
+                            color: "var(--color-title)"
                         },
                     }}
                 />
