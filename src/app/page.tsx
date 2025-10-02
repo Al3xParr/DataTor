@@ -13,7 +13,7 @@ export default function Stats() {
 
     const { CSVReader } = useCSVReader()
     const [logbook, setLogbook] = useState<Log[]>()
-    const [firstYear, setFirstYear] = useState<number>(2025);
+    // const [firstYear, setFirstYear] = useState<number>(2025);
 
     const gradeConverter = new GradeConverter()
 
@@ -45,8 +45,8 @@ export default function Stats() {
                         yds: (climb[1] as string).startsWith("5.")
                     } as Log
 
-                    if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
-                    if (newLog.style != "DNF" && newLog.style != "Dogged") climbs.push(newLog)
+                    // if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
+                    if (newLog.style != "DNF" && newLog.style != "Dogged" && newLog.type != "Alpine" && newLog.type != "Via Ferrata") climbs.push(newLog)
                 })
                 setLogbook(climbs.sort((a, b) => gradeConverter.compareLog(a, b)))
                 
@@ -63,7 +63,7 @@ export default function Stats() {
 
                         <div className="w-full h-full flex flex-col sm:p-10 sm:pt-5 pt-5">
 
-                            <Summary logs={logbook ?? []} firstYear={firstYear} owner={cleanName(acceptedFile.name)} />
+                            <Summary logs={logbook ?? []} owner={cleanName(acceptedFile.name)} />
 
                         </div>
                         :

@@ -37,7 +37,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
                 color: colours[index],
                 valueFormatter: (v, context) => {
                     const yearGradeString = data[context.dataIndex].year + "-" + grade
-                    return climbNames[yearGradeString].join("\n")
+                    return climbNames[yearGradeString].join("\n   ")
                 },
 
             }))}
@@ -85,7 +85,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
 
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.valueCell}`]: {
                         display: "inline !important",
-                        whiteSpace: "pre-line !important"
+                        whiteSpace: "pre !important"
                     },
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
                         ...mediumFontStyling,

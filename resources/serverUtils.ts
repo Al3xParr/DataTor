@@ -84,11 +84,11 @@ export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
     const rtn = new Promise<TimelineDataRtn>((resolve) => {
         const climbDate: DatePoint[] = []
 
-        const presentGradesNew = [] as string[]
+        const presentGrades = [] as string[]
 
         function newDate(date: number = new Date().getTime()): DatePoint {
             const a: DatePoint = { date: date, freq: {} }
-            for (const grade of presentGradesNew.values()) a.freq[grade] = 0
+            for (const grade of presentGrades.values()) a.freq[grade] = 0
             return a
         }
 
@@ -104,8 +104,8 @@ export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
                 currentDate.date = climb.date.getTime()
             }
 
-            if (!presentGradesNew.includes(climb.grade)){
-                presentGradesNew.push(climb.grade)
+            if (!presentGrades.includes(climb.grade)){
+                presentGrades.push(climb.grade)
                 climbDate.forEach((val) => val.freq[climb.grade] = 0)
             }
 
@@ -119,7 +119,7 @@ export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
         }
 
 
-        resolve({data: climbDate, presentGrades: presentGradesNew.sort().reverse()} as TimelineDataRtn)
+        resolve({data: climbDate, presentGrades: presentGrades.sort((a, b) => new GradeConverter().compareGrade(a, b))} as TimelineDataRtn)
     })
 
     return rtn
@@ -159,7 +159,8 @@ export async function getGradeData(logs: Log[]): Promise<GradeGraphData[]> {
 export interface AvgMaxData {
     year: number,
     max: number,
-    avg: number
+    avg: number,
+    total: number
 }
 
 
@@ -187,7 +188,7 @@ export async function getAvgMaxData(logs: Log[]): Promise<AvgMaxData[]> {
             const max = gradeConverter.getGradeIndex(yearLogs[0].grade)
             const avgList = yearLogs.map((l) => gradeConverter.getGradeIndex(l.grade))
             const avg = Math.floor(avgList.reduce((acc, val) => acc + val) / yearLogs.length)
-            avgMaxData.push({ year: currentYear, max: max, avg: avg })
+            avgMaxData.push({ year: currentYear, max: max, avg: avg, total: yearLogs.length })
         }
 
         count += yearLogs.length

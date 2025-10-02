@@ -160,6 +160,7 @@ export function getStyle(style: string) {
         case "2nd RP": return "DNF"
         case "2nd β": return "DNF"
         case "2nd Î²": return "DNF"
+        case "2nd &beta;": return "DNF"
         case "2nd G/U": return "DNF"
         case "2nd O/S": return "DNF"
         case "2nd rpt": return "DNF"
