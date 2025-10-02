@@ -16,6 +16,7 @@ export class GradeConverter {
     v = ["VE", "VM", "VB", "V0-", "V0", "V0+", "V1", "V2", "V3", "V3+", "V4", "V4+", "V5", "V5+", "V6", "V7", "V8", "V8+", "V9", "V10", "V11", "V12", "V13", "V14", "V15", "V16", "V17"]
 
     french = ["1", "2", "2+", "3a", "3b", "3c", "4a", "4b", "4c", "5a", "5b", "5c", "6a", "6a+", "6b", "6b+", "6c", "6c+", "7a", "7a+", "7b", "7b+", "7c", "7c+", "8a", "8a+", "8b", "8b+", "8c", "8c+", "9a", "9a+", "9b", "9b+", "9c"]
+    yds = ["5.0", "5.1", "5.2", "5.3", "5.4", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10a", "5.10b", "5.10c", "5.10d", "5.11a", "5.11b", "5.11c", "5.11d", "5.12a", "5.12b", "5.12c", "5.12d", "5.13a", "5.13b", "5.13c", "5.13d", "5.14a", "5.14b", "5.14c", "5.14d", "5.15a", "5.15b", "5.15c", "5.15d"]  
 
     britTrad = ["M", "D", "VD", "HVD", "S", "HS", "VS", "HVS", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12"]
 
@@ -30,8 +31,10 @@ export class GradeConverter {
         let bIndex = this.font.indexOf(bGrade) + this.v.indexOf(bGrade) + 1
         if (aIndex == -1) aIndex = this.french.indexOf(aGrade)
         if (aIndex == -1) aIndex = this.britTrad.indexOf(aGrade)
+        if (aIndex == -1) aIndex = this.yds.indexOf(aGrade)
         if (bIndex == -1) bIndex = this.french.indexOf(bGrade)
         if (bIndex == -1) bIndex = this.britTrad.indexOf(bGrade)
+        if (bIndex == -1) bIndex = this.yds.indexOf(bGrade)
 
         if (aIndex == bIndex) return a.date.getTime() - b.date.getTime()
 
@@ -44,8 +47,10 @@ export class GradeConverter {
         let bIndex = this.font.indexOf(b) + this.v.indexOf(b) + 1
         if (aIndex == -1) aIndex = this.french.indexOf(a)
         if (aIndex == -1) aIndex = this.britTrad.indexOf(a)
+        if (aIndex == -1) aIndex = this.yds.indexOf(a)
         if (bIndex == -1) bIndex = this.french.indexOf(b)
         if (bIndex == -1) bIndex = this.britTrad.indexOf(b)
+        if (bIndex == -1) bIndex = this.yds.indexOf(b)
 
         return bIndex - aIndex
     }
@@ -72,12 +77,14 @@ export class GradeConverter {
         if (index == -1) index = this.v.indexOf(grade)
         if (index == -1) index = this.britTrad.indexOf(grade)
         if (index == -1) index = this.french.indexOf(grade)
+        if (index == -1) index = this.yds.indexOf(grade)
         return index
     }
 
-    getGradeFromIndex(index: number, scale: "font" | "v" | "french" | "britTrad"){
+    getGradeFromIndex(index: number, scale: "font" | "v" | "french" | "britTrad" | "yds"){
         switch (scale) {
             case "v": return this.v[index]
+            case "yds": return this.yds[index]
             case "french": return this.french[index]
             case "britTrad": return this.britTrad[index]
             default: return this.font[index]
@@ -110,19 +117,65 @@ export function getStyle(style: string) {
         case "Sent O/S": return "Onsight"
         case "Sent rpt": return "Repeat"
         case "Sent dnf": return "DNF"
+
+        case "Lead": return "Sent"
         case "Lead RP": return "Redpoint"
         case "Lead β": return "Flash"
         case "Lead Î²": return "Flash"
-        case "Lead G/U": return "GroundUp"
+        case "Lead G/U": return "Ground Up"
         case "Lead O/S": return "Onsight"
         case "Lead rpt": return "Repeat"
         case "Lead dnf": return "DNF"
         case "Lead dog": return "Dogged"
+
         case "Solo": return "Sent"
         case "Solo β": return "Flash"
         case "Solo Î²": return "Flash"
         case "Solo O/S": return "Onsight"
-        default : return "Sent"
+        case "Solo G/U": return "Ground Up"
+        case "Solo RP": return "Redpoint"
+        case "Solo rpt": return "Repeat"
+        case "Solo dnf": return "DNF"
+
+        case "TR": return "DNF"
+        case "TR RP": return "DNF"
+        case "TR β": return "DNF"
+        case "TR Î²": return "DNF"
+        case "TR G/U": return "DNF"
+        case "TR O/S": return "DNF"
+        case "TR rpt": return "DNF"
+        case "TR dnf": return "DNF"
+        case "TR dog": return "DNF"
+
+        case "DWS": return "DNF"
+        case "DWS RP": return "DNF"
+        case "DWS β": return "DNF"
+        case "DWS Î²": return "DNF"
+        case "DWS G/U": return "DNF"
+        case "DWS O/S": return "DNF"
+        case "DWS rpt": return "DNF"
+        case "DWS dnf": return "DNF"
+        
+        case "2nd": return "DNF"
+        case "2nd RP": return "DNF"
+        case "2nd β": return "DNF"
+        case "2nd Î²": return "DNF"
+        case "2nd G/U": return "DNF"
+        case "2nd O/S": return "DNF"
+        case "2nd rpt": return "DNF"
+        case "2nd dnf": return "DNF"
+
+        case "AltLd": return "Sent"
+        case "AltLd RP": return "Redpoint"
+        case "AltLd β": return "Flash"
+        case "AltLd Î²": return "Flash"
+        case "AltLd G/U": return "Ground Up"
+        case "AltLd O/S": return "Onsight"
+        case "AltLd rpt": return "Repeat"
+        case "AltLd dnf": return "DNF"
+        case "AltLd dog": return "Dogged"
+
+        default: return "Sent"
     }
 }
 

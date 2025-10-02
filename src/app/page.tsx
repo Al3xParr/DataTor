@@ -41,7 +41,8 @@ export default function Stats() {
                         region: climb[8],
                         country: climb[9],
                         pitches: climb[10],
-                        type: climb[11]
+                        type: climb[11],
+                        yds: (climb[1] as string).startsWith("5.")
                     } as Log
 
                     if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
