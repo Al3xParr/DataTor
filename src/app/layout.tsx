@@ -21,8 +21,8 @@ export default function RootLayout({
                 className={`antialiased flex flex-col items-center h-screen w-[vmin] bg-bg-dark`}
             >
 
-                <header className="w-full py-2 sticky top-0 flex bg-primary z-50 text-txt items-center font-primary font-extrabold align-middle leading-0">
-                    <Mountain className="ml-5 mr-1 mb-1" strokeWidth="3" size={30} color="#0b0c0e " />
+                <header className="w-full py-2 sticky top-0 flex bg-primary z-50 text-txt-header fill-txt-header items-center font-primary font-extrabold align-middle leading-0">
+                    <Mountain className="ml-5 mr-1 mb-1" strokeWidth="3" size={30} />
                     <h1 className="text-3xl whitespace-pre max-h-min">
                         DataTor&nbsp;&nbsp;
                     </h1>
@@ -33,7 +33,7 @@ export default function RootLayout({
                     {children}
                 </div>
                 <div className="grow-1"/>
-                <footer className="bg-primary text-txt w-full py-2 font-primary text-center justify-self-end text-wrap" >
+                <footer className="bg-primary text-txt-header w-full py-2 font-primary text-center justify-self-end text-wrap" >
                     None of your data is saved, when you leave the site all data is forgotten
                 </footer>
 

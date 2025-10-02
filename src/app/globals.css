@@ -13,11 +13,9 @@
   --bg-light-color: hsl(220, 13%, 95%);
   --bg-accent-color: hsl(151, 46%, 30%);
 
+  --txt-header-color: hsl(220, 13%, 5%);
   --txt-color: hsl(220, 13%, 5%);
   --txt-muted-color: hsl(220, 13%, 30%);
-
-  --map-low: "#aef5d3";
-  --map-high: "#0e251a";
 
 }
 
@@ -32,8 +30,6 @@
     --txt-color: hsl(220, 13%, 95%);
     --txt-muted-color: hsl(220, 13%, 70%);
 
-    --map-low: "#0e251a";
-    --map-high: "#aef5d3";
   }
 
 }
@@ -55,9 +51,8 @@
 
   --color-txt: var(--txt-color);
   --color-txt-muted: var(--txt-muted-color);
+  --color-txt-header: var(--txt-header-color);
 
-  --color-map-low: var(--map-low);
-  --color-map-high: var(--map-high);
 
 }
 

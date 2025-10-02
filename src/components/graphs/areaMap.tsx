@@ -19,10 +19,15 @@ const GREENDARK = "#0e251a"
 
 export default function AreaMap({ data }: AreaMapProps) {
 
-    let lowCol = GREENDARK
-    let highCol = GREENLIGHT
+    let lowCol = GREENLIGHT
+    let highCol = GREENDARK
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        lowCol = GREENDARK
+        highCol = GREENLIGHT
+    }
     const grad = tinygradient([lowCol, highCol])
     const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
+
     const [colours, setColours] = useState(grad.rgb(max))
 
     const [defaultArea, setDefaultArea] = useState("")
