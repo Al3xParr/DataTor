@@ -114,9 +114,9 @@ export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
 
         })
         // if (climbDate.length > 0 && extendToToday) {
-        if (climbDate.length > 0) {
-            climbDate.push({ ...climbDate[climbDate.length - 1], "date": new Date().getTime() })
-        }
+        // if (climbDate.length > 0) {
+        //     climbDate.push({ ...climbDate[climbDate.length - 1], "date": new Date().getTime() })
+        // }
 
 
         resolve({data: climbDate, presentGrades: presentGrades.sort((a, b) => new GradeConverter().compareGrade(a, b))} as TimelineDataRtn)
@@ -302,8 +302,8 @@ export async function getMapData(logs: Log[]) {
             freq: climbs.length,
             topClimbs: climbs.slice(0, 3).map((climb) => climb.grade + "/-" + climb.name),
             gradeDistribution: gradeDistribution,
-            minGrade: gradeConverter.getGradeFromIndex(min, scale),
-            maxGrade: gradeConverter.getGradeFromIndex(max, scale)
+            minGrade: gradeConverter.getGradeFromIndex(min, (country == "USA" || country == "Canada") && logs[0].type != "Bouldering" ? "yds" :  scale),
+            maxGrade: gradeConverter.getGradeFromIndex(max, (country == "USA" || country == "Canada") && logs[0].type != "Bouldering" ? "yds" :  scale)
         } as AreaData
     })
 

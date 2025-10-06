@@ -1,8 +1,9 @@
+'use client'
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataRetrievalFunc, Log } from "./types";
 
 
-export default function useDataRetrieval<T>(climbs: Log[], retrievalFunc: DataRetrievalFunc, args: any[] = []) : [boolean, T]{
+export default function useDataRetrieval<T>(climbs: Log[], retrievalFunc: DataRetrievalFunc, args: any[] = []) : [T, boolean]{
 
     const [processing, setProcessing] = useState(true)
     const [data, setData] = useState<T>({} as T)
@@ -17,5 +18,7 @@ export default function useDataRetrieval<T>(climbs: Log[], retrievalFunc: DataRe
         })
     }, [climbs])
 
-    return [processing, data]
+
+
+    return [data, processing]
 }

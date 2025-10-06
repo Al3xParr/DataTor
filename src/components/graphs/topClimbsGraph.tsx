@@ -58,7 +58,8 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
 
             sx={{
                 [`.${barLabelClasses.root}`]: {
-                    ...mediumFontStyling
+                    ...mediumFontStyling,
+                    fill: "var(--color-txt-header)"
                 }
             }}
         >
@@ -89,7 +90,7 @@ export default function TopClimbsGraph({ data, presentGrades, climbNames }: TopC
                     },
                     [`&.${chartsTooltipClasses.root} .${chartsTooltipClasses.cell}`]: {
                         ...mediumFontStyling,
-                        color: "var(--color-title)"
+                        color: "var(--color-txt-header)"
                     }
                 }}
 

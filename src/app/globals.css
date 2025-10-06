@@ -8,9 +8,9 @@
   --primary-color: hsl(151, 46%, 47%);
   --tertiary-color: hsl(190, 100%, 28%);
 
-  --bg-color: hsl(220, 13%, 90%);
-  --bg-dark-color: hsl(220, 13%, 85%);
-  --bg-light-color: hsl(220, 13%, 95%);
+  --bg-color: hsl(220, 13%, 95%);
+  --bg-dark-color: hsl(220, 13%, 90%);
+  --bg-light-color: hsl(220, 13%, 100%);
   --bg-accent-color: hsl(151, 46%, 30%);
 
   --txt-header-color: hsl(220, 13%, 5%);

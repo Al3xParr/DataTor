@@ -52,7 +52,7 @@ function BarLabel(props: BarLabelProps) {
     );
 
     return (
-        <Text  {...otherProps} fill={color} textAnchor="middle" {...animatedProps} />
+        <Text  {...otherProps} textAnchor="middle" {...animatedProps} />
     );
 }
 

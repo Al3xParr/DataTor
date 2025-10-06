@@ -21,14 +21,24 @@ export default function AreaMap({ data }: AreaMapProps) {
 
     let lowCol = GREENLIGHT
     let highCol = GREENDARK
+
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         lowCol = GREENDARK
         highCol = GREENLIGHT
     }
-    const grad = tinygradient([lowCol, highCol])
-    const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
 
-    const [colours, setColours] = useState(grad.rgb(max))
+    const [colours, setColours] = useState([] as string[])
+
+    function calculateColours(){
+        const grad = tinygradient([lowCol, highCol])
+        const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
+        setColours(grad.rgb(max))
+    }
+
+    useEffect(() => {
+        calculateColours()
+    }, [data])
+
 
     const [defaultArea, setDefaultArea] = useState("")
     const [area, setArea] = useState("")
@@ -42,9 +52,7 @@ export default function AreaMap({ data }: AreaMapProps) {
             highCol = GREENDARK
         }
 
-        const grad = tinygradient([lowCol, highCol])
-        const max = Object.values(data).map((c) => c.freq).sort((a, b) => a - b).findLast(() => true) ?? 2
-        setColours(grad.rgb(max))
+        calculateColours()
     });
 
     function getColour(freq: number) {
@@ -114,9 +122,9 @@ export default function AreaMap({ data }: AreaMapProps) {
 
                                 <div className="mt-5">Top Climbs</div>
                                 <div className="flex flex-col md:flex-row md:w-full justify-around mb-5">
-                                    {data[area]?.topClimbs.map((topClimb) => {
+                                    {data[area]?.topClimbs.map((topClimb, index) => {
                                         return (
-                                            <div key={topClimb} className="md:basis-1 md:grow-1 flex md:flex-col items-center pt-1 mx-1 overflow-clip">
+                                            <div key={topClimb + index.toString()} className="md:basis-1 md:grow-1 flex md:flex-col items-center pt-1 mx-1 overflow-clip">
                                                 <Badge text={topClimb.split("/-")[0]} colour="light-text" />
                                                 <div className="w-fit font-bold mt-1 not-md:line-clamp-1 pl-1 md:pl-0 text-left md:text-center">{topClimb.split("/-")[1]}</div>
                                             </div>
@@ -133,11 +141,10 @@ export default function AreaMap({ data }: AreaMapProps) {
                                         disableLine: true,
                                         disableTicks: true,
                                         data: getAxisList(data[area]),
-                                        valueFormatter(value) {
-                                            if (Number(value)) return ""
-                                            return value
-                                        },
                                         height: 25,
+                                        tickLabelInterval(value, index) {
+                                            return (index == 0 || index == data[area].gradeDistribution.length - 1)
+                                        },
                                         tickLabelStyle: {
                                             overflow: "visible",
                                             ...smallFontStyling
