@@ -13,6 +13,7 @@
   --bg-light-color: hsl(220, 13%, 100%);
   --bg-accent-color: hsl(151, 46%, 30%);
 
+  --txt-header-muted-color: hsl(220, 13%, 30%);
   --txt-header-color: hsl(220, 13%, 5%);
   --txt-color: hsl(220, 13%, 5%);
   --txt-muted-color: hsl(220, 13%, 30%);
@@ -52,6 +53,7 @@
   --color-txt: var(--txt-color);
   --color-txt-muted: var(--txt-muted-color);
   --color-txt-header: var(--txt-header-color);
+  --color-txt-header-muted: var(--txt-header-muted-color);
 
 
 }

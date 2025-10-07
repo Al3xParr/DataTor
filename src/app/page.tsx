@@ -1,11 +1,12 @@
-
 'use client'
 import React, { useState } from "react"
 import { Log } from "../../resources/types"
 import { useCSVReader } from "react-papaparse"
 import Summary from "@/components/summary"
 import { GradeConverter, cleanGrade, cleanName, createDate, getStyle } from "../../resources/utils"
-import { Upload } from "lucide-react"
+import { Download, Navigation, Upload } from "lucide-react"
+import LandingPageGraphs from "../../resources/svg"
+import Step from "@/components/ui/step"
 
 
 
@@ -49,7 +50,7 @@ export default function Stats() {
                     if (newLog.style != "DNF" && newLog.style != "Dogged" && newLog.type != "Alpine" && newLog.type != "Via Ferrata") climbs.push(newLog)
                 })
                 setLogbook(climbs.sort((a, b) => gradeConverter.compareLog(a, b)))
-                
+
             }}
 
         >
@@ -67,20 +68,61 @@ export default function Stats() {
 
                         </div>
                         :
-                        <div className="w-full h-full flex flex-col items-center">
-                            <div className="text-center sm:text-2xl text-xl m-10 sm:m-20 text-text-muted">
-                                Navigate to <a href="https://www.ukclimbing.com/logbook">https://www.ukclimbing.com/logbook</a> and download your logbook
+
+                        <div className="w-full h-full flex flex-col items-center  bg-[url(../../resources/bgSVG.svg)] bg-top-left bg-no-repeat bg-contain ">
+
+
+                            <div className="grid items-center justify-items-center grid-cols-2 gap-y-50 overflow-clip pt-20 ">
+
+                                <div className="w-[450px] text-wrap ">
+                                    <h2 className="text-txt-header text-3xl font-bold whitespace-pre pb-3">
+                                        {`Get instant insight into\nyour climbing logbook`}
+                                    </h2>
+                                    <h3 className="text-txt-header-muted left-25 top-60 text-xl pb-3">
+                                        Upload your logbook to see your climbing stats, trends and milestones - visualised to track your progress
+                                    </h3>
+                                    <div className="flex gap-3">
+                                        <div className="flex items-center cursor-pointer w-max px-4 p-2 bg-bg font-bold shadow-md rounded-xl text-txt text-base transition hover:scale-103 "
+                                            {...getRootProps()}
+                                        >
+                                            Upload Logbook
+                                        </div>
+                                        <div className=" cursor-pointer w-max px-4 p-2 font-bold text-txt rounded-xl transition hover:underline" onClick={() => { }}>
+                                            Explore Example
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <LandingPageGraphs />
+
+                                <div className="w-full text-xl flex py-5 col-span-2 justify-around">
+
+
+                                    <Step number={1} >
+                                        <Navigation size={30} className="" />
+                                        <div>Navigate to <a href="https://www.ukclimbing.com/logbook">www.ukclimbing.com/logbook</a></div>
+                                    </Step>
+                                    <Step number={2}>
+                                        <Download size={30} className="" />
+                                        Download logbook in DLOG format
+                                    </Step>
+                                    <Step number={3}>
+                                        <div className="transition ease-in-out duration-300 hover:scale-103 flex gap-5 w-full flex-col items-center border border-dashed rounded-xl px-8 p-4 cursor-pointer"
+                                        {...getRootProps()}>
+                                            <Upload size={30} className="" />
+                                            Upload Here
+                                        </div>
+
+                                    </Step>
+
+
+                                </div>
+
                             </div>
 
-                            <div
-                                className="txt-txt sm:text-2xl text-xl fill-txt cursor-pointer w-2/3 h-min not-dark:border-2 not-dark:border-txt-muted border-1 border-bg-light space-y-5 sm:space-y-10 p-10 mb-10 shadow-lg not-dark:border-dashed rounded-3xl bg-bg font-general flex flex-col justify-center items-center transition duration-300 ease-in-out hover:shadow-2xl"
-                                {...getRootProps()}>
-                                <Upload size={60} />
-                                <div className="text-center">Drag & drop to upload climbing DLOG (.csv format)</div>
-                                <div className="">OR</div>
-                                <div className="p-4 bg-bg-light text-center not-dark:border border-bg-dark rounded-lg transition duration-300 ease-in-out hover:scale-103">Browse Files</div>
-                            </div>
                         </div>
+
                     }
                 </div>
             )}
