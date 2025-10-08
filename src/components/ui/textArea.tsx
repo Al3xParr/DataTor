@@ -9,7 +9,7 @@ const TextArea = ({ ...props }) => {
                     <div className="text-txt-muted pr-3">{props.icon}</div>
                 }
                 <textarea
-                className="border-0 outline-0 w-full"
+                className="border-0 outline-0 w-full max-h-92"
                 placeholder={props.placeholder}
                 value={props.value}
                 onChange={props.onChange}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "tailwindcss";
-import "@radix-ui/themes/styles.css";;
+import "@radix-ui/themes/styles.css";
 import { Info, Mountain } from "lucide-react";
 import React from "react";
 
@@ -17,6 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <body
                 className={`antialiased flex flex-col items-center h-screen w-[vmin] bg-bg-dark`}
             >

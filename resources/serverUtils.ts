@@ -113,13 +113,11 @@ export async function getTimelineData(climbs: Log[]): Promise<TimelineDataRtn> {
             currentDate.freq[climb.grade] = temp + 1
 
         })
-        // if (climbDate.length > 0 && extendToToday) {
-        // if (climbDate.length > 0) {
-        //     climbDate.push({ ...climbDate[climbDate.length - 1], "date": new Date().getTime() })
-        // }
 
+        const gradesOut = presentGrades.filter((grade) => grade.startsWith("5.")).sort((a, b) => new GradeConverter().compareGrade(a, b))
+        const gradesOutYds = presentGrades.filter((grade) => !grade.startsWith("5.")).sort((a, b) => new GradeConverter().compareGrade(a, b))
 
-        resolve({data: climbDate, presentGrades: presentGrades.sort((a, b) => new GradeConverter().compareGrade(a, b))} as TimelineDataRtn)
+        resolve({data: climbDate, presentGrades: gradesOutYds.concat(gradesOut) } as TimelineDataRtn)
     })
 
     return rtn
@@ -260,6 +258,8 @@ export async function getMapData(logs: Log[]) {
     const areaFreq: Record<string, AreaData> = {}
 
     const gradeConverter = new GradeConverter()
+
+    if (logs.length == 0) return areaFreq
 
     const scale = (() => {
         switch (logs[0].type) {

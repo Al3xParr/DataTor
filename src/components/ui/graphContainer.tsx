@@ -15,7 +15,7 @@ export default function GraphContainer({ processing, title, className, padded = 
 
 
     return (
-        <Card className={`w-full h-[500px] fill-tertiary flex flex-col justify-center items-center col-span-2 md:col-span-1 ${!padded ? "p-0" : "" }  ${className}`}>
+        <Card className={`w-full h-full row-span-2 fill-tertiary flex flex-col justify-center order-none items-center ${!padded ? "p-0" : "" }  ${className}`}>
             {
                 processing ?
                     <>

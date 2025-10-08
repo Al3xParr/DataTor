@@ -44,8 +44,6 @@ export default function ContactForm() {
             );
     }
 
-
-
     return (
    
             <div className="flex flex-col shadow-md/20 rounded-2xl overflow-clip h-max w-[40rem]">
@@ -53,7 +51,7 @@ export default function ContactForm() {
                     <h3 className="font-extrabold text-xl">
                         Send Me a Message
                     </h3>
-                    <div className="text-bg-dark ">Fill out the form to contact me to give feedback</div>
+                    <div className="text-bg-dark ">Fill out the form to get into contact with me for any reason</div>
                 </div>
 
                 <form className="grid grid-cols-2 p-4 pt-8 bg-bg gap-4">

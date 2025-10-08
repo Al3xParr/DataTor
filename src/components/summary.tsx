@@ -18,10 +18,11 @@ import useDataRetrieval from '../../resources/useDataRetrieval';
 
 interface StyleSummaryProps {
     logs: Log[],
-    owner: string
+    owner: string,
+    msg?: string
 }
 
-export default function Summary({ logs, owner }: StyleSummaryProps) {
+export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
 
     const [selectedYear, setSelectedYear] = useState<number>(0);
     const [selectedType, setSelectedType] = useState<string>("Bouldering");
@@ -42,9 +43,9 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
     const [topClimbsData, topClimbsProcessing] = useDataRetrieval<TopClimbsDataRtn>(typeClimbs, getTopClimbsData)
     const [topClimbsYdsData, topClimbsYdsProcessing] = useDataRetrieval<TopClimbsDataRtn>(typeClimbsYds, getTopClimbsData)
 
-    const [timelineData, timelineProcessing] = useDataRetrieval<TimelineDataRtn>(useMemo(() => yearAndTypeClimbs.concat(yearAndTypeClimbsYds), [yearAndTypeClimbsYds]), getTimelineData)
-    const [mapData, mapProcessing] = useDataRetrieval<Record<string, AreaData>>(useMemo(() => yearAndTypeClimbs.concat(yearAndTypeClimbsYds), [yearAndTypeClimbsYds]), getMapData)
-    
+    const [timelineData, timelineProcessing] = useDataRetrieval<TimelineDataRtn>(useMemo(() => yearAndTypeClimbs.concat(yearAndTypeClimbsYds), [yearAndTypeClimbs]), getTimelineData)
+    const [mapData, mapProcessing] = useDataRetrieval<Record<string, AreaData>>(useMemo(() => yearAndTypeClimbs.concat(yearAndTypeClimbsYds), [yearAndTypeClimbs]), getMapData)
+
     const [avgMaxData, avgMaxProcessing] = useDataRetrieval<AvgMaxData[]>(typeClimbs, getAvgMaxData)
     const [countryData, countryProcessing] = useDataRetrieval<CountryData>(yearAndTypeClimbs, getCountryData)
 
@@ -57,22 +58,29 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
         setTypeClimbs(logs.filter((l) => (l.type == selectedType && !l.yds)))
         setTypeClimbsYds(logs.filter((l) => (l.type == selectedType && l.yds)))
         setYearList([...new Set(logs.map((climb) => climb.date.getFullYear()))].sort((a, b) => b - a))
-        
 
-        
     }, [logs, selectedYear, selectedType])
 
     if (logs.length == 0) return (<></>)
 
     return (
-        <div className="w-full h-max grid grid-cols-2 gap-4 flex-col">
+        <>
 
-            <Card className='p-6 col-span-2 w-full flex flex-col gap-3 md:flex-row justify-between'>
+            <Card className='p-6 w-full flex flex-col gap-3 md:flex-row justify-between mb-5'>
 
                 <div className='flex flex-col'>
-                    {/* <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}! {gradesYdsData.length == 0 ? "Empty" : "full"}</h3> */}
-                    <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
-                    <p className='pl-1 pt-1 text-txt-muted'>Explore insights into your logbook and see your progress over time</p>                </div>
+                    {!msg ?
+                        <>
+                            <h3 className='font-extrabold text-2xl'>Welcome{owner != "" ? ", " + owner : ""}!</h3>
+                            <p className='pl-1 pt-1 text-txt-muted'>Explore insights into your logbook and see your progress over time</p>
+                        </>
+                        :
+                        <>
+                            <h3 className='font-extrabold text-2xl'>This is an Example Logbook!</h3>
+                            <p className='pl-1 pt-1 text-txt-muted'>Explore insights into your logbook and see your progress over time</p>
+                        </>
+                    }
+                </div>
 
                 <Theme
                     style={{ background: "var(--color-bg)", height: "min-content", minHeight: "min-content", fontFamily: "Nunito serif" }}
@@ -110,75 +118,83 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
 
             </Card>
 
-            {
-                yearAndTypeClimbs.length != 0 ?
-                    <>
-                        <div className='col-span-2 flex flex-col md:flex-row gap-5 items-center p-4 justify-evenly'>
-                            <div>
-                                <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
-                                <Card className='flex divide-x px-0 divide-txt w-max'>
-                                    <TotalClimb type='Sent' total={yearAndTypeClimbs.length} />
-                                    <TotalClimb type='Flash' total={flash?.length} />
-                                    <TotalClimb type='Onsight' total={onsight?.length} />
-                                </Card>
+            <div className="w-full h-max grid grid-cols-1 md:grid-cols-2 3xl:grid-cols-4 auto-rows-[250px] gap-5 flex-col">
+
+                {
+                    yearAndTypeClimbs.length != 0 ?
+                        <>
+                            <div className='flex flex-col gap-5 items-center p-4 row-span-2 justify-evenly'>
+
+                                <div >
+                                    <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
+                                    <Card className='flex flex-col md:flex-row gap-3 divide-txt not-md:divide-y md:divide-x px-0'>
+                                        <TopClimb style="Worked" name={yearAndTypeClimbs[0]?.name ?? "N/A"} grade={yearAndTypeClimbs[0]?.grade ?? "N/A"} colour={yearAndTypeClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
+                                        <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
+                                        <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
+                                    </Card>
+                                </div>
+
+                                <div>
+                                    <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
+                                    <Card className='flex divide-x px-0 divide-txt w-max'>
+                                        <TotalClimb type='Sent' total={yearAndTypeClimbs.length} />
+                                        <TotalClimb type='Flash' total={flash?.length} />
+                                        <TotalClimb type='Onsight' total={onsight?.length} />
+                                    </Card>
+                                </div>
+
                             </div>
 
-                            <div >
-                                <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
-                                <Card className='flex flex-col md:flex-row gap-3 divide-txt not-md:divide-y md:divide-x px-0'>
-                                    <TopClimb style="Worked" name={yearAndTypeClimbs[0]?.name ?? "N/A"} grade={yearAndTypeClimbs[0]?.grade ?? "N/A"} colour={yearAndTypeClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
-                                    <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
-                                    <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
-                                </Card>
-                            </div>
-                        </div>
+
+                            <GraphContainer processing={gradesProcessing && gradesYdsProcessing} title='Climb count by grade' className={`${gradesYdsData.length > 0 ? "h-[800px]" : ""} `}>
+                                <GradeGraph data={gradesData} />
+                                {gradesYdsData.length > 0
+                                    ?
+                                    <GradeGraph data={gradesYdsData} />
+                                    :
+                                    <></>
+                                }
+
+                            </GraphContainer>
+
+                            <GraphContainer processing={topClimbsProcessing} title='Top 10 hardest climbs per year' className={`${topClimbsYdsData?.topClimbsPerYear?.length > 0 ? "h-[800px]" : ""} `}>
+                                <TopClimbsGraph data={topClimbsData.topClimbsPerYear} presentGrades={topClimbsData.gradeList} climbNames={topClimbsData.names} />
+                                {topClimbsYdsData?.topClimbsPerYear?.length > 0
+                                    ?
+                                    <TopClimbsGraph data={topClimbsYdsData.topClimbsPerYear} presentGrades={topClimbsYdsData.gradeList} climbNames={topClimbsYdsData.names} />
+                                    :
+                                    <></>
+                                }
+                            </GraphContainer>
+
+                            <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' className='' >
+                                <AvgMaxGraph data={avgMaxData} type={selectedType} />
+                            </GraphContainer>
+
+                            <GraphContainer processing={timelineProcessing} title='Accumulation of climbs by grade' className='3xl:col-span-2 row-span-3'>
+                                <TimelineGraph data={timelineData.data} presentGrades={timelineData.presentGrades} />
+                            </GraphContainer>
+
+                            <GraphContainer processing={mapProcessing} title='World heatmap' className='row-span-4 3xl:col-span-2 ' padded={false}>
+                                <AreaMap data={mapData} />
+                            </GraphContainer>
 
 
-                        <GraphContainer processing={gradesProcessing && gradesYdsProcessing} title='Climb count by grade' className={`${gradesYdsData.length > 0 ? "h-[800px]" : ""}`}>
-                            <GradeGraph data={gradesData} />
-                            {gradesYdsData.length > 0
-                                ?
-                                <GradeGraph data={gradesYdsData} />
-                                :
-                                <></>
-                            }
 
-                        </GraphContainer>
+                            <GraphContainer processing={countryProcessing} title='Climbs per country' className=''>
+                                <CountryGraph data={countryData} />
+                            </GraphContainer>
 
-                        <GraphContainer processing={topClimbsProcessing} title='Top 10 hardest climbs per year' className={`${topClimbsYdsData?.topClimbsPerYear?.length > 0 ? "h-[800px]" : ""}`}>
-                            <TopClimbsGraph data={topClimbsData.topClimbsPerYear} presentGrades={topClimbsData.gradeList} climbNames={topClimbsData.names} />
-                            {topClimbsYdsData?.topClimbsPerYear?.length > 0
-                                ?
-                                <TopClimbsGraph data={topClimbsYdsData.topClimbsPerYear} presentGrades={topClimbsYdsData.gradeList} climbNames={topClimbsYdsData.names} />
-                                :
-                                <></>
-                            }
-                        </GraphContainer>
+                        </>
+                        :
 
-                        <GraphContainer processing={timelineProcessing} title='Accumulation of climbs by grade' className='md:col-span-2 md:h-[600px]'>
-                            <TimelineGraph data={timelineData.data} presentGrades={timelineData.presentGrades} />
-                        </GraphContainer>
+                        <Card className='text-txt col-span-2 text-center py-10'>No Data</Card>
 
-                        <GraphContainer processing={mapProcessing} title='World heatmap' className='md:row-span-2  md:h-full not-md:h-[45rem]' padded={false}>
-                            <AreaMap data={mapData} />
-                        </GraphContainer>
-
-                        <GraphContainer processing={avgMaxProcessing} title='Max and average grade per year' >
-                            <AvgMaxGraph data={avgMaxData} type={selectedType} />
-                        </GraphContainer>
-
-                        <GraphContainer processing={countryProcessing} title='Climbs per country'>
-                            <CountryGraph data={countryData} />
-                        </GraphContainer>
-                    </>
-                    :
-
-                    <Card className='text-txt col-span-2 text-center py-10'>No Data</Card>
-
-            }
+                }
 
 
-        </div>
+            </div>
+        </>
 
     )
 }

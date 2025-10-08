@@ -55,6 +55,8 @@
   --color-txt-header: var(--txt-header-color);
   --color-txt-header-muted: var(--txt-header-muted-color);
 
+  --breakpoint-3xl: 125rem;
+
 
 }
 

@@ -10,7 +10,8 @@ export default function useDataRetrieval<T>(climbs: Log[], retrievalFunc: DataRe
     
 
     useEffect(() => {
-        if (climbs.length == 0) return
+
+        if (climbs.length == 0) return (setData({} as T))
         
         retrievalFunc(climbs, args).then((rtnData: T) => {
             setData(rtnData)
