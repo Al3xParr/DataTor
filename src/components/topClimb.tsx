@@ -1,23 +1,28 @@
-import { Badge } from "./ui/badge"
-import React from "react";
+import React, { ReactElement } from "react"
+import { Card } from "./ui/card"
 
 interface TopClimbProps {
-    style: string,
+    type: string,
     name: string,
     grade: string,
-    colour: string
+    icon: ReactElement
 }
 
-export function TopClimb({ style, name, grade, colour }: TopClimbProps) {
+export default function TopClimb({ type, name, grade, icon }: TopClimbProps) {
     return (
-        <div className="flex flex-col basis-1 flex-1 overflow-clip items-start px-6 py-2">
+        <Card className="w-52 h-52 rounded-4xl text-primary grid grid-cols-1 grid-rows-2 items-center text-center justify-items-center bg-bg border border-bg-light">
+            <div className="flex items-center justify-around w-full">
 
-            <div className="flex space-x-2 mb-1">
-                <p className="text-txt-muted">{style}</p>
-                {colour != "disabled" ? <Badge text={grade}></Badge> : <></>}
+                <div>
+                    {icon}
+                    <div className='font-bold text-txt-muted text-sm '>{type}</div>
+                </div>
+                <div className="font-bold text-txt-muted text-xl">{grade}</div>
+
             </div>
-            <p className='font-bold text-lg '>{name}</p>
 
-        </div>
+            <div className=' px-4 text-left justify-self-start font-bold text-2xl text-ellipsis max-w-full w-max h-max max-h-full text-txt'>{name}</div>
+
+        </Card>
     )
 }

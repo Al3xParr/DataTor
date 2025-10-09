@@ -119,7 +119,7 @@ export function getStyle(style: string) {
         case "Sent dnf": return "DNF"
 
         case "Lead": return "Sent"
-        case "Lead RP": return "Redpoint"
+        case "Lead RP": return "Sent"
         case "Lead β": return "Flash"
         case "Lead Î²": return "Flash"
         case "Lead G/U": return "Ground Up"
@@ -133,7 +133,7 @@ export function getStyle(style: string) {
         case "Solo Î²": return "Flash"
         case "Solo O/S": return "Onsight"
         case "Solo G/U": return "Ground Up"
-        case "Solo RP": return "Redpoint"
+        case "Solo RP": return "Sent"
         case "Solo rpt": return "Repeat"
         case "Solo dnf": return "DNF"
 
@@ -167,7 +167,7 @@ export function getStyle(style: string) {
         case "2nd dnf": return "DNF"
 
         case "AltLd": return "Sent"
-        case "AltLd RP": return "Redpoint"
+        case "AltLd RP": return "Sent"
         case "AltLd β": return "Flash"
         case "AltLd Î²": return "Flash"
         case "AltLd G/U": return "Ground Up"

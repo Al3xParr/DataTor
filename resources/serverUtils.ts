@@ -309,3 +309,28 @@ export async function getMapData(logs: Log[]) {
 
     return areaFreq
 }
+
+export interface TotalsData {
+    individual: TotalData[]
+    total: number
+}
+export interface TotalData {
+    name: string,
+    freq: number
+}
+
+export async function getTotalsData(logs: Log[]): Promise<TotalsData>{
+    const rtn = [] as TotalData[]
+
+    const styles = ["Sent", "Flash", "Onsight", "Ground Up", "Repeat"]
+    let total = 0
+
+    styles.forEach((style) => {
+        const num = logs.filter((l) => l.style == style).length
+        rtn.push({name: style, freq: num})
+        total += num
+    })
+
+    return {individual: rtn, total: total} 
+
+}

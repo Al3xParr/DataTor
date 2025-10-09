@@ -7,7 +7,6 @@ import { GradeConverter, cleanGrade, cleanName, createDate, getStyle } from "../
 import { Download, Navigation, Upload } from "lucide-react"
 import LandingPageGraphs from "../../resources/svg"
 import Step from "@/components/ui/step"
-import { Router } from "next/router"
 import Papa from "papaparse"
 
 

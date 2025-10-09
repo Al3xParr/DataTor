@@ -67,10 +67,11 @@ export default function AreaMap({ data }: AreaMapProps) {
     }
 
     return (
-        <>
 
+
+        <>
             <ComposableMap
-                className="md:h-full h-[28rem] w-full"
+                className="h-full w-full "
                 projection={"geoMercator"}
             >
                 <ZoomableGroup
@@ -108,31 +109,33 @@ export default function AreaMap({ data }: AreaMapProps) {
                 </ZoomableGroup>
             </ComposableMap>
 
-            {area != "" ?
-                <Card className="bg-bg-light not-md:w-full not-md:h-[13.5rem] md:w-[20rem] md:absolute md:top-17 md:right-4 flex flex-col p-0 items-start overflow-hidden not-md:rounded-none ">
-                    <p className={`bg-tertiary text-bg-light w-full px-3 py-1 font-bold`}>{area}</p>
 
+            {area != "" ?
+                // <Card className="bg-bg-light w-full h-[13.5rem] lg:w-[20rem] lg:absolute lg:top-17 lg:right-4 flex flex-col p-0 items-start overflow-hidden rounded-none ">
+                <Card className="bg-bg-light h-max w-full max-lg:h-min lg:w-[20rem] bottom-0 absolute lg:top-17 lg:right-4 flex flex-col p-0 items-start overflow-hidden max-lg:rounded-none ">
+
+                    <p className={`bg-tertiary text-bg-light w-full px-3 py-1 font-bold`}>{area}</p>
                     {data[area] != null ?
-                        <div className="p-4 grid not-md:h-full not-md:max-h-full not-md:w-full not-md:overflow-clip md:grid-cols-1 md:grid-rows-2 not-md:grid-cols-2 not-md:grid-rows-1 items-start text-sm">
-                            <div className="not-md:h-full">
-                                <div className="flex md:col-span-2">
-                                    <div className="font-bold ">{data[area]?.freq ?? 0}</div>
-                                    &nbsp;Ascents
+                        <div className="p-4 grid h-full w-full  overflow-clip lg:grid-cols-1 lg:grid-rows-2 grid-cols-2 grid-rows-1 items-start text-sm">
+                            <div className="h-full">
+                                <div className="flex lg:col-span-2 ">
+                                    <div className="font-bold text-base self-baseline-last pr-1">{data[area]?.freq ?? 0}</div>
+                                    <div className="self-baseline-last">Ascents</div>
                                 </div>
 
                                 <div className="mt-5">Top Climbs</div>
-                                <div className="flex flex-col md:flex-row md:w-full justify-around mb-5">
+                                <div className="flex flex-col lg:flex-row lg:w-full justify-around mb-5">
                                     {data[area]?.topClimbs.map((topClimb, index) => {
                                         return (
-                                            <div key={topClimb + index.toString()} className="md:basis-1 md:grow-1 flex md:flex-col items-center pt-1 mx-1 overflow-clip">
+                                            <div key={topClimb + index.toString()} className="lg:basis-1 lg:grow-1 flex lg:flex-col items-center pt-1 mx-1 overflow-clip">
                                                 <Badge text={topClimb.split("/-")[0]} colour="light-text" />
-                                                <div className="w-fit font-bold mt-1 not-md:line-clamp-1 pl-1 md:pl-0 text-left md:text-center">{topClimb.split("/-")[1]}</div>
+                                                <div className="w-fit font-bold mt-1 line-clamp-1 pl-1 lg:pl-0 text-left lg:text-center">{topClimb.split("/-")[1]}</div>
                                             </div>
                                         )
                                     })}
                                 </div>
                             </div>
-                            <div className="md:w-full md:h-32 not-md:h-fit md:shrink">
+                            <div className="lg:w-full lg:h-32 h-42 flex items-center lg:shrink">
                                 <ChartContainer
 
                                     series={[{ data: data[area].gradeDistribution, label: "g", type: "bar", color: "#00778f" }]}
@@ -151,7 +154,7 @@ export default function AreaMap({ data }: AreaMapProps) {
                                         },
                                         sx: { overflow: "visisble" }
                                     }]}
-                                    margin={{ top: 10, left: 10, right: 10, bottom: 0 }}
+                                    margin={{ top: 5, left: 10, right: 10, bottom: 0 }}
                                     yAxis={[{ width: 0 }]}
                                 >
                                     <BarPlot borderRadius={7} />

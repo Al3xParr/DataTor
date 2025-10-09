@@ -22,7 +22,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
         if (index == -1) {
             setShowColours(globalColours)
         } else {
-            const highlightColours = Array(presentGrades.length).fill("#6b7280")
+            const highlightColours = Array(presentGrades.length).fill("#d1d5dc")
             highlightColours[index] = "#41af7a"
             setShowColours(highlightColours)
         }
@@ -30,7 +30,7 @@ export default function TimelineGraph({ data, presentGrades }: TimelineGraphProp
 
     return (
         <ChartDataProvider
-
+            
             dataset={dataset}
             colors={rainbowSurgePalette}
 

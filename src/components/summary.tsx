@@ -5,15 +5,16 @@ import { GradeGraphData, Log } from "../../resources/types";
 import GradeGraph from './graphs/gradeGraph';
 import TimelineGraph from './graphs/timelineGraph';
 import TopClimbsGraph from './graphs/topClimbsGraph';
-import { TopClimb } from './topClimb';
-import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, CountryData, AreaData, TopClimbsDataRtn, getTopClimbsData, TimelineDataRtn } from '../../resources/serverUtils';
-import TotalClimb from './totalClimb';
+import { AvgMaxData, getAvgMaxData, getGradeData, getMapData, getCountryData, getTimelineData, CountryData, AreaData, TopClimbsDataRtn, getTopClimbsData, TimelineDataRtn, getTotalsData, TotalsData } from '../../resources/serverUtils';
 import { Card } from './ui/card';
 import GraphContainer from './ui/graphContainer';
 import AvgMaxGraph from './graphs/avgMaxGraph';
 import CountryGraph from './graphs/countryGraph';
 import AreaMap from './graphs/areaMap';
 import useDataRetrieval from '../../resources/useDataRetrieval';
+import TotalsGraph from './graphs/totalsGraph';
+import { Star, View, Zap } from 'lucide-react';
+import TopClimb from './topClimb';
 
 
 interface StyleSummaryProps {
@@ -36,6 +37,7 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
 
     const [yearList, setYearList] = useState([] as number[])
 
+const [totalsData, totalsProcessing] = useDataRetrieval<TotalsData>(yearAndTypeClimbs, getTotalsData)
 
     const [gradesData, gradesProcessing] = useDataRetrieval<GradeGraphData[]>(yearAndTypeClimbs, getGradeData)
     const [gradesYdsData, gradesYdsProcessing] = useDataRetrieval<GradeGraphData[]>(yearAndTypeClimbsYds, getGradeData)
@@ -48,6 +50,8 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
 
     const [avgMaxData, avgMaxProcessing] = useDataRetrieval<AvgMaxData[]>(typeClimbs, getAvgMaxData)
     const [countryData, countryProcessing] = useDataRetrieval<CountryData>(yearAndTypeClimbs, getCountryData)
+
+    
 
 
 
@@ -123,30 +127,30 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
                 {
                     yearAndTypeClimbs.length != 0 ?
                         <>
-                            <div className='flex flex-col gap-5 items-center p-4 row-span-2 justify-evenly'>
-
-                                <div >
-                                    <div className='font-bold text-lg pl-6 pb-1'>Top Climbs</div>
-                                    <Card className='flex flex-col md:flex-row gap-3 divide-txt not-md:divide-y md:divide-x px-0'>
-                                        <TopClimb style="Worked" name={yearAndTypeClimbs[0]?.name ?? "N/A"} grade={yearAndTypeClimbs[0]?.grade ?? "N/A"} colour={yearAndTypeClimbs[0]?.grade != null ? "tertiary" : "disabled"} />
-                                        <TopClimb style="Flash" name={flash[0]?.name ?? "N/A"} grade={flash[0]?.grade ?? "N/A"} colour={flash[0]?.grade != null ? "tertiary" : "disabled"} />
-                                        <TopClimb style="Onsight" name={onsight[0]?.name ?? "N/A"} grade={onsight[0]?.grade ?? "N/A"} colour={onsight[0]?.grade != null ? "tertiary" : "disabled"} />
-                                    </Card>
-                                </div>
-
-                                <div>
-                                    <div className='font-bold text-lg pl-6 pb-1'>Total Climbs</div>
-                                    <Card className='flex divide-x px-0 divide-txt w-max'>
-                                        <TotalClimb type='Sent' total={yearAndTypeClimbs.length} />
-                                        <TotalClimb type='Flash' total={flash?.length} />
-                                        <TotalClimb type='Onsight' total={onsight?.length} />
-                                    </Card>
-                                </div>
-
+                            <div className='md:max-3xl:flex md:max-3xl:col-span-2 flex-col md:max-3xl:flex-row row-span-2 md:max-3xl:row-span-1 grid grid-cols-2 place-items-center w-full h-full justify-evenly items-center '>
+                                <div className='w-min h-full flex items-center'>{!totalsProcessing && <TotalsGraph data={totalsData} />}</div>
+                                    <TopClimb
+                                        type="Worked"
+                                        name={yearAndTypeClimbs[0]?.name ?? "N/A"}
+                                        grade={yearAndTypeClimbs[0]?.grade ?? "N/A"}
+                                        icon={<Star size={60} />}
+                                    />
+                                    <TopClimb
+                                        type="Flash"
+                                        name={flash[0]?.name ?? "N/A"}
+                                        grade={flash[0]?.grade ?? "N/A"}
+                                        icon={<Zap size={60}   />}
+                                    />
+                                    <TopClimb
+                                        type="Onsight"
+                                        name={onsight[0]?.name ?? "N/A"}
+                                        grade={onsight[0]?.grade ?? "N/A"}
+                                        icon={<View size={60} />}
+                                    />
                             </div>
 
 
-                            <GraphContainer processing={gradesProcessing && gradesYdsProcessing} title='Climb count by grade' className={`${gradesYdsData.length > 0 ? "h-[800px]" : ""} `}>
+                            <GraphContainer processing={gradesProcessing && gradesYdsProcessing} title='Climb count by grade' className={`${gradesYdsData.length > 0 ? "row-span-3" : ""} `}>
                                 <GradeGraph data={gradesData} />
                                 {gradesYdsData.length > 0
                                     ?
@@ -157,7 +161,7 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
 
                             </GraphContainer>
 
-                            <GraphContainer processing={topClimbsProcessing} title='Top 10 hardest climbs per year' className={`${topClimbsYdsData?.topClimbsPerYear?.length > 0 ? "h-[800px]" : ""} `}>
+                            <GraphContainer processing={topClimbsProcessing} title='Top 10 hardest climbs per year' className={`${topClimbsYdsData?.topClimbsPerYear?.length > 0 ? "row-span-3" : ""} `}>
                                 <TopClimbsGraph data={topClimbsData.topClimbsPerYear} presentGrades={topClimbsData.gradeList} climbNames={topClimbsData.names} />
                                 {topClimbsYdsData?.topClimbsPerYear?.length > 0
                                     ?
@@ -175,7 +179,7 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
                                 <TimelineGraph data={timelineData.data} presentGrades={timelineData.presentGrades} />
                             </GraphContainer>
 
-                            <GraphContainer processing={mapProcessing} title='World heatmap' className='row-span-4 3xl:col-span-2 ' padded={false}>
+                            <GraphContainer processing={mapProcessing} title='World heatmap' className={`row-span-3 lg:row-span-4 3xl:col-span-2 `} padded={false}>
                                 <AreaMap data={mapData} />
                             </GraphContainer>
 
