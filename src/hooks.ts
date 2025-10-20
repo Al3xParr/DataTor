@@ -1,6 +1,6 @@
 'use client'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { DataRetrievalFunc, Log } from './types'
+import { useEffect, useState } from 'react'
+import { DataRetrievalFunc, Log } from '../resources/types'
 
 export default function useDataRetrieval<T>(
     climbs: Log[],

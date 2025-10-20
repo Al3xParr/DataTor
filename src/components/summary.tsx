@@ -24,19 +24,18 @@ import GraphContainer from './ui/graphContainer'
 import AvgMaxGraph from './graphs/avgMaxGraph'
 import CountryGraph from './graphs/countryGraph'
 import AreaMap from './graphs/areaMap'
-import useDataRetrieval from '../../resources/useDataRetrieval'
 import TotalsGraph from './graphs/totalsGraph'
 import { Star, View, Zap } from 'lucide-react'
 import TopClimb from './topClimb'
 import ExampleLogDialog from './ExampleLogDialog'
+import useDataRetrieval from '@/hooks'
 
 interface StyleSummaryProps {
     logs: Log[]
     owner: string
-    msg?: string
 }
 
-export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
+export default function Summary({ logs, owner }: StyleSummaryProps) {
     const [selectedYear, setSelectedYear] = useState<number>(0)
     const [selectedType, setSelectedType] = useState<string>('Bouldering')
 
@@ -126,19 +125,19 @@ export default function Summary({ logs, owner, msg }: StyleSummaryProps) {
 
     return (
         <>
-            {msg && <ExampleLogDialog />}
+            {owner == 'ExampleLogbook' && <ExampleLogDialog />}
 
             <Card className="mb-5 flex w-full flex-col justify-between gap-3 p-6 md:flex-row">
                 <div className="flex flex-col">
                     <h3 className="text-2xl font-extrabold">
-                        {!msg
-                            ? `Welcome{owner != "" ? ", " + owner : ""}!`
+                        {owner != 'ExampleLogbook'
+                            ? `Welcome${owner != '' ? ', ' + owner : ''}!`
                             : 'This is an Example Logbook!'}
                     </h3>
                     <p className="text-txt-muted pt-1">
-                        {!msg
+                        {owner != 'ExampleLogbook'
                             ? 'Explore insights into your logbook and see your progress over time'
-                            : msg}
+                            : 'Use this to see the type of insight you can get from using DataTor. Feel free to explore!'}
                     </p>
                 </div>
 

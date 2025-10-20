@@ -4,7 +4,7 @@ import 'tailwindcss'
 import '@radix-ui/themes/styles.css'
 import { Info, Mountain } from 'lucide-react'
 import React from 'react'
-import { Theme } from '@radix-ui/themes'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
     title: 'DataTor - The Climbing Logbook Analyser',
@@ -41,9 +41,9 @@ export default function RootLayout({
                         Climbing Logbook Analytics
                     </h2>
                     <div className="grow-1"></div>
-                    <a href="/info">
+                    <Link href="/info">
                         <Info className="mr-5" />
-                    </a>
+                    </Link>
                 </header>
                 <div className="text-txt font-primary flex h-max w-full flex-col items-center justify-around text-base font-normal">
                     {children}

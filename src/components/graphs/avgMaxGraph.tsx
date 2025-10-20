@@ -3,7 +3,6 @@ import {
     LineChart,
     lineElementClasses,
     markElementClasses,
-    MarkElementClasses,
 } from '@mui/x-charts'
 import {
     globalColours,

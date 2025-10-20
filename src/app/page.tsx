@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import { Log } from '../../resources/types'
 import { useCSVReader } from 'react-papaparse'
-import Summary from '@/components/summary'
 import {
     GradeConverter,
     cleanGrade,
@@ -14,13 +13,12 @@ import { Download, Navigation, Upload } from 'lucide-react'
 import LandingPageGraphs from '../../resources/svg'
 import Step from '@/components/ui/step'
 import Papa from 'papaparse'
-import ExampleLogDialog from '@/components/ExampleLogDialog'
+import Summary from '@/components/summary'
 
 export default function Stats() {
     const { CSVReader } = useCSVReader()
     const [logbook, setLogbook] = useState<Log[]>([])
     const [owner, setOwner] = useState('')
-    const [msg, setMsg] = useState('')
     // const [firstYear, setFirstYear] = useState<number>(2025);
 
     const gradeConverter = new GradeConverter()
@@ -28,12 +26,13 @@ export default function Stats() {
     const [width, setWidth] = useState(0)
 
     useEffect(() => {
+        setWidth(window.innerWidth)
         window.addEventListener('resize', () => setWidth(window.innerWidth))
         return () =>
             window.removeEventListener('resize', () =>
                 setWidth(window.innerWidth)
             )
-    })
+    }, [])
 
     function handleCSVData(data: any[]): Log[] {
         const climbs = [] as Log[]
@@ -80,16 +79,14 @@ export default function Stats() {
             .then((response) => response.text())
             .then((responseText) => {
                 setLogbook(handleCSVData(Papa.parse(responseText).data))
-                setMsg(
-                    'Use this to see the type of insight you can get from using DataTor. Feel free to explore! '
-                )
+                setOwner('ExampleLogbook')
             })
     }
 
     if (logbook.length > 0) {
         return (
             <div className="flex h-full w-full flex-col pt-5 md:p-5 lg:p-10 lg:pt-5">
-                <Summary logs={logbook ?? []} owner={owner} msg={msg} />
+                <Summary logs={logbook ?? []} owner={owner} />
             </div>
         )
     }
@@ -133,7 +130,7 @@ export default function Stats() {
 
                                 {width > 768 && <LandingPageGraphs />}
 
-                                <div className="flex w-full flex-col items-center justify-around gap-y-10 py-5 text-xl lg:col-span-2 lg:flex-row">
+                                <div className="flex w-full flex-col items-center justify-around gap-10 py-5 text-xl lg:col-span-2 lg:flex-row">
                                     <Step number={1}>
                                         <Navigation size={30} className="" />
                                         <div>
