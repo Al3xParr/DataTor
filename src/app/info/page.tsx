@@ -1,15 +1,9 @@
-import ContactForm from "@/components/contactForm";
+import ContactForm from '@/components/contactForm'
 
-
-
-export default function Info(){
-
-
-    return(
-        <div className="w-full h-full pt-30 flex justify-center items-center  bg-[url(../../resources/bgSVG.svg)] bg-top-left bg-no-repeat bg-cover">
-
-            <ContactForm/>
-
+export default function Info() {
+    return (
+        <div className="flex h-full w-full items-center justify-center bg-cover bg-top-left bg-no-repeat pt-30 md:bg-[url(../../resources/bgSVG.svg)]">
+            <ContactForm />
         </div>
     )
 }

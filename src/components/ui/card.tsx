@@ -1,17 +1,20 @@
-import React from "react"
-import { cn } from "../../../resources/utils"
+import React from 'react'
+import { cn } from '../../../resources/utils'
 
 const Card = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>>
-    (({ className, ...props }, ref) => (
-        <div ref={ref} className={cn("rounded-xl bg-bg border border-bg-light shadow-md/20 p-4 overflow-clip", className)}
-            {...props}
-        />
+    React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+    <div
+        ref={ref}
+        className={cn(
+            'bg-bg border-bg-light overflow-clip rounded-xl border p-4 shadow-md/20',
+            className
+        )}
+        {...props}
+    />
+))
 
-    ))
+Card.displayName = 'Card'
 
-Card.displayName = "Card"
-
-
-export {Card}
+export { Card }

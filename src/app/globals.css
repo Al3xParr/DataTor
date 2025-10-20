@@ -1,67 +1,117 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
+    --foreground: #171717;
 
-  --foreground: #171717;
+    --primary-color: hsl(151, 46%, 47%);
+    --tertiary-color: hsl(190, 100%, 28%);
 
-  --primary-color: hsl(151, 46%, 47%);
-  --tertiary-color: hsl(190, 100%, 28%);
+    --bg-color: hsl(220, 13%, 95%);
+    --bg-dark-color: hsl(220, 13%, 90%);
+    --bg-light-color: hsl(220, 13%, 100%);
+    --bg-accent-color: hsl(151, 46%, 30%);
 
-  --bg-color: hsl(220, 13%, 95%);
-  --bg-dark-color: hsl(220, 13%, 90%);
-  --bg-light-color: hsl(220, 13%, 100%);
-  --bg-accent-color: hsl(151, 46%, 30%);
+    --txt-header-muted-color: hsl(220, 13%, 30%);
+    --txt-header-color: hsl(220, 13%, 5%);
+    --txt-color: hsl(220, 13%, 5%);
+    --txt-muted-color: hsl(220, 13%, 30%);
 
-  --txt-header-muted-color: hsl(220, 13%, 30%);
-  --txt-header-color: hsl(220, 13%, 5%);
-  --txt-color: hsl(220, 13%, 5%);
-  --txt-muted-color: hsl(220, 13%, 30%);
-
+    .DialogContent {
+        border: 2px solid var(--color-txt-muted);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground: #f3fbf3;
+    :root {
+        --foreground: #f3fbf3;
 
-    --bg-color: hsl(220, 13%, 10%);
-    --bg-dark-color: hsl(220, 13%, 5%);
-    --bg-light-color: hsl(220, 13%, 15%);
+        --bg-color: hsl(220, 13%, 10%);
+        --bg-dark-color: hsl(220, 13%, 5%);
+        --bg-light-color: hsl(220, 13%, 15%);
 
-    --txt-color: hsl(220, 13%, 95%);
-    --txt-muted-color: hsl(220, 13%, 70%);
+        --txt-color: hsl(220, 13%, 95%);
+        --txt-muted-color: hsl(220, 13%, 70%);
 
-  }
-
+        .DialogContent {
+            border: 2px solid var(--color-bg-light);
+        }
+    }
 }
 
 @theme inline {
-  --color-background: var(--bg-dark-color);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-primary: "Nunito", "serif";
+    --color-background: var(--bg-dark-color);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+    --font-primary: 'Nunito', 'serif';
 
+    --color-primary: var(--primary-color);
+    --color-tertiary: var(--tertiary-color);
 
-  --color-primary: var(--primary-color);
-  --color-tertiary: var(--tertiary-color);
+    --color-bg-dark: var(--bg-dark-color);
+    --color-bg-light: var(--bg-light-color);
+    --color-bg: var(--bg-color);
 
-  --color-bg-dark: var(--bg-dark-color);
-  --color-bg-light: var(--bg-light-color);
-  --color-bg: var(--bg-color);
+    --color-txt: var(--txt-color);
+    --color-txt-muted: var(--txt-muted-color);
+    --color-txt-header: var(--txt-header-color);
+    --color-txt-header-muted: var(--txt-header-muted-color);
 
-  --color-txt: var(--txt-color);
-  --color-txt-muted: var(--txt-muted-color);
-  --color-txt-header: var(--txt-header-color);
-  --color-txt-header-muted: var(--txt-header-muted-color);
-
-  --breakpoint-3xl: 125rem;
-
-
+    --breakpoint-3xl: 125rem;
 }
 
 body {
-  background: var(--bg-dark-color);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg-dark-color);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.DialogOverlay {
+    background-color: var(--black-a9);
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(5px);
+    animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+    background-color: var(--color-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-6);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 500px;
+    max-height: 85vh;
+    padding: 25px;
+    animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent:focus {
+    outline: none;
+}
+
+@keyframes overlayShow {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes contentShow {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }

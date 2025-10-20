@@ -1,34 +1,50 @@
 'use client'
-import React, { useState } from "react"
-import { Log } from "../../resources/types"
-import { useCSVReader } from "react-papaparse"
-import Summary from "@/components/summary"
-import { GradeConverter, cleanGrade, cleanName, createDate, getStyle } from "../../resources/utils"
-import { Download, Navigation, Upload } from "lucide-react"
-import LandingPageGraphs from "../../resources/svg"
-import Step from "@/components/ui/step"
-import Papa from "papaparse"
-
-
-
+import React, { useEffect, useState } from 'react'
+import { Log } from '../../resources/types'
+import { useCSVReader } from 'react-papaparse'
+import Summary from '@/components/summary'
+import {
+    GradeConverter,
+    cleanGrade,
+    cleanName,
+    createDate,
+    getStyle,
+} from '../../resources/utils'
+import { Download, Navigation, Upload } from 'lucide-react'
+import LandingPageGraphs from '../../resources/svg'
+import Step from '@/components/ui/step'
+import Papa from 'papaparse'
+import ExampleLogDialog from '@/components/ExampleLogDialog'
 
 export default function Stats() {
-
     const { CSVReader } = useCSVReader()
     const [logbook, setLogbook] = useState<Log[]>([])
-    const [owner, setOwner] = useState("")
-    const [msg, setMsg] = useState("")
+    const [owner, setOwner] = useState('')
+    const [msg, setMsg] = useState('')
     // const [firstYear, setFirstYear] = useState<number>(2025);
 
     const gradeConverter = new GradeConverter()
+
+    const [width, setWidth] = useState(0)
+
+    useEffect(() => {
+        window.addEventListener('resize', () => setWidth(window.innerWidth))
+        return () =>
+            window.removeEventListener('resize', () =>
+                setWidth(window.innerWidth)
+            )
+    })
 
     function handleCSVData(data: any[]): Log[] {
         const climbs = [] as Log[]
 
         data.forEach((climb: any, index: number) => {
-
-            if (climb[0] == "") { return; }
-            if (index == 0) { return; }
+            if (climb[0] == '') {
+                return
+            }
+            if (index == 0) {
+                return
+            }
 
             const newLog = {
                 id: index,
@@ -36,7 +52,7 @@ export default function Stats() {
                 grade: cleanGrade(climb[1], climb[11]),
                 style: getStyle(climb[2]),
                 partner: climb[3],
-                notes: climb[4],
+                notes: '',
                 date: createDate(climb[5]),
                 crag: climb[6],
                 county: climb[7],
@@ -44,34 +60,36 @@ export default function Stats() {
                 country: climb[9],
                 pitches: climb[10],
                 type: climb[11],
-                yds: (climb[1] as string).startsWith("5.")
+                yds: (climb[1] as string).startsWith('5.'),
             } as Log
 
             // if (newLog.date.getFullYear() < firstYear) setFirstYear(newLog.date.getFullYear())
-            if (newLog.style != "DNF" && newLog.style != "Dogged" && newLog.type != "Alpine" && newLog.type != "Via Ferrata") climbs.push(newLog)
+            if (
+                newLog.style != 'DNF' &&
+                newLog.style != 'Dogged' &&
+                newLog.type != 'Alpine' &&
+                newLog.type != 'Via Ferrata'
+            )
+                climbs.push(newLog)
         })
         return climbs.sort((a, b) => gradeConverter.compareLog(a, b))
     }
 
     function loadExample() {
-
-
-        fetch("./Logbook_DLOG.csv")
-            .then(response => response.text())
-            .then(responseText => {
+        fetch('./Logbook_DLOG.csv')
+            .then((response) => response.text())
+            .then((responseText) => {
                 setLogbook(handleCSVData(Papa.parse(responseText).data))
-                setMsg("This is an Example Logbook for you to see the type of insight you can get from using DataTor. Feel free to explore! ")
-            }
-            )
+                setMsg(
+                    'Use this to see the type of insight you can get from using DataTor. Feel free to explore! '
+                )
+            })
     }
 
     if (logbook.length > 0) {
-
         return (
-            <div className="w-full h-full flex flex-col md:p-5 lg:p-10 lg:pt-5 pt-5">
-
+            <div className="flex h-full w-full flex-col pt-5 md:p-5 lg:p-10 lg:pt-5">
                 <Summary logs={logbook ?? []} owner={owner} msg={msg} />
-
             </div>
         )
     }
@@ -82,78 +100,70 @@ export default function Stats() {
                 setLogbook(handleCSVData(results.data))
                 setOwner(cleanName(acceptedFile.name))
             }}
-
         >
-            {({
-                getRootProps,
-                acceptedFile
-            }: any) => (
-                <div className="flex flex-col h-full w-full items-center">
-
-                    {!acceptedFile &&
-
-                        <div className="w-full h-full flex flex-col items-center  bg-[url(../../resources/bgSVG.svg)] bg-top-left bg-no-repeat bg-contain ">
-
-
-                            <div className="grid items-center justify-items-center grid-cols-2 gap-y-50 overflow-clip pt-20 ">
-
-                                <div className="w-[450px] text-wrap ">
-                                    <h2 className="text-txt-header text-3xl font-bold whitespace-pre pb-3">
+            {({ getRootProps, acceptedFile }: any) => (
+                <div className="flex h-full w-full flex-col items-center">
+                    {!acceptedFile && (
+                        <div className="flex h-full w-full justify-center bg-[url(../../resources/bgSVG.svg)]">
+                            <div className="grid grid-cols-1 items-center justify-items-center gap-y-30 overflow-visible pt-30 pb-10 lg:grid-cols-2 lg:gap-y-50 lg:py-20">
+                                <div className="w-[450px] max-w-full place-self-center px-5 text-wrap">
+                                    <h2 className="text-txt-header pb-3 text-3xl font-bold whitespace-pre">
                                         {`Get instant insight into\nyour climbing logbook`}
                                     </h2>
-                                    <h3 className="text-txt-header-muted left-25 top-60 text-xl pb-3">
-                                        Upload your logbook to see your climbing stats, trends and milestones - visualised to track your progress
+                                    <h3 className="text-txt-header-muted top-60 left-25 pb-3 text-lg">
+                                        Upload your logbook to see your climbing
+                                        stats, trends and milestones -
+                                        visualised to track your progress
                                     </h3>
                                     <div className="flex gap-3">
-                                        <div className="flex items-center cursor-pointer w-max px-4 p-2 bg-tertiary font-bold shadow-md rounded-xl text-bg text-base transition hover:shadow-lg/20 inset-shadow-sm/50 inset-shadow-[#7cc1cf] "
+                                        <button
+                                            className="bg-tertiary text-bg flex w-max cursor-pointer items-center rounded-xl p-2 px-4 text-base font-bold shadow-md inset-shadow-sm/50 inset-shadow-[#7cc1cf] transition select-none hover:shadow-lg/20 hover:inset-shadow-[#bde9f2]"
                                             {...getRootProps()}
                                         >
                                             Upload Logbook
-                                        </div>
-                                        <div className=" cursor-pointer w-max px-4 p-2 font-bold text-txt rounded-xl transition hover:underline"
+                                        </button>
+                                        <button
+                                            className="text-txt-header-muted w-max cursor-pointer rounded-xl p-2 px-4 font-bold transition select-none hover:underline"
                                             onClick={loadExample}
                                         >
                                             Explore Example
-                                        </div>
-
+                                        </button>
                                     </div>
                                 </div>
 
-                                <LandingPageGraphs />
+                                {width > 768 && <LandingPageGraphs />}
 
-                                <div className="w-full text-xl flex py-5 col-span-2 justify-around">
-
-
-                                    <Step number={1} >
+                                <div className="flex w-full flex-col items-center justify-around gap-y-10 py-5 text-xl lg:col-span-2 lg:flex-row">
+                                    <Step number={1}>
                                         <Navigation size={30} className="" />
-                                        <div>Navigate to <a href="https://www.ukclimbing.com/logbook">www.ukclimbing.com/logbook</a></div>
+                                        <div>
+                                            Navigate to{' '}
+                                            <a href="https://www.ukclimbing.com/logbook">
+                                                www.ukclimbing.com/logbook
+                                            </a>
+                                        </div>
                                     </Step>
+
                                     <Step number={2}>
                                         <Download size={30} className="" />
                                         Download logbook in DLOG format
                                     </Step>
+
                                     <Step number={3}>
-                                        <div className="transition ease-in-out duration-300 hover:inset-shadow-sm/50 flex gap-5 w-full flex-col items-center bg-bg-dark inset-shadow-sm/10 rounded-xl px-8 p-4 cursor-pointer"
-                                            {...getRootProps()}>
+                                        <button
+                                            className="bg-bg-dark flex w-full cursor-pointer flex-col items-center gap-5 rounded-xl p-4 px-8 inset-shadow-[0_-2px_4px_rgb(255,255,255,0.5)]/10 transition duration-300 ease-in-out not-dark:inset-shadow-sm/10 hover:inset-shadow-[0_-2px_4px_rgb(255,255,255,0.5)]/30 not-dark:hover:bg-[#d4d7de] not-dark:hover:inset-shadow-sm/50 dark:hover:bg-black/70"
+                                            {...getRootProps()}
+                                        >
                                             <Upload size={30} className="" />
                                             Upload Here
-                                        </div>
-
+                                        </button>
                                     </Step>
-
-
                                 </div>
-
                             </div>
-
                         </div>
-                    }
-
+                    )}
                 </div>
             )}
-        </CSVReader >
+        </CSVReader>
     )
 }
-
-
-

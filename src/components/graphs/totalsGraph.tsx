@@ -1,34 +1,34 @@
-import { PieChart, PieValueType, useDrawingArea } from "@mui/x-charts";
-import { TotalsData } from "../../../resources/serverUtils";
-import { globalColours } from "../../../resources/utils";
-import { styled } from '@mui/material/styles';
+import { PieChart, useDrawingArea } from '@mui/x-charts'
+import { TotalsData } from '../../../resources/serverUtils'
+import { globalColours } from '../../../resources/utils'
+import { styled } from '@mui/material/styles'
 
 interface TotalsGraphProps {
     data: TotalsData
 }
 
-const StyledText = styled('text')(({ theme }) => ({
+const StyledText = styled('text')(() => ({
     textAnchor: 'middle',
     dominantBaseline: 'central',
     fontSize: 40,
     fontWeight: 700,
-    fill: "var(--color-txt)"
-}));
+    fill: 'var(--color-txt)',
+}))
 
-const StyledTextSub = styled('text')(({ theme }) => ({
+const StyledTextSub = styled('text')(() => ({
     textAnchor: 'middle',
     dominantBaseline: 'central',
     fontSize: 16,
     fontWeight: 400,
-    fill: "var(--color-txt-muted)"
-}));
+    fill: 'var(--color-txt-muted)',
+}))
 
 interface PieCenterProps {
     total: number
 }
 
 function PieCenterLabel({ total }: PieCenterProps) {
-    const { width, height, left, top } = useDrawingArea();
+    const { width, height, left, top } = useDrawingArea()
     const x = left + width / 2
     const y = top + height / 2 - 7
     return (
@@ -40,37 +40,35 @@ function PieCenterLabel({ total }: PieCenterProps) {
                 Total Logs
             </StyledTextSub>
         </>
-    );
+    )
 }
 
 export default function TotalsGraph({ data }: TotalsGraphProps) {
-
     return (
-
         <PieChart
-        height={200}
-        width={200}
-            
+            height={200}
+            width={200}
             colors={globalColours}
             series={[
                 {
-                    data: data.individual.map((d, i) => ({ id: i, value: d.freq, label: d.name })),
-
+                    data: data.individual.map((d, i) => ({
+                        id: i,
+                        value: d.freq,
+                        label: d.name,
+                    })),
                     innerRadius: 70,
-                    outerRadius: 100
+                    outerRadius: 100,
+                    cornerRadius: 4,
                 },
-
             ]}
-            // sx={{: "#000000"}}
+            sx={{
+                '& .MuiPieArc-root': {
+                    stroke: 'var(--color-bg-dark)',
+                },
+            }}
             hideLegend
-
         >
-            <PieCenterLabel total={data.total}>
-
-            </PieCenterLabel>
+            <PieCenterLabel total={data.total}></PieCenterLabel>
         </PieChart>
-
-
-
     )
 }

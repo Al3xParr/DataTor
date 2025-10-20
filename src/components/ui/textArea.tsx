@@ -1,25 +1,26 @@
-import React from "react"
-
+import React from 'react'
 
 const TextArea = ({ ...props }) => {
-    return(
+    return (
         <>
-            <div className={"bg-bg-light rounded-lg flex p-3 shadow has-[textarea:focus]:outline outline-tertiary"}>
-                {props.icon &&
-                    <div className="text-txt-muted pr-3">{props.icon}</div>
+            <div
+                className={
+                    'bg-bg-light outline-tertiary flex rounded-lg p-3 shadow has-[textarea:focus]:outline'
                 }
+            >
+                {props.icon && (
+                    <div className="text-txt-muted pr-3">{props.icon}</div>
+                )}
                 <textarea
-                className="border-0 outline-0 w-full max-h-92"
-                placeholder={props.placeholder}
-                value={props.value}
-                onChange={props.onChange}
-                name={props.name}
+                    className="max-h-92 w-full border-0 outline-0"
+                    placeholder={props.placeholder}
+                    value={props.value}
+                    onChange={props.onChange}
+                    name={props.name}
                 />
-   
             </div>
         </>
     )
 }
 
-
-export {TextArea}
+export { TextArea }

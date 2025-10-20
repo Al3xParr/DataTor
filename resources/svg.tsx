@@ -1,17 +1,15 @@
-import React from "react";
+import React from 'react'
 
 export default function LandingPageGraphs() {
-
     return (
-
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="600"
-            height="420"
-            viewBox="0 0 600 420"
+            height="400"
+            viewBox="0 0 600 400"
             role="img"
             aria-label="Varied minimalist charts with random data in green-blue palette"
-            className="bg-bg shadow-md rounded-4xl "
+            className="bg-bg rounded-4xl shadow-md"
         >
             <defs>
                 <style>
@@ -29,26 +27,74 @@ export default function LandingPageGraphs() {
             </defs>
 
             {/* 1. Vertical bars */}
-            <g transform="translate(20,20)" className="" >
-                <rect className="bg" width="260" height="160"  />
-                <g transform="translate(18,20)" >
+            <g transform="translate(20,20)" className="">
+                <rect className="bg" width="260" height="160" />
+                <g transform="translate(18,20)">
                     <line className="axis" x1="0" y1="120" x2="224" y2="120" />
                     <line className="axis" x1="0" y1="0" x2="0" y2="120" />
-                    <rect className="primary bar" x="10" y="78" width="16" height="42" />
-                    <rect className="secondary bar" x="28" y="52" width="16" height="68" />
-                    <rect className="primary bar" x="60" y="90" width="16" height="30" />
-                    <rect className="secondary bar" x="78" y="30" width="16" height="90" />
-                    <rect className="primary bar" x="110" y="60" width="16" height="60" />
-                    <rect className="secondary bar" x="128" y="85" width="16" height="35" />
-                    <rect className="primary bar" x="160" y="40" width="16" height="80" />
-                    <rect className="secondary bar" x="178" y="25" width="16" height="95" />
+                    <rect
+                        className="primary bar"
+                        x="10"
+                        y="78"
+                        width="16"
+                        height="42"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="28"
+                        y="52"
+                        width="16"
+                        height="68"
+                    />
+                    <rect
+                        className="primary bar"
+                        x="60"
+                        y="90"
+                        width="16"
+                        height="30"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="78"
+                        y="30"
+                        width="16"
+                        height="90"
+                    />
+                    <rect
+                        className="primary bar"
+                        x="110"
+                        y="60"
+                        width="16"
+                        height="60"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="128"
+                        y="85"
+                        width="16"
+                        height="35"
+                    />
+                    <rect
+                        className="primary bar"
+                        x="160"
+                        y="40"
+                        width="16"
+                        height="80"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="178"
+                        y="25"
+                        width="16"
+                        height="95"
+                    />
                 </g>
             </g>
 
             {/* 2. Line + shaded area */}
-            <g transform="translate(320,20)" >
+            <g transform="translate(320,20)">
                 <rect className="bg" width="260" height="160" radius={7} />
-                <g transform="translate(15,20)" >
+                <g transform="translate(15,20)">
                     <line className="axis" x1="0" y1="120" x2="230" y2="120" />
                     <line className="axis" x1="0" y1="0" x2="0" y2="120" />
                     <polyline
@@ -62,12 +108,10 @@ export default function LandingPageGraphs() {
                 </g>
             </g>
 
-
-
             {/* 4. Horizontal bars */}
-            <g transform="translate(20,220)" >
+            <g transform="translate(20,220)">
                 <rect className="bg" width="260" height="160" radius={7} />
-                <g transform="translate(130,80) scale(0.9)" >
+                <g transform="translate(130,80) scale(0.9)">
                     <circle r="65" fill="none" className="axis" />
                     <circle r="45" fill="none" className="axis" />
                     <polygon
@@ -91,21 +135,41 @@ export default function LandingPageGraphs() {
             </g>
 
             {/* 5. Multi-line overlapping */}
-            <g transform="translate(320,220)" >
+            <g transform="translate(320,220)">
                 <rect className="bg" width="260" height="160" radius={7} />
-                <g transform="translate(20,20)" >
+                <g transform="translate(20,20)">
                     <line className="axis" x1="0" y1="120" x2="220" y2="120" />
                     <line className="axis" x1="0" y1="0" x2="0" y2="120" />
-                    <rect className="primary bar" x="0" y="10" width="130" height="16" />
-                    <rect className="secondary bar" x="0" y="36" width="90" height="16" />
-                    <rect className="primary bar" x="0" y="62" width="180" height="16" />
-                    <rect className="secondary bar" x="0" y="88" width="210" height="16" />
+                    <rect
+                        className="primary bar"
+                        x="0"
+                        y="10"
+                        width="130"
+                        height="16"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="0"
+                        y="36"
+                        width="90"
+                        height="16"
+                    />
+                    <rect
+                        className="primary bar"
+                        x="0"
+                        y="62"
+                        width="180"
+                        height="16"
+                    />
+                    <rect
+                        className="secondary bar"
+                        x="0"
+                        y="88"
+                        width="210"
+                        height="16"
+                    />
                 </g>
             </g>
-
-        </svg >
-
-
+        </svg>
     )
-
 }

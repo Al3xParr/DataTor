@@ -1,51 +1,54 @@
 {
-  "name": "data-tor",
-  "version": "1.1.1",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -p 8080",
-    "build": "next build",
-    "start": "next start -p 8080",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@emailjs/react-native": "^5.1.0",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/x-charts": "^8.4.0",
-    "@radix-ui/themes": "^3.2.1",
-    "classnames": "^2.5.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.511.0",
-    "next": "15.3.2",
-    "radix-ui": "^1.4.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-loading-icons": "^1.1.0",
-    "react-papaparse": "^4.4.0",
-    "react-simple-maps": "^3.0.0",
-    "tailwind-merge": "^3.3.0",
-    "tinygradient": "^2.0.1"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/papaparse": "^5.3.16",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/react-simple-maps": "^3.0.6",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.2",
-    "eslint-plugin-react": "^7.37.5",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  },
-  "overrides": {
-    "react-simple-maps": {
-      "d3-zoom": "^3.0.0",
-      "d3-interpolate": "^3.0.1",
-      "d3-color": "^3.1.0"
+    "name": "data-tor",
+    "version": "1.1.1",
+    "private": true,
+    "scripts": {
+        "dev": "next dev -p 8080",
+        "build": "next build",
+        "start": "next start -p 8080",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@emailjs/react-native": "^5.1.0",
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.0",
+        "@mui/x-charts": "^8.4.0",
+        "@radix-ui/react-dialog": "^1.1.15",
+        "@radix-ui/themes": "^3.2.1",
+        "classnames": "^2.5.1",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.511.0",
+        "next": "15.3.2",
+        "radix-ui": "^1.4.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-loading-icons": "^1.1.0",
+        "react-papaparse": "^4.4.0",
+        "react-simple-maps": "^3.0.0",
+        "tailwind-merge": "^3.3.0",
+        "tinygradient": "^2.0.1"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3",
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^20",
+        "@types/papaparse": "^5.3.16",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "@types/react-simple-maps": "^3.0.6",
+        "eslint": "^9",
+        "eslint-config-next": "15.3.2",
+        "eslint-plugin-react": "^7.37.5",
+        "prettier": "3.6.2",
+        "prettier-plugin-tailwindcss": "^0.7.1",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    },
+    "overrides": {
+        "react-simple-maps": {
+            "d3-zoom": "^3.0.0",
+            "d3-interpolate": "^3.0.1",
+            "d3-color": "^3.1.0"
+        }
     }
-  }
 }
