@@ -23,8 +23,10 @@ export default function AvgMaxGraph({ data, type }: AvgMaxGraphProps) {
         Sport: 'french',
         Trad: 'britTrad',
     }
-
+    console.log('render', data)
     const gradeConverter = new GradeConverter()
+
+    if (data.length == 0) return
 
     return (
         <LineChart

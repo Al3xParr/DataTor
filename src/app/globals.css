@@ -61,6 +61,33 @@
     --breakpoint-3xl: 125rem;
 }
 
+::-webkit-resizer {
+    display: none;
+    color: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-corner {
+    display: none;
+    color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--color-bg-ligh);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
 body {
     background: var(--bg-dark-color);
     color: var(--foreground);

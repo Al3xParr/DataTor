@@ -136,8 +136,8 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
                     </h3>
                     <p className="text-txt-muted pt-1">
                         {owner != 'ExampleLogbook'
-                            ? 'Explore insights into your logbook and see your progress over time'
-                            : 'Use this to see the type of insight you can get from using DataTor. Feel free to explore!'}
+                            ? 'Explore insights from your logbook and track your progress over time'
+                            : 'See the kinds of insights DataTor can offer—feel free to explore'}
                     </p>
                 </div>
 
@@ -297,7 +297,6 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
                         <GraphContainer
                             processing={avgMaxProcessing}
                             title="Max and average grade per year"
-                            className=""
                         >
                             <AvgMaxGraph
                                 data={avgMaxData}
@@ -334,7 +333,7 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
                         </GraphContainer>
                     </>
                 ) : (
-                    <Card className="text-txt col-span-2 py-10 text-center">
+                    <Card className="text-txt col-span-full flex items-center justify-around py-10">
                         No Data
                     </Card>
                 )}

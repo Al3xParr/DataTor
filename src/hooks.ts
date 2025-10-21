@@ -11,7 +11,11 @@ export default function useDataRetrieval<T>(
     const [data, setData] = useState<T>({} as T)
 
     useEffect(() => {
-        if (climbs.length == 0) return setData({} as T)
+        if (climbs.length == 0) {
+            setData(Object as T)
+            return
+        }
+        setProcessing(true)
 
         retrievalFunc(climbs, args).then((rtnData: T) => {
             setData(rtnData)

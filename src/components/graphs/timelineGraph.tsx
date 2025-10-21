@@ -17,7 +17,7 @@ import {
     LinePlot,
     markElementClasses,
 } from '@mui/x-charts/LineChart'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { rainbowSurgePalette } from '@mui/x-charts'
 import {
     globalColours,
@@ -54,6 +54,8 @@ export default function TimelineGraph({
             setShowColours(highlightColours)
         }
     }
+
+    if (presentGrades.length == 0) return
 
     return (
         <ChartDataProvider

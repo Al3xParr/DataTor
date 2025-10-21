@@ -3,11 +3,10 @@
 import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/textArea'
 import { Mail, MessageSquare, Phone, Send, User } from 'lucide-react'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import emailjs from '@emailjs/react-native'
-import { Form } from 'radix-ui'
 
 type FormInputs = {
     name: string

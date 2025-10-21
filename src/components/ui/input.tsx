@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '../../../resources/utils'
 
-const Input = ({ className, error, ...props }: any) => {
+const Input = ({ className, error, icon, ...props }: any) => {
     return (
         <div
             className={cn(
@@ -9,9 +9,7 @@ const Input = ({ className, error, ...props }: any) => {
                 className
             )}
         >
-            {props.icon && (
-                <div className="text-txt-muted pr-3">{props.icon}</div>
-            )}
+            {icon && <div className="text-txt-muted pr-3">{icon}</div>}
             <input className="w-full border-0 outline-0" {...props} />
         </div>
     )

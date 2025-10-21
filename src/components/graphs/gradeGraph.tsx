@@ -11,7 +11,7 @@ import { interpolateObject } from '@mui/x-charts-vendor/d3-interpolate'
 import { useAnimate } from '@mui/x-charts/hooks'
 import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis'
 import { mediumFontStyling, smallFontStyling } from '../../../resources/utils'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GradeGraphData } from '../../../resources/types'
 
 interface GradeGraphProps {
@@ -87,6 +87,8 @@ export default function GradeGraph({ data }: GradeGraphProps) {
                 return ''
         }
     }
+
+    if (data.length == 0) return
 
     return (
         <ChartContainer

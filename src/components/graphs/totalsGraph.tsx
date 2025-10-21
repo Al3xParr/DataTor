@@ -1,7 +1,8 @@
 import { PieChart, useDrawingArea } from '@mui/x-charts'
-import { TotalsData } from '../../../resources/serverUtils'
+import { TotalsData, TotalData } from '../../../resources/serverUtils'
 import { globalColours } from '../../../resources/utils'
 import { styled } from '@mui/material/styles'
+import { useEffect } from 'react'
 
 interface TotalsGraphProps {
     data: TotalsData
@@ -43,7 +44,12 @@ function PieCenterLabel({ total }: PieCenterProps) {
     )
 }
 
-export default function TotalsGraph({ data }: TotalsGraphProps) {
+export default function TotalsGraph({
+    data = { individual: [], total: 0 },
+}: TotalsGraphProps) {
+    if (data.individual == undefined) return
+    if (data.total == 0) return
+
     return (
         <PieChart
             height={200}

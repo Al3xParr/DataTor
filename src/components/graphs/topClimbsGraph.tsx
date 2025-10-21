@@ -13,7 +13,7 @@ import {
     mediumFontStyling,
     smallFontStyling,
 } from '../../../resources/utils'
-import React from 'react'
+import React, { useEffect } from 'react'
 import tinygradient from 'tinygradient'
 
 interface TopClimbsGraphProps {
@@ -36,6 +36,8 @@ export default function TopClimbsGraph({
 
     const grad = tinygradient(globalColourList)
     const colours = grad.rgb(numberOfGrades)
+
+    if (presentGrades.length == 0) return
 
     return (
         <ChartContainer
@@ -74,7 +76,7 @@ export default function TopClimbsGraph({
             sx={{
                 [`.${barLabelClasses.root}`]: {
                     ...mediumFontStyling,
-                    fill: 'var(--color-txt-header)',
+                    fill: 'white',
                 },
             }}
         >

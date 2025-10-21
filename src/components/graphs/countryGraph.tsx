@@ -13,13 +13,15 @@ import {
     mediumFontStyling,
     smallFontStyling,
 } from '../../../resources/utils'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface CountryGraphProps {
     data: CountryData
 }
 
 export default function CountryGraph({ data }: CountryGraphProps) {
+    if (data.countries.length == 0) return
+
     return (
         <ChartContainer
             series={[

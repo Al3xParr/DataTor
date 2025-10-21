@@ -37,11 +37,13 @@ export default function AreaMap({ data }: AreaMapProps) {
 
     function calculateColours() {
         const grad = tinygradient([lowCol, highCol])
-        const max =
+        const max = Math.max(
             Object.values(data)
                 .map((c) => c.freq)
                 .sort((a, b) => a - b)
-                .findLast(() => true) ?? 2
+                .findLast(() => true) ?? 2,
+            2
+        )
         setColours(grad.rgb(max))
     }
 
@@ -137,7 +139,6 @@ export default function AreaMap({ data }: AreaMapProps) {
             </ComposableMap>
 
             {area != '' ? (
-                // <Card className="bg-bg-light w-full h-[13.5rem] lg:w-[20rem] lg:absolute lg:top-17 lg:right-4 flex flex-col p-0 items-start overflow-hidden rounded-none ">
                 <Card className="bg-bg-light absolute bottom-0 flex h-max w-full flex-col items-start overflow-hidden p-0 max-lg:h-min max-lg:rounded-none lg:top-17 lg:right-4 lg:w-[20rem]">
                     <p
                         className={`bg-tertiary text-bg-light w-full px-3 py-1 font-bold`}
