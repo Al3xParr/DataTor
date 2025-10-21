@@ -52,8 +52,6 @@ export default function TotalsGraph({
 
     return (
         <PieChart
-            height={200}
-            width={200}
             colors={globalColours}
             series={[
                 {
@@ -62,12 +60,15 @@ export default function TotalsGraph({
                         value: d.freq,
                         label: d.name,
                     })),
-                    innerRadius: 70,
-                    outerRadius: 100,
+                    innerRadius: '70%',
+                    outerRadius: '100%',
                     cornerRadius: 4,
                 },
             ]}
             sx={{
+                height: '100%',
+                width: '100%',
+
                 '& .MuiPieArc-root': {
                     stroke: 'var(--color-bg-dark)',
                 },

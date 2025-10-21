@@ -231,11 +231,11 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
                 </Theme>
             </Card>
 
-            <div className="3xl:grid-cols-4 grid h-max w-full auto-rows-[250px] grid-cols-1 flex-col gap-5 md:grid-cols-2">
+            <div className="3xl:grid-cols-4 grid h-max w-full auto-rows-[200px] grid-cols-1 flex-col gap-5 md:auto-rows-[250px] md:grid-cols-2">
                 {yearAndTypeClimbs.length != 0 ? (
                     <>
-                        <div className="md:max-3xl:flex md:max-3xl:flex-row md:max-3xl:row-span-1 3xl:grid 3xl:grid-cols-2 3xl:row-span-2 md:max-3xl:col-span-2 row-span-3 flex h-full w-full flex-col place-items-center items-center justify-evenly gap-2 sm:max-md:grid sm:max-md:grid-cols-2 sm:md:row-span-2">
-                            <div className="flex h-full w-min items-center">
+                        <div className="md:max-3xl:flex md:max-3xl:flex-row md:max-3xl:row-span-1 3xl:grid 3xl:grid-cols-2 3xl:row-span-2 md:max-3xl:col-span-2 row-span-2 grid h-full w-full grid-cols-2 place-items-center items-center justify-evenly gap-2 sm:max-md:grid sm:max-md:grid-cols-2 sm:md:row-span-2">
+                            <div className="flex h-40 w-40 items-center md:h-52 md:w-52">
                                 {!totalsProcessing && (
                                     <TotalsGraph data={totalsData} />
                                 )}
@@ -244,19 +244,25 @@ export default function Summary({ logs, owner }: StyleSummaryProps) {
                                 type="Sent"
                                 name={yearAndTypeClimbs[0]?.name ?? 'N/A'}
                                 grade={yearAndTypeClimbs[0]?.grade ?? 'N/A'}
-                                icon={<Star size={60} />}
+                                icon={
+                                    <Star className="h-10 w-10 md:h-16 md:w-16" />
+                                }
                             />
                             <TopClimb
                                 type="Flash"
                                 name={flash[0]?.name ?? 'N/A'}
                                 grade={flash[0]?.grade ?? 'N/A'}
-                                icon={<Zap size={60} />}
+                                icon={
+                                    <Zap className="h-10 w-10 md:h-16 md:w-16" />
+                                }
                             />
                             <TopClimb
                                 type="Onsight"
                                 name={onsight[0]?.name ?? 'N/A'}
                                 grade={onsight[0]?.grade ?? 'N/A'}
-                                icon={<View size={60} />}
+                                icon={
+                                    <View className="h-10 w-10 md:h-16 md:w-16" />
+                                }
                             />
                         </div>
 

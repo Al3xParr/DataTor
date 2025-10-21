@@ -10,7 +10,7 @@ interface TopClimbProps {
 
 export default function TopClimb({ type, name, grade, icon }: TopClimbProps) {
     return (
-        <Card className="text-primary bg-bg border-bg-light grid h-52 w-52 grid-cols-1 grid-rows-2 items-center justify-items-center rounded-4xl border text-center">
+        <Card className="text-primary bg-bg border-bg-light grid h-40 w-40 grid-cols-1 grid-rows-2 items-center justify-items-center rounded-4xl border text-center md:h-52 md:w-52">
             <div className="flex w-full items-center justify-around">
                 <div>
                     {icon}
