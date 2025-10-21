@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/textArea'
 import { Mail, MessageSquare, Phone, Send, User } from 'lucide-react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import emailjs from '@emailjs/react-native'
@@ -21,7 +21,6 @@ export default function ContactForm() {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<FormInputs>()
 
@@ -94,7 +93,7 @@ export default function ContactForm() {
                     icon={<MessageSquare />}
                 />
 
-                <div className="bg-tertiary text-bg col-span-2 mt-4 flex w-full cursor-pointer justify-center rounded-lg p-2 text-center font-bold shadow">
+                <div className="bg-tertiary text-bg col-span-2 mt-4 flex w-full items-center justify-center rounded-lg text-center font-bold shadow">
                     {processing ? (
                         <>
                             <svg
@@ -108,7 +107,7 @@ export default function ContactForm() {
                                     cy="12"
                                     r="10"
                                     stroke="currentColor"
-                                    stroke-width="4"
+                                    strokeWidth="4"
                                 ></circle>
                                 <path
                                     className="opacity-75"
@@ -116,12 +115,16 @@ export default function ContactForm() {
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                 ></path>
                             </svg>
-                            Sending...
+                            <p className="my-2">Sending...</p>
                         </>
                     ) : (
                         <>
-                            <Send className="mr-1" />
-                            <input type="submit" value="Send Message" />
+                            {/* <Send className="mr-1" /> */}
+                            <input
+                                type="submit"
+                                className="my-2 h-full w-full cursor-pointer"
+                                value="Send Message"
+                            />
                         </>
                     )}
                 </div>

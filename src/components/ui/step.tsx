@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react'
 import { Card } from './card'
+import React from 'react'
 
 interface stepProps {
     number: number

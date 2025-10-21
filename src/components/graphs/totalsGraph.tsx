@@ -2,7 +2,7 @@ import { PieChart, useDrawingArea } from '@mui/x-charts'
 import { TotalsData, TotalData } from '../../../resources/serverUtils'
 import { globalColours } from '../../../resources/utils'
 import { styled } from '@mui/material/styles'
-import { useEffect } from 'react'
+import React from 'react'
 
 interface TotalsGraphProps {
     data: TotalsData

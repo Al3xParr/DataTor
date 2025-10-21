@@ -1,4 +1,5 @@
 import { Dialog } from 'radix-ui'
+import React from 'react'
 
 export default function ExampleLogDialog() {
     return (
