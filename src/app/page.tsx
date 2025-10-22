@@ -105,7 +105,7 @@ export default function Stats() {
                             <div className="grid grid-cols-1 items-center justify-items-center gap-y-30 overflow-visible pt-30 pb-10 lg:grid-cols-2 lg:gap-y-50 lg:py-20">
                                 <div className="w-[450px] max-w-full place-self-center px-5 text-wrap">
                                     <h2 className="text-txt-header pb-3 text-3xl font-bold whitespace-pre">
-                                        {`Get instant insight into\nyour climbing logbook`}
+                                        {`Get instant insight into\nyour UKC logbook`}
                                     </h2>
                                     <h3 className="text-txt-header-muted top-60 left-25 pb-3 text-lg">
                                         Upload your logbook to see your climbing

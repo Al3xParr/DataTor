@@ -7,9 +7,24 @@ import React from 'react'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-    title: 'DataTor - The Climbing Logbook Analyser',
+    title: 'DataTor - UKC Logbook Analytics',
     description:
-        'Gain deeper insight into your climbing logbook, looking at stats and graphs',
+        'Analyse your UKC climbing logbook with DataTor. Track grades, visualize progress, and gain insights to improve your climbing performance.',
+    keywords: [
+        'climbing',
+        'logbook',
+        'UKC',
+        'bouldering',
+        'trad',
+        'sport',
+        'analysis',
+        'progression',
+        'graphs',
+        'stats',
+        'statistics',
+        'rock climbing',
+        'outdoors',
+    ],
 }
 
 export default function RootLayout({
